@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="action_settings">Settings</string>
+    <string name="text_description">Description</string>
+    <string name="text_play_trailer">Play trailer</string>
+    <string name="text_trailers">Trailers</string>
+    <string name="text_reviews">Reviews</string>
+    <string name="format_reviews">\" %s \"</string>
+    <string name="format_reviewer">- %s -"</string>
+
+</resources>
