@@ -1,6 +1,6 @@
 ##MVP-Movies
 This a movies application that demonstrates the use of multiple libraries and
-implementing a clean architecture fetching the data from [The Movie Database](https://www.themoviedb.org) Api.
+implementing a clean architecture for fetching the data from [The Movie Database](https://www.themoviedb.org) Api.
 
 ###Libraries
 - **[OkHttp](https://square.github.io/okhttp/)** As a http client.
