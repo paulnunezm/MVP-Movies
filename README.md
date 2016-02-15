@@ -4,13 +4,13 @@ implementing a clean architecture for fetching the data from [The Movie Database
 
 ###Libraries
 - **[OkHttp](https://square.github.io/okhttp/)** As a http client.
-- **[Stetho](https://facebook.github.io/stetho/)** For intercepting the data requested and view it with chrome.
+- **[Stetho](https://facebook.github.io/stetho/)** For intercepting the data requested and view it with Chrome.
 - **[Support Palette](https://developer.android.com/reference/android/support/v7/graphics/Palette.html)** For retrieving the predominant colors in a picture. 
 - **[Glide](https://github.com/bumptech/glide)** To perform image request and loading it to the views.
 - **[Gson](https://github.com/google/gson)** For parsing the network's JSON response.
 
 ###Architecture
-This app uses the [Model View Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) architecture as explain in [this article](https://saulmm.github.io/2015/02/02/A%20useful%20stack%20on%20android%20%231,%20architecture/)
+This app uses the [Model View Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) architecture as explained in [this article](https://saulmm.github.io/2015/02/02/A%20useful%20stack%20on%20android%20%231,%20architecture/)
 written by [Saul Molinero](https://plus.google.com/+SaulMolineroMalvido) at his awesome blog. With a few modifications.
 
 Instead of dividing the entire project in the three main layers of the architecture I opted to divide it

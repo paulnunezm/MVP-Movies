@@ -1,16 +1,25 @@
 package com.nunez.popularmovies.showMovieDetails;
 
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +28,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -66,6 +80,7 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
     private MyLinearLayoutManager mReviewsLayoutManager;
     private ReviewsAdapter mReviewsAdapter;
     private RecyclerView mReviewsRecyclerView;
+    private ImageButton fab;
 //    private int
 
     @Override @TargetApi (Build.VERSION_CODES.LOLLIPOP)
@@ -109,8 +124,12 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
         mTrailersRecycleView = (RecyclerView) findViewById(R.id.recyler_trailers);
         mReviewsTitle = (TextView) findViewById(R.id.text_reviews);
         mReviewsRecyclerView = (RecyclerView) findViewById(R.id.recyler_reviews);
+        fab = (ImageButton) findViewById(R.id.button_fab);
 
         findViewById(R.id.actio_play_trailer).setOnClickListener(this);
+        fab.setOnClickListener(this);
+
+//        fab.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
     }
 
 //    private void prepareRecyclers(){
@@ -291,8 +310,36 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.actio_play_trailer){
+        int id = v.getId();
+        if(id == R.id.actio_play_trailer){
             playTrailer();
+
+        }else if(id == R.id.button_fab){
+            PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
+            PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
+            ObjectAnimator scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
+//            scaleAnim.setInterpolator(new BounceInterpolator());
+            scaleAnim.setDuration(500);
+            scaleAnim.setRepeatCount(1);
+            scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
+
+            //Let's change background's color from blue to red.
+            Drawable[] color = {fab.getBackground(),
+                getContext().getResources().getDrawable(R.drawable.fab)};
+            TransitionDrawable trans = new TransitionDrawable(color);
+            //This will work also on old devices. The latest API says you have to use setBackground instead.
+            fab.setBackgroundDrawable(trans);
+
+            trans.startTransition(1000);
+
+            ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, 720);
+            rotateAnim.setInterpolator(new DecelerateInterpolator());
+            rotateAnim.setDuration(1400);
+
+            AnimatorSet setAnim = new AnimatorSet();
+            setAnim.play(scaleAnim).with(rotateAnim);
+//            setAnim.setDuration(500);
+            setAnim.start();
         }
     }
 

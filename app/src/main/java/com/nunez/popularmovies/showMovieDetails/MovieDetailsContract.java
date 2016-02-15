@@ -15,8 +15,7 @@ import java.util.ArrayList;
  */
 public interface MovieDetailsContract {
 
-    interface Presenter extends com.nunez.popularmovies.mvp.presenters.Presenter{
-
+    interface Presenter extends com.nunez.popularmovies.mvp.presenters.Presenter {
         void attachView(View detailsView);
         void setTrailerLink();
         void showViews();
@@ -25,20 +24,18 @@ public interface MovieDetailsContract {
         void showDescription(String description);
         void showTrailers();
         void showReviews();
-
     }
 
-    interface View extends MVPView{
+    interface View extends MVPView {
         void setTrailerLink(String url);
         void showPoster(String url);
         void showTitle (String title);
         void showDescription(String description);
         void showTrailers(ArrayList<Video> trailers);
         void showReviews(ArrayList<Review> reviews);
-
     }
 
-     interface MovieDetailsController extends UseCase{
+     interface MovieDetailsController extends UseCase {
          void requestMovieDetails();
          void sendMovieDetailsToPresenter(Movie movie);
     }
