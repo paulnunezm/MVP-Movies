@@ -84,7 +84,6 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
     private ImageButton fab;
     private ProgressBar mProgress;
     private View mDetailsContainer;
-//    private int
 
     @Override @TargetApi (Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,9 +136,6 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 //        fab.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
     }
 
-//    private void prepareRecyclers(){
-//
-//    }
 
     @Override
     public Context getContext() {
