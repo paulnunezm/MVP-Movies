@@ -29,6 +29,8 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
         setTrailerLink();
         showTrailers();
         showReviews();
+        mDetailView.hideLoading();
+
     }
 
 

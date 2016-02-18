@@ -3,13 +3,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
         android:id="@+id/item_detail_trailer"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:drawableLeft="@drawable/play_arrow_black_192x192"
+        android:drawableTint="@color/gray_dark"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         style="@style/DetailViewTextViewBody"
@@ -20,7 +21,7 @@
         android:id="@+id/divider"
         android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:background="#cecece"
-        android:padding="10dp"/>
+        android:background="@color/gray_dark"
+        android:layout_marginTop="10dp" />
 </LinearLayout>
 

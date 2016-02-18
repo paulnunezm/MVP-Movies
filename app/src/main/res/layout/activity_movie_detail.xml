@@ -5,180 +5,169 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/details_scrollView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/movie_placeholder"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/gray_light"
     android:fillViewport="true"
     android:scrollbars="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".showMovieDetails.MovieDetailActivity">
 
     <FrameLayout
-        android:id="@+id/actio_play_trailer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:elevation="2dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/image_poster"
-            android:layout_width="fill_parent"
-            android:layout_height="450dp"
-            android:transitionName="poster"/>
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_gravity="center"
-            android:tint="#FFF"
-            android:paddingLeft="2dp"
-            android:src="@drawable/play_arrow_black_192x192"/>
-
-        <FrameLayout
-            android:id="@+id/text_title_bgnd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom" >
-
-            <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
-                android:id="@+id/text_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="20dp"
-                android:textColor="#fff"
-                android:textSize= "22sp"
-                tools:text="Title"
-                />
-        </FrameLayout>
-
-
-
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/button_fab"-->
-            <!--android:layout_width="@dimen/fab_dimen"-->
-            <!--android:layout_height="@dimen/fab_dimen" -->
-            <!--android:clickable="true"-->
-            <!--android:elevation="5dp"-->
-            <!--app:layout_anchor="@id/actio_play_trailer"-->
-            <!--app:layout_anchorGravity="bottom|right|end"-->
-            <!--android:layout_marginBottom="25dp"-->
-            <!--android:layout_marginRight="@dimen/fab_margin"-->
-            <!--android:layout_gravity="bottom|end"-->
-            <!--android:src="@drawable/ic_favorite"/>-->
-        <!-- -->
-
-        <ImageButton
-            android:id="@+id/button_fab"
-            android:layout_width="@dimen/fab_dimen"
-            android:layout_height="@dimen/fab_dimen"
-            android:background="@drawable/play_btn_background"
-            android:layout_gravity="bottom|right|end"
-            android:layout_marginBottom="40dp"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:scaleType="center"
-            android:src="@drawable/ic_favorite"
+            android:visibility="visible"
+            style="?android:attr/progressBarStyleLarge"
             />
 
+        <LinearLayout
+            android:id="@+id/container"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:id="@+id/actio_play_trailer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true" >
+
+                <ImageView
+                    android:id="@+id/image_poster"
+                    android:layout_width="fill_parent"
+                    android:layout_height="450dp"/>
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:tint="@color/gray_dark"
+                    android:paddingLeft="2dp"
+                    android:src="@drawable/play_arrow_black_192x192"/>
+
+                <FrameLayout
+                    android:id="@+id/text_title_bgnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:padding="20dp"
+                    android:foregroundGravity="center"
+                    android:layout_gravity="bottom" >
+
+                    <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
+                        android:id="@+id/text_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/gray_light"
+                        android:textAlignment="center"
+                        android:textSize="22sp"
+                        tools:text="Title" />
+                </FrameLayout>
 
 
+                <ImageButton
+                    android:id="@+id/button_fab"
+                    android:layout_width="@dimen/fab_dimen"
+                    android:layout_height="@dimen/fab_dimen"
+                    android:background="@drawable/play_btn_background"
+                    android:layout_gravity="bottom|right|end"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_favorite"/>
 
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:elevation="1dp"
+                android:orientation="vertical" >
+
+                <com.nunez.popularmovies.views.custom_views.LatoTextView
+                    android:id="@+id/text_description_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/gray_dark"
+                    android:drawableLeft="@drawable/ic_description_black_192x192"
+                    android:drawableTint="@color/gray_dark"
+                    android:tint="@color/gray_dark"
+                    android:gravity="center"
+                    app:fontType="BlackItalic"
+                    android:text="@string/text_description"
+                    style="@style/DetailsViewTextViewTitle" />
+
+                <TextView
+                    android:id="@+id/text_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serit"
+                    android:paddingRight="10dp"
+                    android:visibility="visible"
+                    tools:text= "Larga descripcion, ridiculamente larga"
+                    style="@style/DetailViewTextViewBody"/>
+
+            </LinearLayout>
+
+            <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
+                android:id="@+id/text_trailers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="10dp"
+                android:drawableLeft="@drawable/trailer"
+                android:drawableTint="@color/gray_dark"
+                android:tint="@color/gray_dark"
+                android:paddingLeft="20dp"
+                android:gravity="center"
+                android:text="@string/text_trailers"
+                style="@style/DetailsViewTextViewTitle"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyler_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                tools:listitem="@layout/item_detail_trailer"/>
+
+            <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
+                android:id="@+id/text_reviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/gray_dark"
+                android:drawableLeft="@drawable/review"
+                android:drawableTint="@color/gray_dark"
+                android:tint="@color/gray_dark"
+                android:paddingLeft="20dp"
+                android:gravity="center"
+                android:text="@string/text_reviews"
+                style="@style/DetailsViewTextViewTitle"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyler_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
     </FrameLayout>
 
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:elevation="1dp"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-
-        <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
-            android:id="@+id/text_description_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="10dp"
-            android:textColor="#FFF"
-            android:drawableLeft="@drawable/ic_description_black_192x192"
-            android:drawableTint="#FFF"
-            android:gravity="center"
-            android:text="@string/text_description"
-            android:textSize= "20sp"
-            />
-
-        <TextView
-            android:id="@+id/text_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serit"
-            android:textColor="#FFF"
-            android:textSize= "16sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:visibility="visible"
-            tools:text= "Larga descripcion, ridiculamente larga"
-            />
-
-    </LinearLayout>
-
-
-        <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
-            android:id="@+id/text_trailers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="10dp"
-            android:textColor="#FFF"
-            android:drawableLeft="@drawable/trailer"
-            android:drawableTint="#FFF"
-            android:paddingLeft="20dp"
-            android:gravity="center"
-            android:text="@string/text_trailers"
-            android:textSize= "20sp"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyler_trailers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            tools:listitem="@layout/item_detail_trailer"/>
-
-        <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
-            android:id="@+id/text_reviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="10dp"
-            android:textColor="#FFF"
-            android:drawableLeft="@drawable/review"
-            android:drawableTint="#FFF"
-            android:paddingLeft="20dp"
-            android:gravity="center"
-            android:text="@string/text_reviews"
-            android:textSize= "20sp"
-            />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyler_reviews"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            />
-
-
-
-    </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

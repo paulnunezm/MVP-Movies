@@ -34,6 +34,7 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -81,6 +82,8 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
     private ReviewsAdapter mReviewsAdapter;
     private RecyclerView mReviewsRecyclerView;
     private ImageButton fab;
+    private ProgressBar mProgress;
+    private View mDetailsContainer;
 //    private int
 
     @Override @TargetApi (Build.VERSION_CODES.LOLLIPOP)
@@ -125,6 +128,8 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
         mReviewsTitle = (TextView) findViewById(R.id.text_reviews);
         mReviewsRecyclerView = (RecyclerView) findViewById(R.id.recyler_reviews);
         fab = (ImageButton) findViewById(R.id.button_fab);
+        mProgress = (ProgressBar) findViewById(R.id.progress);
+        mDetailsContainer = findViewById(R.id.container);
 
         findViewById(R.id.actio_play_trailer).setOnClickListener(this);
         fab.setOnClickListener(this);
@@ -148,7 +153,8 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
     @Override
     public void hideLoading() {
-
+        mProgress.setVisibility(View.GONE);
+        mDetailsContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -214,33 +220,31 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
                     if (palette != null) {
                         Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
-//                        Palette.Swatch darkMutedSwatch = palette.getDarkMutedSwatch();
                         Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
                         Palette.Swatch mutedLightSwatch = palette.getLightMutedSwatch();
                         try {
 
                             int color = vibrantDarkSwatch.getRgb(); // for the status bar.
                             int alphaColor = Color.argb(170, Color.red(color), Color.green(color), Color.blue(color));
-//                            int vibrantSwatchTitleTextColor = vibrantSwatch.getTitleTextColor();
-                            int textColor = mutedLightSwatch.getBodyTextColor();
+//                            int textColor = mutedLightSwatch.getBodyTextColor();
 
                             // Set awesome colors to texts and backgrounds
 
-                            mScrollView.setBackgroundColor(mutedLightSwatch.getRgb());
+//                            mScrollView.setBackgroundColor(mutedLightSwatch.getRgb());
                             mTitleBackground.setBackgroundColor(alphaColor);
-                            mDescriptionTitle.setTextColor(textColor);//vibrantSwatchTitleTextColor);
-                            mDescription.setTextColor(textColor);
-                            mTrailersTitle.setTextColor(textColor);
-                            mReviewsTitle.setTextColor(textColor);
+//                            mDescriptionTitle.setTextColor(textColor);//vibrantSwatchTitleTextColor);
+//                            mDescription.setTextColor(textColor);
+//                            mTrailersTitle.setTextColor(textColor);
+//                            mReviewsTitle.setTextColor(textColor);
 
                             // Set awesome drawable colors
-                            Drawable[] drawables = mDescriptionTitle.getCompoundDrawables();
-                            drawables[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-
-                            Drawable[] drawableTrailersTitle = mTrailersTitle.getCompoundDrawables();
-                            drawableTrailersTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-                            Drawable[] drawableReviewsTitle = mReviewsTitle.getCompoundDrawables();
-                            drawableReviewsTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
+//                            Drawable[] drawables = mDescriptionTitle.getCompoundDrawables();
+//                            drawables[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
+//
+//                            Drawable[] drawableTrailersTitle = mTrailersTitle.getCompoundDrawables();
+//                            drawableTrailersTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
+//                            Drawable[] drawableReviewsTitle = mReviewsTitle.getCompoundDrawables();
+//                            drawableReviewsTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
 
                             changeStatusBarColor(color);
 

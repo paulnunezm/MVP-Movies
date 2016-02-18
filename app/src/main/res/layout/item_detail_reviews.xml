@@ -4,25 +4,24 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
-    android:paddingLeft="10dp">
+    android:layout_marginTop="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
         android:id="@+id/text_reviewer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:textSize="20sp"
         tools:text="Logan Stark"
-        tools:textColor="#000"/>
+        style="@style/DetailsViewTextViewTitle"/>
 
     <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
         android:id="@+id/text_review"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:textSize="16sp"
+        android:layout_marginTop="5dp"
         tools:text="AwesomeReviews"
-        tools:textColor="#000"/>
+        style="@style/DetailViewTextViewBody"/>
 
 </LinearLayout>
