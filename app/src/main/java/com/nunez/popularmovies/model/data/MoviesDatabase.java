@@ -1,0 +1,14 @@
+package com.nunez.popularmovies.model.data;
+
+import net.simonvt.schematic.annotation.Table;
+
+
+/**
+ * Created by paulnunez on 2/18/16.
+ */
+@net.simonvt.schematic.annotation.Database(version =  MoviesDatabase.VERSION)
+public final class MoviesDatabase {
+    public static final int VERSION = 1;
+
+    @Table(MoviesColumns.class) public static final String MOVIES = "movies";
+}
