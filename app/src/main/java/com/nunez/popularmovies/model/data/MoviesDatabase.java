@@ -6,7 +6,8 @@ import net.simonvt.schematic.annotation.Table;
 /**
  * Created by paulnunez on 2/18/16.
  */
-@net.simonvt.schematic.annotation.Database(version =  MoviesDatabase.VERSION)
+@net.simonvt.schematic.annotation.Database(
+        version =  MoviesDatabase.VERSION)
 public final class MoviesDatabase {
     public static final int VERSION = 1;
 

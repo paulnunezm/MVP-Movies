@@ -9,8 +9,8 @@ import net.simonvt.schematic.annotation.PrimaryKey;
  * Created by paulnunez on 2/18/16.
  */
 public interface MoviesColumns {
-
     @DataType(DataType.Type.INTEGER) @PrimaryKey @AutoIncrement String _ID = "_id";
+    @DataType(DataType.Type.INTEGER) @NotNull String MOVIE_ID = "movie_id";
     @DataType(DataType.Type.BLOB) String POSTER = "poster";
     @DataType(DataType.Type.TEXT) @NotNull String TITLE = "title";
     @DataType(DataType.Type.TEXT) String DESCRIPTION = "description";

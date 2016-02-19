@@ -7,6 +7,7 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -44,6 +45,9 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.nunez.popularmovies.R;
+import com.nunez.popularmovies.model.data.MoviesColumns;
+import com.nunez.popularmovies.model.data.MoviesDatabase;
+import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.utils.Constants;
@@ -315,6 +319,18 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
             playTrailer();
 
         }else if(id == R.id.button_fab){
+
+            ContentValues values = new ContentValues();
+            values.put(MoviesColumns.MOVIE_ID, mMovieId);
+            values.put(MoviesColumns.TITLE, String.valueOf(mTitle.getText()));
+
+            Uri inserMoviesUri;
+
+            inserMoviesUri = getContentResolver().insert(
+                    MoviesProvider.Movies.MOVIES,
+                    values);
+
+
             PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
             PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
             ObjectAnimator scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
