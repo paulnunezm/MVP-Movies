@@ -23,6 +23,7 @@
             android:layout_height="55dp"
             android:layout_gravity="center"
             android:visibility="visible"
+            tools:visibility="gone"
             style="?android:attr/progressBarStyleLarge"
             />
 
@@ -33,7 +34,8 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <FrameLayout
                 android:id="@+id/actio_play_trailer"

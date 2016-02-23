@@ -1,6 +1,7 @@
 package com.nunez.popularmovies.model.restApi;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -11,6 +12,8 @@ import com.nunez.popularmovies.BuildConfig;
 import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.domain.MoviesCallback;
+import com.nunez.popularmovies.model.data.MoviesColumns;
+import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
 import com.nunez.popularmovies.model.entities.Review;
@@ -35,8 +38,9 @@ public class RestMovieSource implements RestDataSource{
     private  Response                      response;
     private  Callbacks.StandarCallback     controllerCallback;
     private  MovieDatabaseApi              mDbApi;
+    private  Context                       mContext;
 
-    public RestMovieSource( Callbacks.StandarCallback controllerCallback){ // Needs a callback for the controller
+    public RestMovieSource(Callbacks.StandarCallback controllerCallback){ // Needs a callback for the controller
         this.controllerCallback = controllerCallback;
 //        mDbApi = new MovieDatabaseApi(PopularMovies.getApiKey());
         mDbApi = new MovieDatabaseApi(BuildConfig.theMovieDbApiKey);
@@ -131,7 +135,6 @@ public class RestMovieSource implements RestDataSource{
         }
     }
 
-
     class GetMovieDetailsCall extends AsyncTask<Void, Void, String> {
 
         private Movie mMovie;
@@ -169,6 +172,7 @@ public class RestMovieSource implements RestDataSource{
             Log.d("GetMovieDetailsCall", "onPostEx");
 
             Gson gson = new Gson();
+
 //            Movie response = null;
             mMovie  = null;
             try {
@@ -179,6 +183,7 @@ public class RestMovieSource implements RestDataSource{
 
             if(mMovie != null){
                 Log.d("GetMovieDetailsCall", mMovie.title);
+
 
 
 //                onSuccess(response);

@@ -15,14 +15,19 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
 
     private MovieDetailsContract.View mDetailView;
     private MovieDetailsController mDetailsController;
+    private String movieId;
     private Movie mMovie;
+    private boolean isFavorite;
 
     public MovieDetailsPresenter(String id){
         mDetailsController = new MovieDetailsController(id, this);
+        movieId = id;
     }
 
     @Override
     public void showViews() {
+        checkIfFavorite();
+
         showPoster(mMovie.getPosterPath());
         showTitle(mMovie.getTitle());
         showDescription(mMovie.getDescription());
@@ -55,6 +60,13 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
         mDetailView.showReviews(reviewsWrapper.getReviews());
     }
 
+    @Override
+    public void checkIfFavorite() {
+
+        if(mDetailsController.checkIfFavorite(mDetailView.getContext(), movieId))
+            mDetailView.setFavorite();
+    }
+
 
     @Override
     public void attachView(MovieDetailsContract.View detailsView) {
@@ -76,6 +88,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
     @Override
     public void start() {
         mDetailView.showLoading();
+//        isFavorite = mDetailsController.checkIfFavorite();
         mDetailsController.requestMovieDetails();
     }
 

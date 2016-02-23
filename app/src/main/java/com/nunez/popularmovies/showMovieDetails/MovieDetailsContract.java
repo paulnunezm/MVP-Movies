@@ -1,5 +1,6 @@
 package com.nunez.popularmovies.showMovieDetails;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.nunez.popularmovies.domain.UseCase;
@@ -24,6 +25,7 @@ public interface MovieDetailsContract {
         void showDescription(String description);
         void showTrailers();
         void showReviews();
+        void checkIfFavorite();
     }
 
     interface View extends MVPView {
@@ -33,10 +35,12 @@ public interface MovieDetailsContract {
         void showDescription(String description);
         void showTrailers(ArrayList<Video> trailers);
         void showReviews(ArrayList<Review> reviews);
+        void setFavorite();
     }
 
      interface MovieDetailsController extends UseCase {
          void requestMovieDetails();
          void sendMovieDetailsToPresenter(Movie movie);
+         boolean checkIfFavorite(Context context, String id);
     }
 }

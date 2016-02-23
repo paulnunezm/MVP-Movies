@@ -1,7 +1,12 @@
 package com.nunez.popularmovies.showMovieDetails;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 
+import com.nunez.popularmovies.model.data.DbDataSource;
+import com.nunez.popularmovies.model.data.MoviesColumns;
+import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.model.restApi.RestMovieSource;
 import com.nunez.popularmovies.utils.Callbacks;
@@ -23,13 +28,14 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
      */
     public MovieDetailsController(String movieId, Callbacks.StandarCallback presenterCallback){
 
-        mDataSource = new RestMovieSource(this);
+        mDataSource = new RestMovieSource( this);
         mPresenterCallback = presenterCallback;
         mMovieId = movieId;
     }
 
     @Override
     public void requestMovieDetails() {
+//        checkIfFavorite(this, mMovieId);
         mDataSource.getMovieDetails(mMovieId);
     }
 
@@ -41,6 +47,12 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
     public void sendMovieDetailsToPresenter(Movie movieDetails) {
         mPresenterCallback.onSuccess(movieDetails);
     }
+
+    @Override
+    public boolean checkIfFavorite(Context context, String id) {
+        return DbDataSource.checkIfFavorite(context, id);
+    }
+
 
     @Override
     public void execute() {

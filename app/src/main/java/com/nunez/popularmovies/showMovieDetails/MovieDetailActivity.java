@@ -7,10 +7,12 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -25,6 +27,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -68,6 +71,7 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
     private String mMovieId;
     private String mTrailerUrl;
+    private boolean isFavorite;
 
     private Context mContext;
     private MovieDetailsContract.Presenter mDetailPresenter;
@@ -285,6 +289,12 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
     }
 
+    @Override
+    public void setFavorite() {
+        isFavorite = true;
+        fab.setBackground(getContext().getResources().getDrawable(R.drawable.fab));
+    }
+
     public void playTrailer(){
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v="
@@ -312,6 +322,45 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
         window.setStatusBarColor(color);
     }
 
+    public void animateFavoritePulse(){
+        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
+        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
+        ObjectAnimator scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
+
+        scaleAnim.setDuration(500);
+        scaleAnim.setRepeatCount(1);
+        scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
+        scaleAnim.start();
+    }
+
+
+    public void animateFavorite(){
+        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
+        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
+        ObjectAnimator scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
+//            scaleAnim.setInterpolator(new BounceInterpolator());
+        scaleAnim.setDuration(500);
+        scaleAnim.setRepeatCount(1);
+        scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
+
+        //Let's change background's color to red.
+        Drawable[] color = {fab.getBackground(),
+                getContext().getResources().getDrawable(R.drawable.fab)};
+        TransitionDrawable trans = new TransitionDrawable(color);
+        //This will work also on old devices. The latest API says you have to use setBackground instead.
+        fab.setBackgroundDrawable(trans);
+
+        trans.startTransition(1000);
+
+        ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, 720);
+        rotateAnim.setInterpolator(new DecelerateInterpolator());
+        rotateAnim.setDuration(1400);
+
+        AnimatorSet setAnim = new AnimatorSet();
+        setAnim.play(scaleAnim).with(rotateAnim);
+        setAnim.start();
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -320,42 +369,22 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
         }else if(id == R.id.button_fab){
 
-            ContentValues values = new ContentValues();
-            values.put(MoviesColumns.MOVIE_ID, mMovieId);
-            values.put(MoviesColumns.TITLE, String.valueOf(mTitle.getText()));
+            if(!isFavorite){
+                ContentValues values = new ContentValues();
+                values.put(MoviesColumns.MOVIE_ID, mMovieId);
+                values.put(MoviesColumns.TITLE, String.valueOf(mTitle.getText()));
 
-            Uri inserMoviesUri;
+                Uri inserMoviesUri;
 
-            inserMoviesUri = getContentResolver().insert(
-                    MoviesProvider.Movies.MOVIES,
-                    values);
+                inserMoviesUri = getContentResolver().insert(
+                        MoviesProvider.Movies.MOVIES,
+                        values);
 
+                animateFavorite();
+            }else{
+                animateFavoritePulse();
+            }
 
-            PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
-            PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
-            ObjectAnimator scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
-//            scaleAnim.setInterpolator(new BounceInterpolator());
-            scaleAnim.setDuration(500);
-            scaleAnim.setRepeatCount(1);
-            scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
-
-            //Let's change background's color from blue to red.
-            Drawable[] color = {fab.getBackground(),
-                getContext().getResources().getDrawable(R.drawable.fab)};
-            TransitionDrawable trans = new TransitionDrawable(color);
-            //This will work also on old devices. The latest API says you have to use setBackground instead.
-            fab.setBackgroundDrawable(trans);
-
-            trans.startTransition(1000);
-
-            ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, 720);
-            rotateAnim.setInterpolator(new DecelerateInterpolator());
-            rotateAnim.setDuration(1400);
-
-            AnimatorSet setAnim = new AnimatorSet();
-            setAnim.play(scaleAnim).with(rotateAnim);
-//            setAnim.setDuration(500);
-            setAnim.start();
         }
     }
 

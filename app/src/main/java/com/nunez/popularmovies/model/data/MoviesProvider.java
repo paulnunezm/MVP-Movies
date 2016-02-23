@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import net.simonvt.schematic.annotation.ContentProvider;
 import net.simonvt.schematic.annotation.ContentUri;
+import net.simonvt.schematic.annotation.InexactContentUri;
 import net.simonvt.schematic.annotation.TableEndpoint;
 
 /**
@@ -13,13 +14,11 @@ import net.simonvt.schematic.annotation.TableEndpoint;
 public class MoviesProvider {
     public static final String AUTHORITY = "com.nunez.popularmovies.model.data.MoviesProvider";
 
-//    @TableEndpoint(table = NotesDatabase.LISTS) public static class Lists {
-//
-//        @ContentUri(
-//                path = "lists",
-//                type = "vnd.android.cursor.dir/list",
-//                defaultSort = ListColumns.TITLE + " ASC")
-//        public static final Uri LISTS = Uri.parse("content://" + AUTHORITY + "/lists");
+    interface Path{
+        String MOVIES = "movies";
+        String TRAILERS = "trailers";
+    }
+
 
     @TableEndpoint(table = MoviesDatabase.MOVIES) public static class Movies{
 
@@ -27,7 +26,24 @@ public class MoviesProvider {
                 path = MoviesDatabase.MOVIES,
                 type = "vnd.android.cursor.dir/movies",
                 defaultSort = MoviesColumns.TITLE + " ASC")
-
         public static final Uri MOVIES = Uri.parse("content://" + AUTHORITY + "/movies");
+
+//        @InexactContentUri(
+//                path = Path.MOVIES + "/#",
+//                name = "MOVIE_ID",
+//                type = "vnd.android.cursor.item/movies",
+//                whereColumn = MoviesColumns.MOVIE_ID,
+//                pathSegment = 1)
+//
+//        public static Uri withMovieId(String id) {
+//            return Uri.parse("content://" + AUTHORITY + "/"+Path.MOVIES+"/" + id);
+//        }
+
+//        public static String getMovieId(String)
     }
+
+
+
+
+
 }
