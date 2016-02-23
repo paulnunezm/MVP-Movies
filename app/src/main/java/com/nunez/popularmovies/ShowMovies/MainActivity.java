@@ -1,25 +1,14 @@
-package com.nunez.popularmovies.views;
+package com.nunez.popularmovies.ShowMovies;
 
-import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
-import android.transition.Transition;
-import android.util.Log;
-import android.util.Pair;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +23,6 @@ import com.nunez.popularmovies.mvp.views.MoviesView;
 import com.nunez.popularmovies.showMovieDetails.MovieDetailActivity;
 import com.nunez.popularmovies.views.adapters.MoviesAdapter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MoviesView, RecyclerViewClickListener {
@@ -67,11 +55,6 @@ public class MainActivity extends AppCompatActivity implements MoviesView, Recyc
 
         if (savedInstanceState == null)
             mMoviesPresenter.attachView(this);
-
-//        else
-//            initializeFromParams(savedInstanceState);
-
-//        if (android.os.Build.VERSION.SDK_INT >= 19)
 
     }
 
@@ -115,7 +98,8 @@ public class MainActivity extends AppCompatActivity implements MoviesView, Recyc
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_favorites) {
+            //showFavoriteMovies();
             return true;
         }
 

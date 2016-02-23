@@ -1,7 +1,9 @@
-package com.nunez.popularmovies.domain;
+package com.nunez.popularmovies.ShowMovies;
 
 import android.content.Context;
 
+import com.nunez.popularmovies.domain.GetMoviesUsecase;
+import com.nunez.popularmovies.domain.MoviesCallback;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
 import com.nunez.popularmovies.model.restApi.RestDataSource;
 import com.nunez.popularmovies.model.restApi.RestMovieSource;

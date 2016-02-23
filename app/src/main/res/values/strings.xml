@@ -7,5 +7,6 @@
     <string name="text_reviews">Reviews</string>
     <string name="format_reviews">\" %s \"</string>
     <string name="format_reviewer">- %s -"</string>
+    <string name="text_show_favorites">Show favorites</string>
 
 </resources>
