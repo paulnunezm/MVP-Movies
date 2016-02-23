@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.Movie;
-import com.nunez.popularmovies.mvp.presenters.MoviesPresenter;
 import com.nunez.popularmovies.mvp.presenters.RecyclerViewClickListener;
 import com.nunez.popularmovies.mvp.views.MoviesView;
 import com.nunez.popularmovies.showMovieDetails.MovieDetailActivity;

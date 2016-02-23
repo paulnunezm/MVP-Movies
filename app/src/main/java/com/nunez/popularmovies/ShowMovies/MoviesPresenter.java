@@ -2,7 +2,6 @@ package com.nunez.popularmovies.ShowMovies;
 
 import android.util.Log;
 
-import com.nunez.popularmovies.domain.GetMoviesController;
 import com.nunez.popularmovies.domain.MoviesCallback;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
 import com.nunez.popularmovies.mvp.presenters.Presenter;

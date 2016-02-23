@@ -2,7 +2,6 @@ package com.nunez.popularmovies.views.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.Video;
-import com.nunez.popularmovies.views.MainActivity;
 
 import java.util.ArrayList;
 
