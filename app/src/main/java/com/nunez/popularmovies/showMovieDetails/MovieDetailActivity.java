@@ -292,7 +292,8 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
     @Override
     public void setFavorite() {
         isFavorite = true;
-        fab.setBackground(getContext().getResources().getDrawable(R.drawable.fab));
+//        fab.setBackgroundColor(getContext().getResources().getColor(R.color.color_favorite));
+        fab.setBackgroundResource(R.drawable.fab);
     }
 
     public void playTrailer(){

@@ -17,7 +17,7 @@ public class DbDataSource {
                null
        );
 
-       if(mCursor != null) return true;
+       if(mCursor.moveToFirst()) return true;
 
        return false;
    }
