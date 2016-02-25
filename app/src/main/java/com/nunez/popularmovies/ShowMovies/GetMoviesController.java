@@ -1,13 +1,15 @@
 package com.nunez.popularmovies.ShowMovies;
 
-import android.content.Context;
+import android.database.Cursor;
 
-import com.nunez.popularmovies.domain.GetMoviesUsecase;
+import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.domain.MoviesCallback;
+import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
 import com.nunez.popularmovies.model.restApi.RestDataSource;
 import com.nunez.popularmovies.model.restApi.RestMovieSource;
 import com.nunez.popularmovies.utils.Callbacks;
+import com.nunez.provider.MoviesDatabase;
 
 /**
  * This class is an implementation of {@link GetMoviesUsecase}
@@ -22,19 +24,6 @@ public class GetMoviesController implements GetMoviesUsecase {
     public GetMoviesController(MoviesCallback presenterCallback) {
 
         mPresenterCallback = presenterCallback;
-
-//        callback = new MoviesCallback() {
-//            @Override
-//            public void onSuccess(MoviesWrapper moviesWrapper) {
-//                sendMoviesToPresenter(moviesWrapper);
-//            }
-//
-//            @Override
-//            public String onError(String e) {
-//               mPresenterCallback.onError(e);
-//                return null;
-//            }
-//        };
 
         callback = new Callbacks.StandarCallback() {
             @Override
@@ -55,6 +44,15 @@ public class GetMoviesController implements GetMoviesUsecase {
     public void requestPopularMovies() {
         mDataSource.getMovies();
     }
+
+    @Override
+    public void requestFavoriteMovies() {
+        Cursor movies = PopularMovies.context.getContentResolver().query(
+                MoviesProvider.Movies.MOVIES,
+                null, null, null, null);
+
+    }
+
 
     @Override
     public void sendMoviesToPresenter(MoviesWrapper response) {

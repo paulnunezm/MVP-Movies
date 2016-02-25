@@ -35,9 +35,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
         showTrailers();
         showReviews();
         mDetailView.hideLoading();
-
     }
-
 
     @Override
     public void showTitle(String title) {
@@ -88,7 +86,6 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
     @Override
     public void start() {
         mDetailView.showLoading();
-//        isFavorite = mDetailsController.checkIfFavorite();
         mDetailsController.requestMovieDetails();
     }
 

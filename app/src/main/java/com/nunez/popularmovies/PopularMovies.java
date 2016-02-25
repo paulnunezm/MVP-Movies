@@ -10,7 +10,7 @@ import com.facebook.stetho.Stetho;
  */
 public class PopularMovies extends Application {
 
-//    public static  String API_KEY;
+    public static  Context context;
 
 
 
@@ -18,17 +18,12 @@ public class PopularMovies extends Application {
     public void onCreate() {
         super.onCreate();
 
+        context = getApplicationContext();
+
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)
                     .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                     .build());
 
-//        API_KEY = getResources().getString(R.string.theMovieDbApiKey);
-
-
     }
-
-//    public static String getApiKey(){
-//        return API_KEY;
-//    }
 }

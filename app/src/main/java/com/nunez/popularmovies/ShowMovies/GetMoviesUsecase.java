@@ -1,5 +1,6 @@
-package com.nunez.popularmovies.domain;
+package com.nunez.popularmovies.ShowMovies;
 
+import com.nunez.popularmovies.domain.UseCase;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
 
 /**
@@ -13,10 +14,17 @@ public interface GetMoviesUsecase extends UseCase {
     void requestPopularMovies();
 
     /**
+     * Request favorite movies from the content provider
+     */
+    void requestFavoriteMovies();
+
+    /**
      * Send the popular movies response from the api through a callback.
      *
      * @param response
      */
     void sendMoviesToPresenter(MoviesWrapper response);
+
+
 
 }
