@@ -27,7 +27,10 @@ import com.nunez.popularmovies.views.adapters.MoviesAdapter;
 
 import java.util.ArrayList;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
+
+    public static final String EXTRA_MOVIE_ID = "movie_id";
+
 
     private Snackbar.Callback snackCallback;
     private TextView text;
@@ -40,7 +43,6 @@ public class MainActivity extends ActionBarActivity {
     private ProgressBar mProgress;
     private Toolbar toolbar;
     private boolean mAutoUpdated;
-    public static final String EXTRA_MOVIE_ID = "movie_id";
 
 
     @Override
@@ -48,8 +50,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        MoviesFragment moviesFragment = (MoviesFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.fragment_movies);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+
+//        initializeToolbar();
 
     }
 
@@ -76,9 +79,13 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initializeToolbar(){
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle("");
+    public CoordinatorLayout getCoordinatorLayout(){
+        return coordinatorLayout;
     }
+
+//    private void initializeToolbar(){
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//    }
 
 }

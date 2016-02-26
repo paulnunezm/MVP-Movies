@@ -31,31 +31,33 @@ import java.util.ArrayList;
  */
 public class MoviesFragment extends Fragment implements MoviesView, RecyclerViewClickListener {
 
-    private Snackbar.Callback snackCallback;
-    private TextView text;
-    private CoordinatorLayout coordinatorLayout;
-    private MoviesPresenter mMoviesPresenter;
-    private Context mContext;
-    private RecyclerView mRecycler;
-    private MoviesAdapter mAdapter;
-    private GridLayoutManager mLayoutMangager;
-    private ProgressBar mProgress;
-    private Toolbar toolbar;
-    private boolean mAutoUpdated;
     public static final String EXTRA_MOVIE_ID = "movie_id";
 
+    private boolean mAutoUpdated;
+    private CoordinatorLayout coordinatorLayout;
+    private GridLayoutManager mLayoutMangager;
+    private MoviesPresenter mMoviesPresenter;
+    private MoviesAdapter mAdapter;
+    private ProgressBar mProgress;
+    private RecyclerView mRecycler;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mMoviesPresenter = new MoviesPresenter();
+
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_main, container);
 
-
         initializeViews(rootView);
         initializeRecyclerView();
 
-
-
+        mMoviesPresenter.attachView(this);
 
         return rootView;
     }
@@ -73,9 +75,6 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     }
 
     public void initializeViews(View view){
-//        mContext          = this.getContext();
-//        toolbar           = (Toolbar) container.findViewById(R.id.toolbar);
-////        coordinatorLayout = (CoordinatorLayout) container.findViewById(R.id.coordinatorLayout);
         mRecycler         = (RecyclerView) view.findViewById(R.id.recycler);
         mProgress         = (ProgressBar) view.findViewById(R.id.progress);
     }
@@ -90,8 +89,9 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
 
     @Override
     public void showLoading() {
-//        mProgress.setVisibility(View.VISIBLE);
-//        Snackbar.make(coordinatorLayout, "Requesting movies...", Snackbar.LENGTH_LONG).show();
+        mProgress.setVisibility(View.VISIBLE);
+        Snackbar.make(((MainActivity) getActivity()).getCoordinatorLayout(),
+                "Requesting movies...", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
 
     @Override
     public Context getContext() {
-        return mContext;
+        return getActivity().getApplicationContext();
     }
 
     @Override
