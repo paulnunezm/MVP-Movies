@@ -9,7 +9,6 @@ import com.nunez.popularmovies.model.entities.MoviesWrapper;
 import com.nunez.popularmovies.model.restApi.RestDataSource;
 import com.nunez.popularmovies.model.restApi.RestMovieSource;
 import com.nunez.popularmovies.utils.Callbacks;
-import com.nunez.provider.MoviesDatabase;
 
 /**
  * This class is an implementation of {@link GetMoviesUsecase}

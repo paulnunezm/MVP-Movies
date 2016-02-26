@@ -1,10 +1,13 @@
 package com.nunez.popularmovies.ShowMovies;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +27,7 @@ import com.nunez.popularmovies.views.adapters.MoviesAdapter;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MoviesView, RecyclerViewClickListener {
+public class MainActivity extends ActionBarActivity {
 
     private Snackbar.Callback snackCallback;
     private TextView text;
@@ -45,41 +48,9 @@ public class MainActivity extends AppCompatActivity implements MoviesView, Recyc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeViews();
-        initializeToolbar();
-        initializeRecyclerView();
+//        MoviesFragment moviesFragment = (MoviesFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.fragment_movies);
 
-        mAutoUpdated = false; // Checks if already updated without user interaction.
-        mMoviesPresenter = new MoviesPresenter();
-
-        if (savedInstanceState == null)
-            mMoviesPresenter.attachView(this);
-
-    }
-
-    private void initializeToolbar(){
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-    }
-
-    public void initializeRecyclerView(){
-        mLayoutMangager = new GridLayoutManager(getContext(),2);
-        mRecycler.setLayoutManager(mLayoutMangager);
-    }
-
-    public void initializeViews(){
-        mContext          = this.getContext();
-        toolbar           = (Toolbar) findViewById(R.id.toolbar);
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-        mRecycler         = (RecyclerView) findViewById(R.id.recycler);
-        mProgress         = (ProgressBar) findViewById(R.id.progress);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if(!mAutoUpdated) mMoviesPresenter.start();
     }
 
     @Override
@@ -105,65 +76,9 @@ public class MainActivity extends AppCompatActivity implements MoviesView, Recyc
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void showMovies(ArrayList<Movie> movieList) {
-        mAutoUpdated = true;
-        mAdapter = new MoviesAdapter(movieList,5);
-        mAdapter.setRecyclerListListener(MainActivity.this);
-        mRecycler.setAdapter(mAdapter);
+    private void initializeToolbar(){
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setTitle("");
     }
 
-    @Override
-    public void showLoading() {
-        mProgress.setVisibility(View.VISIBLE);
-        Snackbar.make(coordinatorLayout, "Requesting movies...", Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void hideLoading() {
-        mProgress.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showLoadingLabel() {
-
-    }
-
-    @Override
-    public void hideActionLabel() {
-
-    }
-
-    @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public boolean isTheListEmpty() {
-        return false;
-    }
-
-    @Override
-    public void appendMovies(ArrayList<Movie> movieList) {
-
-    }
-
-    @Override
-    public Context getContext() {
-        return mContext;
-    }
-
-    @Override
-    public void onClick(View v, int position, float x, float y) {
-        Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
-
-        Movie movie = mAdapter.getMovies().get(position);
-
-        Bundle args = new Bundle();
-        args.putString(EXTRA_MOVIE_ID, String.valueOf(movie.id));
-        intent.putExtra(EXTRA_MOVIE_ID, args);
-
-        startActivity(intent);
-    }
 }
