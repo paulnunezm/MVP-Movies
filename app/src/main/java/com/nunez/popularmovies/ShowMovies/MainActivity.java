@@ -34,20 +34,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public static final String EXTRA_MOVIE_ID = "movie_id";
 
-
-    private Snackbar.Callback snackCallback;
-    private TextView text;
     private CoordinatorLayout coordinatorLayout;
-    private MoviesPresenter mMoviesPresenter;
-    private Context mContext;
-    private RecyclerView mRecycler;
-    private MoviesAdapter mAdapter;
-    private GridLayoutManager mLayoutMangager;
-    private ProgressBar mProgress;
     private Spinner spinner;
-    private Toolbar toolbar;
-    private boolean mAutoUpdated;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +48,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setOnItemSelectedListener(this);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.movies_sort_array, android.R.layout.simple_spinner_item);
+                R.array.movies_sort_array, R.layout.item_spinner);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.item_spinner);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 

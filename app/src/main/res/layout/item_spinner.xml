@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
+    xmlns:yourApp="http://schemas.android.com/apk/lib/com.nunez.popularmovies"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    style="?android:attr/spinnerItemStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:ellipsize="marquee"
+    android:padding="10dp"
+    android:singleLine="true"
+    android:text="@string/app_name"
+    android:textSize="26dp"
+    android:textColor="#fff"
+    android:textAlignment="inherit" />
