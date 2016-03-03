@@ -15,7 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nunez.popularmovies.R;
@@ -27,7 +30,7 @@ import com.nunez.popularmovies.views.adapters.MoviesAdapter;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String EXTRA_MOVIE_ID = "movie_id";
 
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private MoviesAdapter mAdapter;
     private GridLayoutManager mLayoutMangager;
     private ProgressBar mProgress;
+    private Spinner spinner;
     private Toolbar toolbar;
     private boolean mAutoUpdated;
 
@@ -51,8 +55,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        spinner           = (Spinner) findViewById(R.id.spinner_sort);
 
-//        initializeToolbar();
+        spinner.setOnItemSelectedListener(this);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.movies_sort_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
     }
 
@@ -83,9 +95,15 @@ public class MainActivity extends AppCompatActivity {
         return coordinatorLayout;
     }
 
-//    private void initializeToolbar(){
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//    }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
 
 }

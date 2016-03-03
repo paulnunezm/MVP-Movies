@@ -14,7 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nunez.popularmovies.R;
@@ -34,7 +37,6 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public static final String EXTRA_MOVIE_ID = "movie_id";
 
     private boolean mAutoUpdated;
-    private CoordinatorLayout coordinatorLayout;
     private GridLayoutManager mLayoutMangager;
     private MoviesPresenter mMoviesPresenter;
     private MoviesAdapter mAdapter;
@@ -77,6 +79,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public void initializeViews(View view){
         mRecycler         = (RecyclerView) view.findViewById(R.id.recycler);
         mProgress         = (ProgressBar) view.findViewById(R.id.progress);
+
     }
 
     @Override
