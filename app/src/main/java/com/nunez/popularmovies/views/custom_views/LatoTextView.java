@@ -1,6 +1,5 @@
 package com.nunez.popularmovies.views.custom_views;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -24,49 +23,51 @@ public class LatoTextView extends TextView {
     public LatoTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        if (!isInEditMode())
+        if (!isInEditMode()){
             init(context);
 
-        String fontType;
+            String fontType;
 
-        TypedArray a = context.getTheme().obtainStyledAttributes(
-                attrs,
-                R.styleable.LatoTextView,
-                0, 0);
+            TypedArray a = context.getTheme().obtainStyledAttributes(
+                    attrs,
+                    R.styleable.LatoTextView,
+                    0, 0);
 
-        try {
-            fontType = a.getString(R.styleable.LatoTextView_fontType);
+            try {
+                fontType = a.getString(R.styleable.LatoTextView_fontType);
 
-        } finally {
-            a.recycle();
+            } finally {
+                a.recycle();
+            }
+
+            Typeface t = Typeface.createFromAsset(context.getAssets(), "Lato-" + fontType + ".ttf");
+            this.setTypeface(t);
         }
-
-        Typeface t = Typeface.createFromAsset(context.getAssets(), "Lato-"+fontType+".ttf");
-        this.setTypeface(t);
     }
 
     public LatoTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        if (!isInEditMode())
+        if (!isInEditMode()) {
             init(context);
 
-        String fontType;
+            String fontType;
 
-        TypedArray a = context.getTheme().obtainStyledAttributes(
-                attrs,
-                R.styleable.LatoTextView,
-                0, 0);
+            TypedArray a = context.getTheme().obtainStyledAttributes(
+                    attrs,
+                    R.styleable.LatoTextView,
+                    0, 0);
 
-        try {
-            fontType = a.getString(R.styleable.LatoTextView_fontType);
+            try {
+                fontType = a.getString(R.styleable.LatoTextView_fontType);
 
-        } finally {
-            a.recycle();
+            } finally {
+                a.recycle();
+            }
+
+            Typeface t = Typeface.createFromAsset(context.getAssets(), "Lato-" + fontType + ".ttf");
+            this.setTypeface(t);
         }
-
-        Typeface t = Typeface.createFromAsset(context.getAssets(), "Lato-"+fontType+".ttf");
-        this.setTypeface(t);
     }
 
 

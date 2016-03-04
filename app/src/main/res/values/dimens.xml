@@ -6,4 +6,5 @@
     <dimen name="fab_dimen">56dp</dimen>
     <dimen name="item_movie_width">196dp</dimen>
     <dimen name="item_movie_height">248dp</dimen>
+    <dimen name="card_elevation">12dp</dimen>Os
 </resources>

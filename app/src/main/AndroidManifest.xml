@@ -31,7 +31,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".showMovieDetails.MovieDetailActivity"></activity>
+        <activity
+            android:name=".showMovieDetails.MovieDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ShowMovies.MainActivity"/>
+        </activity>
         
 
     </application>

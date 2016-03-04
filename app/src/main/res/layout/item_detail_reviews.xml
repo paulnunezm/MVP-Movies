@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="5dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
-    <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
+    <com.nunez.popularmovies.views.custom_views.LatoTextView
         android:id="@+id/text_reviewer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         tools:text="Logan Stark"
-        style="@style/DetailsViewTextViewTitle"/>
+        app:fontType="Medium"
+        style="@style/DetailsViewTextViewTitle"  />
 
-    <com.nunez.popularmovies.views.custom_views.RalewayMediumTextView
+    <com.nunez.popularmovies.views.custom_views.LatoTextView
         android:id="@+id/text_review"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        app:fontType="Medium"
         tools:text="AwesomeReviews"
         style="@style/DetailViewTextViewBody"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/gray_light"
+        android:layout_marginTop="10dp" />
 
 </LinearLayout>

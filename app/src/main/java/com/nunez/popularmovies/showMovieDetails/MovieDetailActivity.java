@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -17,9 +16,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -49,7 +50,7 @@ import java.util.ArrayList;
 /**
  * Created by paulnunez on 12/7/15.
  */
-public class MovieDetailActivity extends Activity implements MovieDetailsContract.View,
+public class MovieDetailActivity extends AppCompatActivity implements MovieDetailsContract.View,
         View.OnClickListener{
 
     private static String LOG_TAG = MovieDetailActivity.class.getSimpleName();
@@ -77,6 +78,7 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
     private ImageButton fab;
     private ProgressBar mProgress;
     private View mDetailsContainer;
+    private android.support.v7.widget.Toolbar toolbar;
 
     @Override @TargetApi (Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,11 +124,29 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
         fab = (ImageButton) findViewById(R.id.button_fab);
         mProgress = (ProgressBar) findViewById(R.id.progress);
         mDetailsContainer = findViewById(R.id.container);
+        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
 
         findViewById(R.id.actio_play_trailer).setOnClickListener(this);
         fab.setOnClickListener(this);
+
+        toolbar.setTitle("");
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public Context getContext() {
@@ -219,6 +239,7 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
 //                            mScrollView.setBackgroundColor(mutedLightSwatch.getRgb());
                             mTitleBackground.setBackgroundColor(alphaColor);
+                            toolbar.setBackgroundColor(alphaColor);
 //                            mDescriptionTitle.setTextColor(textColor);//vibrantSwatchTitleTextColor);
 //                            mDescription.setTextColor(textColor);
 //                            mTrailersTitle.setTextColor(textColor);

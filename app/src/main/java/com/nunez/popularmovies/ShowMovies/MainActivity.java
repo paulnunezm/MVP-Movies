@@ -1,37 +1,18 @@
 package com.nunez.popularmovies.ShowMovies;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.nunez.popularmovies.R;
-import com.nunez.popularmovies.model.entities.Movie;
-import com.nunez.popularmovies.mvp.presenters.RecyclerViewClickListener;
-import com.nunez.popularmovies.mvp.views.MoviesView;
-import com.nunez.popularmovies.showMovieDetails.MovieDetailActivity;
 import com.nunez.popularmovies.utils.Constants;
-import com.nunez.popularmovies.views.adapters.MoviesAdapter;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
