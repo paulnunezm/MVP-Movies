@@ -117,7 +117,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         int cellPosition = holder.getAdapterPosition();
 
-        if (!holder.animated) {
+        if (!holder.animated && cellPosition>=0) {
             holder.animated = true;
             holder.title.animate()
                     .alpha(1)

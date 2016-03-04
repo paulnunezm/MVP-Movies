@@ -3,6 +3,7 @@ package com.nunez.popularmovies.ShowMovies;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.mvp.presenters.RecyclerViewClickListener;
 import com.nunez.popularmovies.mvp.views.MoviesView;
 import com.nunez.popularmovies.showMovieDetails.MovieDetailActivity;
+import com.nunez.popularmovies.utils.Constants;
 import com.nunez.popularmovies.views.adapters.MoviesAdapter;
 
 import java.util.ArrayList;
@@ -35,7 +38,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public static final String EXTRA_MOVIE_ID = "movie_id";
 
     private CoordinatorLayout coordinatorLayout;
+    private SharedPreferences sortPreferences;
+    private SharedPreferences.Editor prefEditor;
     private Spinner spinner;
+    private boolean firstTimeOpen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.setDropDownViewResource(R.layout.item_spinner);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+
+        // Initialize the sort preference, and set sort popular
+        sortPreferences = getSharedPreferences(Constants.PREFS,0);
+        String sortType = sortPreferences.getString(Constants.SORT_POPULAR, null);
+        prefEditor = sortPreferences.edit();
+
+
+        // If no sorting prefs has been set before, set popular sorting as default.
+        if (sortType == null) {
+            prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_POPULAR);
+            prefEditor.apply();
+        }
+
 
     }
 
@@ -85,6 +105,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(!firstTimeOpen){
+
+            switch (position){
+                case 0: // pop movies
+                    prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_POPULAR);
+                    prefEditor.apply();
+                    break;
+
+                case 1: // top rated
+                    prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_RATING);
+                    prefEditor.apply();
+                    break;
+            }
+
+            ((MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies))
+                    .refreshMovies();
+
+        }
+        firstTimeOpen = false;
 
     }
 

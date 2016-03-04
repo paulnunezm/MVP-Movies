@@ -82,6 +82,10 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
 
     }
 
+    public void refreshMovies(){
+        mMoviesPresenter.start();
+    }
+
     @Override
     public void showMovies(ArrayList<Movie> movieList) {
         mAutoUpdated = true;
