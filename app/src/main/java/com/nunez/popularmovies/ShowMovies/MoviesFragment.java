@@ -1,24 +1,25 @@
 package com.nunez.popularmovies.ShowMovies;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.Movie;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
  */
 public class MoviesFragment extends Fragment implements MoviesView, RecyclerViewClickListener {
 
+    private static final String TAG = MoviesFragment.class.getSimpleName();
     public static final String EXTRA_MOVIE_ID = "movie_id";
 
     private boolean mAutoUpdated;
@@ -42,13 +44,13 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     private MoviesAdapter mAdapter;
     private ProgressBar mProgress;
     private RecyclerView mRecycler;
+    private Sensor mSensor;
+    private SensorManager mSensorManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mMoviesPresenter = new MoviesPresenter();
-
     }
 
     @Nullable
@@ -70,8 +72,21 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
         if(!mAutoUpdated) mMoviesPresenter.start();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializeRecyclerView();
+    }
 
     public void initializeRecyclerView(){
+
+        int columns = 2;
+        Log.d(TAG, "initializeRecyclerView: "+getActivity().getRequestedOrientation());
+
+//        if( != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT){
+//            columns = 4;
+//        }
+
         mLayoutMangager = new GridLayoutManager(getContext(),2);
         mRecycler.setLayoutManager(mLayoutMangager);
     }
@@ -79,7 +94,6 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public void initializeViews(View view){
         mRecycler         = (RecyclerView) view.findViewById(R.id.recycler);
         mProgress         = (ProgressBar) view.findViewById(R.id.progress);
-
     }
 
     public void refreshMovies(){

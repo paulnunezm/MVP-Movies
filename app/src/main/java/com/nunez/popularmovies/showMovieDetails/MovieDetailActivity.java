@@ -35,15 +35,14 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.nunez.popularmovies.R;
+import com.nunez.popularmovies.ShowMovies.MainActivity;
 import com.nunez.popularmovies.model.data.MoviesColumns;
 import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.utils.Constants;
-import com.nunez.popularmovies.ShowMovies.MainActivity;
 import com.nunez.popularmovies.views.adapters.ReviewsAdapter;
 import com.nunez.popularmovies.views.adapters.TrailersAdapter;
-import com.nunez.popularmovies.views.custom_views.MyLinearLayoutManager;
 
 import java.util.ArrayList;
 
@@ -70,9 +69,9 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
     private View mTitleBackground;
     private NestedScrollView mScrollView;
     private RecyclerView mTrailersRecycleView;
-    private MyLinearLayoutManager mTrailersLayoutManager;
+    private LinearLayoutManager mTrailersLayoutManager;
     private TrailersAdapter mTrailersAdapter;
-    private MyLinearLayoutManager mReviewsLayoutManager;
+    private LinearLayoutManager mReviewsLayoutManager;
     private ReviewsAdapter mReviewsAdapter;
     private RecyclerView mReviewsRecyclerView;
     private ImageButton fab;
@@ -126,8 +125,6 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
         findViewById(R.id.actio_play_trailer).setOnClickListener(this);
         fab.setOnClickListener(this);
-
-//        fab.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
     }
 
 
@@ -236,7 +233,10 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 //                            Drawable[] drawableReviewsTitle = mReviewsTitle.getCompoundDrawables();
 //                            drawableReviewsTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
 
-                            changeStatusBarColor(color);
+                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                                changeStatusBarColor(color);
+                            }
+
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -252,7 +252,7 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
     @Override
     public void showTrailers(ArrayList<Video> trailers){
         mTrailersAdapter = new TrailersAdapter(trailers);
-        mTrailersLayoutManager = new MyLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mTrailersLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mTrailersRecycleView.setLayoutManager(mTrailersLayoutManager);
         mTrailersRecycleView.setHasFixedSize(true);
         mTrailersRecycleView.setAdapter(mTrailersAdapter);
@@ -264,7 +264,7 @@ public class MovieDetailActivity extends Activity implements MovieDetailsContrac
 
         if(reviews.size() > 0){
             mReviewsAdapter = new ReviewsAdapter(reviews);
-            mReviewsLayoutManager = new MyLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            mReviewsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mReviewsRecyclerView.setLayoutManager(mReviewsLayoutManager);
 //        mReviewsRecyclerView.setHasFixedSize(true);
             mReviewsRecyclerView.setAdapter(mReviewsAdapter);
