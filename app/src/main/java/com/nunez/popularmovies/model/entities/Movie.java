@@ -4,8 +4,6 @@ package com.nunez.popularmovies.model.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 public class Movie {
 
     public int id;
@@ -18,11 +16,15 @@ public class Movie {
     @Expose @SerializedName("poster_path")
     public String posertPath;
 
+    @SerializedName("release_date")
+    public String releaseDate;
+
+    @SerializedName("vote_average")
+    public String rating;
 
     // Not parsed
     public VideosWrapper videosWrapper;
     public ReviewsWrapper reviewsWrapper;
-
 
 
     public String getId() {
@@ -39,6 +41,10 @@ public class Movie {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
     public VideosWrapper getVideosWrapper() {
@@ -60,4 +66,9 @@ public class Movie {
     public void setReviewsWrapper(ReviewsWrapper reviewsWrapper) {
         this.reviewsWrapper = reviewsWrapper;
     }
+
+    public String getRating() {
+        return rating;
+    }
+
 }

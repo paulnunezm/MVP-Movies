@@ -66,6 +66,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     private TextView mDescriptionTitle;
     private TextView mTrailersTitle;
     private TextView mReviewsTitle;
+    private TextView mReleaseDate;
+    private TextView mRatings;
     private ImageView mPoster;
     private View mTitleBackground;
     private NestedScrollView mScrollView;
@@ -96,7 +98,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         mDetailPresenter.attachView(this);
 
         initializeViews();
-//        prepareRecylers();
     }
 
     @Override
@@ -125,6 +126,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         mProgress = (ProgressBar) findViewById(R.id.progress);
         mDetailsContainer = findViewById(R.id.container);
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        mRatings = (TextView) findViewById(R.id.text_rating);
+        mReleaseDate = (TextView) findViewById(R.id.text_release);
 
         findViewById(R.id.actio_play_trailer).setOnClickListener(this);
         fab.setOnClickListener(this);
@@ -299,8 +302,17 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     @Override
     public void setFavorite() {
         isFavorite = true;
-//        fab.setBackgroundColor(getContext().getResources().getColor(R.color.color_favorite));
         fab.setBackgroundResource(R.drawable.fab);
+    }
+
+    @Override
+    public void showReleaseDate(String release) {
+        mReleaseDate.setText(release);
+    }
+
+    @Override
+    public void showRatings(String rating) {
+        mRatings.setText(rating);
     }
 
     public void playTrailer(){

@@ -1,5 +1,6 @@
 package com.nunez.popularmovies.showMovieDetails;
 
+import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.model.entities.ReviewsWrapper;
 import com.nunez.popularmovies.model.entities.Video;
@@ -34,6 +35,8 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
         setTrailerLink();
         showTrailers();
         showReviews();
+        showReleaseDate();
+        showRatings();
         mDetailView.hideLoading();
     }
 
@@ -63,6 +66,17 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
 
         if(mDetailsController.checkIfFavorite(mDetailView.getContext(), movieId))
             mDetailView.setFavorite();
+    }
+
+    @Override
+    public void showReleaseDate() {
+        mDetailView.showReleaseDate(mMovie.getReleaseDate().replace("-","/"));
+    }
+
+    @Override
+    public void showRatings() {
+        mDetailView.showRatings(String.format(mDetailView.getContext().getResources()
+            .getString(R.string.format_rating), mMovie.rating));
     }
 
 
