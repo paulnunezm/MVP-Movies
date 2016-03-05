@@ -1,6 +1,13 @@
-##MVP-Movies
-This a movies application that demonstrates the use of multiple libraries and
-implementing a clean architecture for fetching the data from [The Movie Database](https://www.themoviedb.org) Api.
+## Popular Movies
+This a movies application for the Android Developer Nanodegree. This app also demonstrates the use of multiple libraries
+with a clean architecture for fetching the data from [The Movie Database](https://www.themoviedb.org) Api.
+
+## Setting it up with your own API KEY
+In your root folder create a gradle.properties file and inside add the following line:
+```
+API_KEY = "{with you api key here}"
+```
+And your good to go.
 
 ###Libraries
 - **[OkHttp](https://square.github.io/okhttp/)** As a http client.
