@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:height="17dp"
+	android:width="14dp"
+	android:viewportWidth="36"
+	android:viewportHeight="48">
+
+	<group
+		android:name="group_rating">
+		<path
+			android:name="rating"
+			android:fillColor="@color/gray"
+			android:pathData="M20,0h-2H0v48h36V19v-1v-1L20,0z M20,3.1L33.1,17H20V3.1z M34,46H2V2h16v15v2h2h14V46z M8,24
+			h20v-2H8V24z M14,15H8v2h6V15z M8,31h20v-2H8V31z M8,38h20v-2H8V38z"/>
+	</group>
+
+</vector>

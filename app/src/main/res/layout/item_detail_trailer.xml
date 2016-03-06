@@ -10,13 +10,17 @@
         android:id="@+id/item_detail_trailer"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:drawableLeft="@drawable/play_arrow_black_192x192"
+        android:drawableLeft="@drawable/ic_trailer"
+        android:drawablePadding="10dp"
         android:gravity="center_vertical"
+        android:paddingTop="15dp"
         android:paddingLeft="10dp"
-        style="@style/DetailViewTextViewBody"
+        android:paddingBottom="15dp"
         app:fontType="Medium"
-        tools:text="Trailer 1       c"
-        tools:textColor='#000'/>
+        tools:text="Trailer 1"
+        tools:textColor='#000'
+        style="@style/DetailViewTextViewBody"
+        />
 
     <View
         android:id="@+id/divider"

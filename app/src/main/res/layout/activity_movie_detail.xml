@@ -54,8 +54,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:tint="@color/gray_dark"
-                    android:paddingLeft="2dp"
-                    android:src="@drawable/play_arrow_black_192x192"/>
+                    android:paddingLeft="2dp" />
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -91,6 +90,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@id/text_title"
                         android:layout_below="@id/text_title"
+                        android:drawableLeft="@drawable/ic_rating"
+                        android:drawablePadding="10dp"
                         android:layout_marginRight="20dp"
                         android:textColor="@color/gray_light"
                         android:textSize="14sp"
@@ -110,6 +111,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@id/text_rating"
+                        android:drawableLeft="@drawable/ic_date"
+                        android:drawablePadding="10dp"
                         android:layout_toRightOf="@id/view_separator"
                         android:layout_marginLeft="20dp"
                         android:textColor="@color/gray_light"
@@ -117,7 +120,6 @@
                         app:fontType="Regular"
                         tools:text="2/5/2016" />
                 </RelativeLayout>
-
 
                 <ImageButton
                     android:id="@+id/button_fab"
@@ -152,13 +154,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:textColor="@color/gray_dark"
-                        android:drawableLeft="@drawable/ic_description_black_192x192"
-                        android:drawableTint="@color/gray_dark"
+                        android:drawableLeft="@drawable/ic_description"
+                        android:drawablePadding="10dp"
                         android:tint="@color/gray_dark"
                         android:gravity="center"
                         app:fontType="Regular"
                         android:text="@string/text_description"
-                        style="@style/DetailsViewTextViewTitle" />
+                        style="@style/DetailsViewTextViewTitle"/>
 
 
                     <com.nunez.popularmovies.views.custom_views.LatoTextView
@@ -183,7 +185,7 @@
                 android:layout_marginBottom="10dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -196,8 +198,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:layout_marginTop="10dp"
-                        android:drawableLeft="@drawable/trailer"
-                        android:tint="@color/gray_dark"
+                        android:drawableLeft="@drawable/ic_trailers"
+                        android:drawablePadding="10dp"
                         android:paddingLeft="20dp"
                         android:gravity="center"
                         android:text="@string/text_trailers"
@@ -233,8 +235,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/ic_reviews"
+                        android:drawablePadding="10dp"
                         android:textColor="@color/gray_dark"
-                        android:drawableLeft="@drawable/review"
                         android:paddingLeft="20dp"
                         android:gravity="center"
                         android:text="@string/text_reviews"
@@ -249,7 +252,5 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
-
-
     </FrameLayout>
 </android.support.v4.widget.NestedScrollView>

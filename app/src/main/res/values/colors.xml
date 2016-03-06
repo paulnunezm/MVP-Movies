@@ -9,5 +9,6 @@
     <color name="transparent">#80000000</color>
     <color name="gray_light">#f1f1f1</color>
     <color name="gray_dark">#646464</color> <!-- detailActivity font color -->
+    <color name="gray">#555555</color>
 </resources>
 
