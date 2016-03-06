@@ -2,6 +2,9 @@
 This a movies application for the Android Developer Nanodegree. This app also demonstrates the use of multiple libraries
 with a clean architecture for fetching the data from [The Movie Database](https://www.themoviedb.org) Api.
 
+![1](/screenshots/Screenshot_1.png?raw=true)
+![2](/screenshots/Screenshot_2.png?raw=true)
+
 ## Setting it up with your own API KEY
 In your root folder create a gradle.properties file and inside add the following line:
 ```
@@ -60,8 +63,6 @@ public interface MovieDetailsContract {
 }
 
 ```
+ 
 
-###Screenshots
-![1](/screenshots/Screenshot_1.png?raw=true)
-![2](/screenshots/Screenshot_2.png?raw=true)
 
