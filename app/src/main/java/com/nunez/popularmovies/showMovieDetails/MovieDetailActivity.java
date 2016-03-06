@@ -230,19 +230,22 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
                     if (palette != null) {
                         Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
-                        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-                        Palette.Swatch mutedLightSwatch = palette.getLightMutedSwatch();
-                        try {
 
+                        try {
                             int color = vibrantDarkSwatch.getRgb(); // for the status bar.
                             int alphaColor = Color.argb(170, Color.red(color), Color.green(color), Color.blue(color));
-//                            int textColor = mutedLightSwatch.getBodyTextColor();
+                            //int textColor = mutedLightSwatch.getBodyTextColor();
 
                             // Set awesome colors to texts and backgrounds
 
-//                            mScrollView.setBackgroundColor(mutedLightSwatch.getRgb());
+                            //mScrollView.setBackgroundColor(mutedLightSwatch.getRgb());
                             mTitleBackground.setBackgroundColor(alphaColor);
                             toolbar.setBackgroundColor(alphaColor);
+                            if(isFavorite){
+                                fab.setColorFilter(0xFFF);
+                            }else{
+                                fab.setColorFilter(color);
+                            }
 //                            mDescriptionTitle.setTextColor(textColor);//vibrantSwatchTitleTextColor);
 //                            mDescription.setTextColor(textColor);
 //                            mTrailersTitle.setTextColor(textColor);
@@ -251,7 +254,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                             // Set awesome drawable colors
 //                            Drawable[] drawables = mDescriptionTitle.getCompoundDrawables();
 //                            drawables[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-//
+
 //                            Drawable[] drawableTrailersTitle = mTrailersTitle.getCompoundDrawables();
 //                            drawableTrailersTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
 //                            Drawable[] drawableReviewsTitle = mReviewsTitle.getCompoundDrawables();
@@ -260,7 +263,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
                                 changeStatusBarColor(color);
                             }
-
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -286,11 +288,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     @Override
     public void showReviews(ArrayList<Review> reviews) {
 
-        if(reviews.size() > 0){
+        if(reviews.size() > 0 && reviews!=null){
             mReviewsAdapter = new ReviewsAdapter(reviews);
             mReviewsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mReviewsRecyclerView.setLayoutManager(mReviewsLayoutManager);
-//        mReviewsRecyclerView.setHasFixedSize(true);
             mReviewsRecyclerView.setAdapter(mReviewsAdapter);
             mTrailersRecycleView.setNestedScrollingEnabled(false);
         }else{
@@ -358,7 +359,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
         PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
         ObjectAnimator scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
-//            scaleAnim.setInterpolator(new BounceInterpolator());
+        //scaleAnim.setInterpolator(new BounceInterpolator());
         scaleAnim.setDuration(500);
         scaleAnim.setRepeatCount(1);
         scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
@@ -367,17 +368,20 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         Drawable[] color = {fab.getBackground(),
                 getContext().getResources().getDrawable(R.drawable.fab)};
         TransitionDrawable trans = new TransitionDrawable(color);
+
         //This will work also on old devices. The latest API says you have to use setBackground instead.
         fab.setBackgroundDrawable(trans);
-
-        trans.startTransition(1000);
+        trans.startTransition(700);
 
         ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, 720);
         rotateAnim.setInterpolator(new DecelerateInterpolator());
         rotateAnim.setDuration(1400);
 
+        ObjectAnimator heartColorAnim = ObjectAnimator.ofInt(fab, "colorFilter", getResources().getColor(R.color.white));
+        heartColorAnim.setDuration(700).setStartDelay(700);
+
         AnimatorSet setAnim = new AnimatorSet();
-        setAnim.play(scaleAnim).with(rotateAnim);
+        setAnim.play(scaleAnim).with(rotateAnim).with(heartColorAnim);
         setAnim.start();
     }
 

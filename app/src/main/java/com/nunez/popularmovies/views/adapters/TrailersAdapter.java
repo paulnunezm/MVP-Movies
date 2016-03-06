@@ -49,7 +49,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHo
 
         // Checks if the view is the last to show/hide a divider
         int visibility = (position == getItemCount()-1) ? View.GONE : View.VISIBLE;
-        holder.mDivider.setVisibility(visibility);
+        holder.mDivider.setAlpha(0);
 
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override

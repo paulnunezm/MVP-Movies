@@ -37,8 +37,6 @@
             android:visibility="gone"
             tools:visibility="visible">
 
-
-
             <FrameLayout
                 android:id="@+id/actio_play_trailer"
                 android:layout_width="match_parent"
@@ -50,10 +48,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="300dp"/>
                 <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_gravity="center"
-                    android:tint="@color/gray_dark"
+                    android:foregroundGravity="center"
+                    android:background="@drawable/play_btn_background"
+                    android:src="@drawable/play_arrow_black_192x192"
+                    android:tint="@android:color/white"
                     android:paddingLeft="2dp" />
 
                 <android.support.v7.widget.Toolbar
@@ -78,7 +79,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:textColor="@color/gray_light"
                         android:textSize="22sp"
                         app:fontType="Light"
@@ -101,7 +102,7 @@
                     <View
                         android:id="@+id/view_separator"
                         android:layout_width="1dp"
-                        android:layout_height="14dp"
+                        android:layout_height="18dp"
                         android:layout_alignTop="@id/text_rating"
                         android:layout_toRightOf="@id/text_rating"
                         android:background="@color/gray_light"/>
@@ -125,12 +126,13 @@
                     android:id="@+id/button_fab"
                     android:layout_width="@dimen/fab_dimen"
                     android:layout_height="@dimen/fab_dimen"
-                    android:background="@drawable/play_btn_background"
+                    android:background="@drawable/circle_white"
                     android:layout_gravity="bottom|right|end"
                     android:layout_marginBottom="40dp"
                     android:layout_marginRight="@dimen/fab_margin"
                     android:scaleType="center"
-                    android:src="@drawable/ic_favorite"/>
+                    android:src="@drawable/ic_favorite_heart"
+                    android:tint="@android:color/darker_gray"/>
 
             </FrameLayout>
 
@@ -152,16 +154,10 @@
                         android:id="@+id/text_description_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:textColor="@color/gray_dark"
                         android:drawableLeft="@drawable/ic_description"
-                        android:drawablePadding="10dp"
-                        android:tint="@color/gray_dark"
-                        android:gravity="center"
                         app:fontType="Regular"
                         android:text="@string/text_description"
                         style="@style/DetailsViewTextViewTitle"/>
-
 
                     <com.nunez.popularmovies.views.custom_views.LatoTextView
                         android:id="@+id/text_description"
@@ -171,7 +167,6 @@
                         android:layout_marginTop="10dp"
                         app:fontType="Medium"
                         android:paddingRight="10dp"
-                        android:visibility="visible"
                         tools:text= "Larga descripcion, ridiculamente larga"
                         style="@style/DetailViewTextViewBody"/>
                 </LinearLayout>
@@ -181,7 +176,7 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="24dp"
+                android:elevation="@dimen/card_elevation"
                 android:layout_marginBottom="10dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -196,12 +191,8 @@
                         android:id="@+id/text_trailers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
                         android:layout_marginTop="10dp"
                         android:drawableLeft="@drawable/ic_trailers"
-                        android:drawablePadding="10dp"
-                        android:paddingLeft="20dp"
-                        android:gravity="center"
                         android:text="@string/text_trailers"
                         app:fontType="Regular"
                         style="@style/DetailsViewTextViewTitle"/>
@@ -210,7 +201,8 @@
                         android:id="@+id/recyler_trailers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="20dp"
+                        android:paddingTop="0dp"
+                        android:paddingLeft="10dp"
                         android:paddingRight="20dp"
                         tools:listitem="@layout/item_detail_trailer"/>
                 </LinearLayout>
@@ -233,13 +225,8 @@
                         android:id="@+id/text_reviews"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
                         android:layout_marginTop="10dp"
                         android:drawableLeft="@drawable/ic_reviews"
-                        android:drawablePadding="10dp"
-                        android:textColor="@color/gray_dark"
-                        android:paddingLeft="20dp"
-                        android:gravity="center"
                         android:text="@string/text_reviews"
                         app:fontType="Regular"
                         style="@style/DetailsViewTextViewTitle"/>
