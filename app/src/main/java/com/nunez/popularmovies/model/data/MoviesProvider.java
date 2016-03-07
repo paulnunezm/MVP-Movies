@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import net.simonvt.schematic.annotation.ContentProvider;
 import net.simonvt.schematic.annotation.ContentUri;
-import net.simonvt.schematic.annotation.InexactContentUri;
 import net.simonvt.schematic.annotation.TableEndpoint;
 
 /**
@@ -42,8 +41,15 @@ public class MoviesProvider {
 //        public static String getMovieId(String)
     }
 
+//        @TableEndpoint(table = MoviesDatabase.TRAILERS) public static class Trailers {
+//            @ContentUri(
+//                    path = MoviesDatabase.TRAILERS + "/#",
+//                    type = "vnd.android.cursor.item/movies",
+//                    defaultSort = TrailersColumns.TITLE + " ASC",
+//                    join = MoviesColumns.MOVIE_ID)
+//            public static Uri withMovieId(String id) {
+//                return Uri.parse("content://" + AUTHORITY + "/"+Path.MOVIES+"/" + id);
+//            }
+//        }
 
-
-
-
-}
+    }

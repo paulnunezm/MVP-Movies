@@ -5,14 +5,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 import com.nunez.popularmovies.model.data.MoviesColumns;
 import com.nunez.popularmovies.model.data.MoviesProvider;
-import com.nunez.provider.MoviesDatabase;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
+import com.nunez.popularmovies.model.data.TrailersColumns;
 
 import java.util.Map;
 import java.util.Set;
@@ -56,10 +52,32 @@ public class ContentProviderTest extends AndroidTestCase{
         validateCursor("TestMovieWithTrailer", movieCurosr, values);
         movieCurosr.moveToFirst();
 
-//        contentResolver.query(MoviesProvider.Movies.withMovieId("124"), null, null,null,null);
+        ContentValues trailerValues = new ContentValues();
+        values.put(TrailersColumns.MOVIE_ID, "124");
+        values.put(TrailersColumns.TITLE, "myTrailer");
+        values.put(TrailersColumns.TRAILER_ID, "1ijndspdoafk");
+        values.put(TrailersColumns.SITE, "YouTube");
+
+        Uri createdTrailerUri;
+        ContentResolver contentTrailerResolver = getContext().getContentResolver();
+
+        createdTrailerUri = contentTrailerResolver.insert(
+                MoviesProvider.Movies.MOVIES,
+                values);
+
+        Cursor trailerCursor = contentResolver.query(
+                createdMovieUri,
+                null,
+                null,
+                null,
+                null
+        );
 
 
-//        assertEquals("IdTest", "124", ));
+        validateCursor("TestMovieWithTrailer", trailerCursor, trailerValues);
+
+        assertEquals(trailerCursor.getString(5), "124");
+
 
     }
 
