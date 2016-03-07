@@ -193,6 +193,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 load(Constants.POSTER_BASE_URL + url)
                 .centerCrop()
                 .placeholder(getContext().getResources().getColor(R.color.movie_placeholder))
+                .error(getContext().getResources().getDrawable(R.drawable.ic_trailers))
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
