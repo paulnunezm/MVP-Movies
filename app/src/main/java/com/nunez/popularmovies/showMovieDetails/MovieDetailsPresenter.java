@@ -79,6 +79,11 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
             .getString(R.string.format_rating), mMovie.rating));
     }
 
+    @Override
+    public void saveMovieToDb() {
+        mDetailsController.saveMovieToDb(mMovie);
+    }
+
 
     @Override
     public void attachView(MovieDetailsContract.View detailsView) {

@@ -13,13 +13,14 @@ import net.simonvt.schematic.annotation.TableEndpoint;
 public class MoviesProvider {
     public static final String AUTHORITY = "com.nunez.popularmovies.model.data.MoviesProvider";
 
-    interface Path{
+    interface Path {
         String MOVIES = "movies";
         String TRAILERS = "trailers";
     }
 
 
-    @TableEndpoint(table = MoviesDatabase.MOVIES) public static class Movies{
+    @TableEndpoint(table = MoviesDatabase.MOVIES)
+    public static class Movies {
 
         @ContentUri(
                 path = MoviesDatabase.MOVIES,
@@ -52,4 +53,13 @@ public class MoviesProvider {
 //            }
 //        }
 
+    @TableEndpoint(table = MoviesDatabase.TRAILERS)
+    public static class Trailers {
+
+        @ContentUri(
+                path = MoviesDatabase.TRAILERS,
+                type = "vnd.android.cursor.dir/movies",
+                defaultSort = MoviesColumns.TITLE + " ASC")
+        public static final Uri Trailers = Uri.parse("content://" + AUTHORITY + "/"+Path.TRAILERS);
     }
+}

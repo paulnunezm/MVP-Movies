@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -37,8 +36,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.ShowMovies.MainActivity;
-import com.nunez.popularmovies.model.data.MoviesColumns;
-import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.utils.Constants;
@@ -395,16 +392,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         }else if(id == R.id.button_fab){
 
             if(!isFavorite){
-                ContentValues values = new ContentValues();
-                values.put(MoviesColumns.MOVIE_ID, mMovieId);
-                values.put(MoviesColumns.TITLE, String.valueOf(mTitle.getText()));
-
-                Uri inserMoviesUri;
-
-                inserMoviesUri = getContentResolver().insert(
-                        MoviesProvider.Movies.MOVIES,
-                        values);
-
+                mDetailPresenter.saveMovieToDb();
                 animateFavorite();
             }else{
                 animateFavoritePulse();
