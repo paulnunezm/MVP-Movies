@@ -6,7 +6,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:paddingRight="10dp"
+    android:background="?android:attr/selectableItemBackground">
 
     <com.nunez.popularmovies.views.custom_views.LatoTextView
         android:id="@+id/text_reviewer"
@@ -22,6 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:maxLines="4"
         app:fontType="Medium"
         tools:text="AwesomeReviews"
         style="@style/DetailViewTextViewBody"/>
