@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 import com.nunez.popularmovies.model.data.MoviesColumns;
 import com.nunez.popularmovies.model.data.MoviesProvider;
@@ -47,10 +48,11 @@ public class ContentProviderTest extends AndroidTestCase{
                 null
         );
 
+
         System.out.println(movieCurosr);
 
         validateCursor("TestMovieWithTrailer", movieCurosr, values);
-        movieCurosr.moveToFirst();
+//        movieCurosr.moveToFirst();
 
         ContentValues trailerValues = new ContentValues();
         values.put(TrailersColumns.MOVIE_ID, "124");
@@ -78,7 +80,19 @@ public class ContentProviderTest extends AndroidTestCase{
 
         assertEquals(trailerCursor.getString(5), "124");
 
+         movieCurosr = contentResolver.query(
+                createdMovieUri,
+                null,
+                null,
+                null,
+                null
+        );
 
+        if(movieCurosr.moveToFirst()){
+            for (int i = 0; i < movieCurosr.getColumnCount(); i++) {
+                Log.d("TEST", movieCurosr.getString(i));
+            }
+        }
     }
 
     static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {

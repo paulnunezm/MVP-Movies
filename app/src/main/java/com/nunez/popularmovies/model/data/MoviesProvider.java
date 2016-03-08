@@ -16,6 +16,7 @@ public class MoviesProvider {
     interface Path {
         String MOVIES = "movies";
         String TRAILERS = "trailers";
+        String REVIEWS = "reviews";
     }
 
 
@@ -58,8 +59,18 @@ public class MoviesProvider {
 
         @ContentUri(
                 path = MoviesDatabase.TRAILERS,
-                type = "vnd.android.cursor.dir/movies",
+                type = "vnd.android.cursor.dir/trailers",
                 defaultSort = MoviesColumns.TITLE + " ASC")
         public static final Uri Trailers = Uri.parse("content://" + AUTHORITY + "/"+Path.TRAILERS);
+    }
+
+    @TableEndpoint(table = MoviesDatabase.REVIEWS)
+    public static class Reviews {
+
+        @ContentUri(
+                path = MoviesDatabase.REVIEWS,
+                type = "vnd.android.cursor.dir/reviews",
+                defaultSort = MoviesColumns.TITLE + " ASC")
+        public static final Uri Reviews = Uri.parse("content://" + AUTHORITY + "/"+Path.REVIEWS);
     }
 }

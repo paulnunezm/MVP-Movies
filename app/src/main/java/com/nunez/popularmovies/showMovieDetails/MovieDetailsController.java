@@ -8,8 +8,10 @@ import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.model.data.DbDataSource;
 import com.nunez.popularmovies.model.data.MoviesColumns;
 import com.nunez.popularmovies.model.data.MoviesProvider;
+import com.nunez.popularmovies.model.data.ReviewsTrailers;
 import com.nunez.popularmovies.model.data.TrailersColumns;
 import com.nunez.popularmovies.model.entities.Movie;
+import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.model.restApi.RestMovieSource;
 import com.nunez.popularmovies.utils.Callbacks;
@@ -85,6 +87,22 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
                 PopularMovies.context.getContentResolver().insert(
                         MoviesProvider.Trailers.Trailers,
                         trailerValues);
+            }
+        }
+
+        ArrayList<Review> reviews = movie.getReviewsWrapper().getReviews();
+
+        if(!reviews.isEmpty()){
+            for (Review review:reviews) {
+                ContentValues reviewsValues = new ContentValues();
+                reviewsValues.put(ReviewsTrailers.AUTHOR, review.getAuthor());
+                reviewsValues.put(ReviewsTrailers.CONTENT, review.getContent());
+                reviewsValues.put(ReviewsTrailers.URL, review.getUrl());
+                reviewsValues.put(TrailersColumns.MOVIE_ID, movie.id);
+
+                PopularMovies.context.getContentResolver().insert(
+                        MoviesProvider.Reviews.Reviews,
+                        reviewsValues);
             }
         }
     }
