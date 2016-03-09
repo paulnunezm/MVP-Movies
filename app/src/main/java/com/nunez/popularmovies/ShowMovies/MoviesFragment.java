@@ -61,7 +61,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     @Override
     public void onStart() {
         super.onStart();
-        if(!mAutoUpdated) mMoviesPresenter.start();
+        if(!mAutoUpdated) mMoviesPresenter.start(); // TODO: 3/9/16 set mAutoUpdaetd = true;
     }
 
     @Override
