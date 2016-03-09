@@ -69,16 +69,17 @@ public class DbDataSource {
         ReviewsWrapper reviewsWrapper = new ReviewsWrapper();
         ArrayList<Review> reviews = new ArrayList<>();
 
-        Cursor movieCursor = resolver.query(
-                MoviesProvider.Movies.MOVIES,
-                null,
-                MoviesColumns.MOVIE_ID + " = " + id,
-                null,
-                null
-        );
-
         try {
-            if(movieCursor.moveToFirst()){
+            Cursor movieCursor = resolver.query(
+                    MoviesProvider.Movies.MOVIES,
+                    null,
+                    MoviesColumns.MOVIE_ID + " = " + id,
+                    null,
+                    null
+            );
+
+            if(movieCursor.getCount() > 0){
+                movieCursor.moveToFirst();
                 movie.setId(movieCursor.getString(1));
                 movie.setPosertPath(movieCursor.getString(2));
                 movie.setTitle(movieCursor.getString(3));
