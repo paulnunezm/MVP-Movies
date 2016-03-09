@@ -33,6 +33,7 @@ android {
         buildTypes.each {
             it.buildConfigField 'String', 'theMovieDbApiKey', project.API_KEY
         }
+
     }
 }
 
@@ -43,6 +44,8 @@ dependencies {
     // Others
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.jakewharton:butterknife:7.+'
+
 
     // Google libs
     compile 'com.android.support:support-v4:23.2.+'
