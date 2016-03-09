@@ -6,6 +6,8 @@ import com.nunez.popularmovies.model.entities.ReviewsWrapper;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.utils.Callbacks;
 
+import java.util.ArrayList;
+
 /**
  * Created by paulnunez on 2/2/16.
  */
@@ -62,21 +64,27 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
     }
 
     @Override
-    public void checkIfFavorite() {
+    public boolean checkIfFavorite() {
 
-        if(mDetailsController.checkIfFavorite(mDetailView.getContext(), movieId))
+        if(mDetailsController.checkIfFavorite(movieId)){
             mDetailView.setFavorite();
+            return true;
+        }
+        return  false;
     }
 
     @Override
     public void showReleaseDate() {
-        mDetailView.showReleaseDate(mMovie.getReleaseDate().replace("-","/"));
+        String releaseDate = mMovie.getReleaseDate();
+        if(releaseDate != null) mDetailView.showReleaseDate(releaseDate.replace("-", "/"));
     }
 
     @Override
     public void showRatings() {
-        mDetailView.showRatings(String.format(mDetailView.getContext().getResources()
-            .getString(R.string.format_rating), mMovie.rating));
+        String rating = mMovie.rating;
+
+        if (rating != null) mDetailView.showRatings(String.format(mDetailView.getContext().getResources()
+            .getString(R.string.format_rating),rating));
     }
 
     @Override
@@ -92,8 +100,9 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
 
     @Override
     public void setTrailerLink() {
-        Video video = mMovie.getVideosWrapper().videos.get(0);
-        mDetailView.setTrailerLink(video.getId());
+        ArrayList<Video> videos = mMovie.getVideosWrapper().videos;
+
+        if(!videos.isEmpty()) mDetailView.setTrailerLink(videos.get(0).getId());
     }
 
 
@@ -105,7 +114,12 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
     @Override
     public void start() {
         mDetailView.showLoading();
-        mDetailsController.requestMovieDetails();
+
+        if(checkIfFavorite()){
+            mDetailsController.getFavoriteDetails();
+        }else{
+            mDetailsController.requestMovieDetails();
+        }
     }
 
     @Override

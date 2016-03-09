@@ -18,6 +18,9 @@ public interface MoviesColumns {
     @DataType(BLOB) String POSTER = "poster";
     @DataType(TEXT) @NotNull String TITLE = "title";
     @DataType(TEXT) String DESCRIPTION = "description";
+    @DataType(TEXT) String RELEASE = "release_date";
+    @DataType(TEXT) String RATING = "rating";
+
 
     // Declaring one to many relation
 //    @DataType(INTEGER) @References(table = MoviesDatabase.TRAILERS,

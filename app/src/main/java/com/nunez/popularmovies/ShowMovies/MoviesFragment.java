@@ -1,12 +1,7 @@
 package com.nunez.popularmovies.ShowMovies;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +38,6 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     private MoviesAdapter mAdapter;
     private ProgressBar mProgress;
     private RecyclerView mRecycler;
-    private Sensor mSensor;
-    private SensorManager mSensorManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,10 +74,6 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
 
         int columns = 2;
         Log.d(TAG, "initializeRecyclerView: "+getActivity().getRequestedOrientation());
-
-//        if( != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT){
-//            columns = 4;
-//        }
 
         mLayoutMangager = new GridLayoutManager(getContext(),2);
         mRecycler.setLayoutManager(mLayoutMangager);

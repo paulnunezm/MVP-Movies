@@ -12,4 +12,7 @@ public class VideosWrapper {
     @SerializedName("results")
     public ArrayList<Video> videos;
 
+    public void setVideos(ArrayList<Video> videos) {
+        this.videos = videos;
+    }
 }

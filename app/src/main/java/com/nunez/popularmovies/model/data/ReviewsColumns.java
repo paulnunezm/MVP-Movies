@@ -12,7 +12,7 @@ import static net.simonvt.schematic.annotation.DataType.Type.TEXT;
 /**
  * Created by paulnunez on 3/7/16.
  */
-public interface ReviewsTrailers {
+public interface ReviewsColumns {
     @DataType(INTEGER) @PrimaryKey @AutoIncrement String _ID = "_id";
     @DataType(TEXT) @NotNull String AUTHOR = "author";
     @DataType(TEXT) @NotNull String CONTENT = "content";

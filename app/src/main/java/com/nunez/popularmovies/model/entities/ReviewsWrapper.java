@@ -19,4 +19,8 @@ public class ReviewsWrapper {
     public ArrayList<Review> getReviews() {
         return reviews;
     }
+
+    public void setReviews(ArrayList<Review> reviews) {
+        this.reviews = reviews;
+    }
 }

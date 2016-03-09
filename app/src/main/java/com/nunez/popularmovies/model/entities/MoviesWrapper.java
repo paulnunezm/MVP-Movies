@@ -15,4 +15,8 @@ public class MoviesWrapper {
     int page;
 
     int total_pages;
+
+    public void setMovies(ArrayList<Movie> movies) {
+        this.movies = movies;
+    }
 }

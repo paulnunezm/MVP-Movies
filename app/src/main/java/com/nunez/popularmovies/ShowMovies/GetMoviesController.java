@@ -1,21 +1,17 @@
 package com.nunez.popularmovies.ShowMovies;
 
-import android.database.Cursor;
-
-import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.domain.MoviesCallback;
-import com.nunez.popularmovies.model.data.MoviesProvider;
+import com.nunez.popularmovies.model.data.DbDataSource;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
-import com.nunez.popularmovies.model.restApi.RestDataSource;
 import com.nunez.popularmovies.model.restApi.RestMovieSource;
 import com.nunez.popularmovies.utils.Callbacks;
 
 /**
  * This class is an implementation of {@link GetMoviesUsecase}
  */
-public class GetMoviesController implements GetMoviesUsecase {
+public class GetMoviesController implements GetMoviesUsecase, Callbacks.StandarCallback {
 
-    RestDataSource mDataSource;
+    RestMovieSource mDataSource;
     Callbacks.StandarCallback callback;
     MoviesCallback mPresenterCallback;
 
@@ -24,19 +20,19 @@ public class GetMoviesController implements GetMoviesUsecase {
 
         mPresenterCallback = presenterCallback;
 
-        callback = new Callbacks.StandarCallback() {
-            @Override
-            public void onSuccess(Object o) {
-                sendMoviesToPresenter((MoviesWrapper) o);
-            }
+//        callback = new Callbacks.StandarCallback() {
+//            @Override
+//            public void onSuccess(Object o) {
+//                sendMoviesToPresenter((MoviesWrapper) o);
+//            }
+//
+//            @Override
+//            public void onError(String e) {
+//                mPresenterCallback.onError(e);
+//            }
+//        };
 
-            @Override
-            public void onError(String e) {
-                mPresenterCallback.onError(e);
-            }
-        };
-
-        mDataSource = new RestMovieSource(callback);
+        mDataSource = new RestMovieSource(this);
     }
 
     @Override
@@ -46,10 +42,7 @@ public class GetMoviesController implements GetMoviesUsecase {
 
     @Override
     public void requestFavoriteMovies() {
-        Cursor movies = PopularMovies.context.getContentResolver().query(
-                MoviesProvider.Movies.MOVIES,
-                null, null, null, null);
-
+        DbDataSource.favoriteMovies(this);
     }
 
 
@@ -63,4 +56,13 @@ public class GetMoviesController implements GetMoviesUsecase {
         requestPopularMovies();
     }
 
+    @Override
+    public void onSuccess(Object o) {
+        sendMoviesToPresenter((MoviesWrapper) o);
+    }
+
+    @Override
+    public void onError(String e) {
+        mPresenterCallback.onError(e);
+    }
 }

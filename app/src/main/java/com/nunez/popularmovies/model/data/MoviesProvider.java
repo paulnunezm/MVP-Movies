@@ -29,30 +29,7 @@ public class MoviesProvider {
                 defaultSort = MoviesColumns.TITLE + " ASC")
         public static final Uri MOVIES = Uri.parse("content://" + AUTHORITY + "/movies");
 
-//        @InexactContentUri(
-//                path = Path.MOVIES + "/#",
-//                name = "MOVIE_ID",
-//                type = "vnd.android.cursor.item/movies",
-//                whereColumn = MoviesColumns.MOVIE_ID,
-//                pathSegment = 1)
-//
-//        public static Uri withMovieId(String id) {
-//            return Uri.parse("content://" + AUTHORITY + "/"+Path.MOVIES+"/" + id);
-//        }
-
-//        public static String getMovieId(String)
     }
-
-//        @TableEndpoint(table = MoviesDatabase.TRAILERS) public static class Trailers {
-//            @ContentUri(
-//                    path = MoviesDatabase.TRAILERS + "/#",
-//                    type = "vnd.android.cursor.item/movies",
-//                    defaultSort = TrailersColumns.TITLE + " ASC",
-//                    join = MoviesColumns.MOVIE_ID)
-//            public static Uri withMovieId(String id) {
-//                return Uri.parse("content://" + AUTHORITY + "/"+Path.MOVIES+"/" + id);
-//            }
-//        }
 
     @TableEndpoint(table = MoviesDatabase.TRAILERS)
     public static class Trailers {
@@ -60,7 +37,7 @@ public class MoviesProvider {
         @ContentUri(
                 path = MoviesDatabase.TRAILERS,
                 type = "vnd.android.cursor.dir/trailers",
-                defaultSort = MoviesColumns.TITLE + " ASC")
+                defaultSort = TrailersColumns.TITLE + " ASC")
         public static final Uri Trailers = Uri.parse("content://" + AUTHORITY + "/"+Path.TRAILERS);
     }
 
@@ -70,7 +47,7 @@ public class MoviesProvider {
         @ContentUri(
                 path = MoviesDatabase.REVIEWS,
                 type = "vnd.android.cursor.dir/reviews",
-                defaultSort = MoviesColumns.TITLE + " ASC")
+                defaultSort = ReviewsColumns.AUTHOR+ " ASC")
         public static final Uri Reviews = Uri.parse("content://" + AUTHORITY + "/"+Path.REVIEWS);
     }
 }

@@ -1,14 +1,13 @@
 package com.nunez.popularmovies.showMovieDetails;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.net.Uri;
 
 import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.model.data.DbDataSource;
 import com.nunez.popularmovies.model.data.MoviesColumns;
 import com.nunez.popularmovies.model.data.MoviesProvider;
-import com.nunez.popularmovies.model.data.ReviewsTrailers;
+import com.nunez.popularmovies.model.data.ReviewsColumns;
 import com.nunez.popularmovies.model.data.TrailersColumns;
 import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.model.entities.Review;
@@ -56,8 +55,8 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
     }
 
     @Override
-    public boolean checkIfFavorite(Context context, String id) {
-        return DbDataSource.checkIfFavorite(context, id);
+    public boolean checkIfFavorite(String id) {
+        return DbDataSource.checkIfFavorite(id);
     }
 
     @Override
@@ -67,6 +66,8 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
         values.put(MoviesColumns.TITLE, movie.title);
         values.put(MoviesColumns.DESCRIPTION, movie.description);
         values.put(MoviesColumns.POSTER, movie.posertPath);
+        values.put(MoviesColumns.RELEASE, movie.releaseDate);
+        values.put(MoviesColumns.RATING, movie.rating);
 
         Uri inserMoviesUri;
 
@@ -95,9 +96,9 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
         if(!reviews.isEmpty()){
             for (Review review:reviews) {
                 ContentValues reviewsValues = new ContentValues();
-                reviewsValues.put(ReviewsTrailers.AUTHOR, review.getAuthor());
-                reviewsValues.put(ReviewsTrailers.CONTENT, review.getContent());
-                reviewsValues.put(ReviewsTrailers.URL, review.getUrl());
+                reviewsValues.put(ReviewsColumns.AUTHOR, review.getAuthor());
+                reviewsValues.put(ReviewsColumns.CONTENT, review.getContent());
+                reviewsValues.put(ReviewsColumns.URL, review.getUrl());
                 reviewsValues.put(TrailersColumns.MOVIE_ID, movie.id);
 
                 PopularMovies.context.getContentResolver().insert(
@@ -107,12 +108,15 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
         }
     }
 
+    @Override
+    public void getFavoriteDetails() {
+        DbDataSource.getFavoriteDetails(this, mMovieId);
+    }
 
     @Override
     public void execute() {
         requestMovieDetails();
     }
-
 
 //    Callback implementation
 

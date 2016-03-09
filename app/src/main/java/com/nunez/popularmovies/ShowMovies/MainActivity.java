@@ -41,20 +41,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-
         // Initialize the sort preference, and set sort popular
         sortPreferences = getSharedPreferences(Constants.PREFS,0);
         String sortType = sortPreferences.getString(Constants.SORT_POPULAR, null);
         prefEditor = sortPreferences.edit();
-
 
         // If no sorting prefs has been set before, set popular sorting as default.
         if (sortType == null) {
             prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_POPULAR);
             prefEditor.apply();
         }
-
-
     }
 
     @Override
@@ -98,6 +94,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_RATING);
                     prefEditor.apply();
                     break;
+
+                case 2:
+                    prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_FAVORITES);
+                    prefEditor.apply();
             }
 
             ((MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies))

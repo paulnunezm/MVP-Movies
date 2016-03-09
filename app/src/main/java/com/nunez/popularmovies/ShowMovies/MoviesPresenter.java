@@ -1,11 +1,14 @@
 package com.nunez.popularmovies.ShowMovies;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.domain.MoviesCallback;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
 import com.nunez.popularmovies.mvp.presenters.Presenter;
 import com.nunez.popularmovies.mvp.views.MoviesView;
+import com.nunez.popularmovies.utils.Constants;
 
 /**
  * Created by paulnunez on 11/15/15.
@@ -41,7 +44,18 @@ public class MoviesPresenter implements Presenter {
     @Override
     public void start() {
         mMoviesView.showLoading();
-        getMoviesController.requestPopularMovies();
+
+        SharedPreferences sharedPreferences = PopularMovies.context
+                .getSharedPreferences(Constants.PREFS, 0);
+
+
+        if(sharedPreferences.getString(Constants.PREFS_SORT, Constants.SORT_POPULAR)
+                .equals(Constants.SORT_FAVORITES)){
+
+            getMoviesController.requestFavoriteMovies();
+        }else{
+            getMoviesController.requestPopularMovies();
+        }
     }
 
     @Override

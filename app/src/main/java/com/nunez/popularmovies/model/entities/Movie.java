@@ -67,6 +67,27 @@ public class Movie {
         this.reviewsWrapper = reviewsWrapper;
     }
 
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPosertPath(String posertPath) {
+        this.posertPath = posertPath;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
     public String getRating() {
         return rating;
     }

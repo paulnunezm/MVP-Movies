@@ -275,18 +275,22 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     public void showTrailers(ArrayList<Video> trailers){
-        mTrailersAdapter = new TrailersAdapter(trailers);
-        mTrailersLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mTrailersRecycleView.setLayoutManager(mTrailersLayoutManager);
-        mTrailersRecycleView.setHasFixedSize(true);
-        mTrailersRecycleView.setAdapter(mTrailersAdapter);
-        mTrailersRecycleView.setNestedScrollingEnabled(false);
+       if(trailers != null & trailers.size()>0){
+           mTrailersAdapter = new TrailersAdapter(trailers);
+           mTrailersLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+           mTrailersRecycleView.setLayoutManager(mTrailersLayoutManager);
+           mTrailersRecycleView.setHasFixedSize(true);
+           mTrailersRecycleView.setAdapter(mTrailersAdapter);
+           mTrailersRecycleView.setNestedScrollingEnabled(false);
+       }else{
+           mTrailersTitle.setVisibility(View.GONE);
+       }
     }
 
     @Override
     public void showReviews(ArrayList<Review> reviews) {
 
-        if(reviews.size() > 0 && reviews!=null){
+        if(reviews!=null && reviews.size()>0 ){
             mReviewsAdapter = new ReviewsAdapter(reviews);
             mReviewsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             mReviewsRecyclerView.setLayoutManager(mReviewsLayoutManager);

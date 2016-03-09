@@ -10,5 +10,5 @@ public class Constants {
     public static final String PREFS_SORT = "sort_preference";
     public static final String SORT_POPULAR = "sort_popular";
     public static final String SORT_RATING = "sort_rating";
-
+    public static final String SORT_FAVORITES = "sort_favs";
 }

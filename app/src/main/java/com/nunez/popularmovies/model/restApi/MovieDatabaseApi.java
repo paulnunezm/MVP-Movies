@@ -45,7 +45,7 @@ import com.nunez.popularmovies.utils.Constants;
             sort = "popularity.desc";
         }else{
             //return GET_TOP_RATED + '?' + API_KEY;
-            sort = "vote_average.des";
+            sort = "vote_average.desc";
         }
 
         return GET_MOVIES+"?certification_country=US&sort_by="+sort+"&"+API_KEY;

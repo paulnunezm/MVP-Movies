@@ -1,7 +1,5 @@
 package com.nunez.popularmovies.showMovieDetails;
 
-import android.content.Context;
-
 import com.nunez.popularmovies.domain.UseCase;
 import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.model.entities.Review;
@@ -24,7 +22,7 @@ public interface MovieDetailsContract {
         void showDescription(String description);
         void showTrailers();
         void showReviews();
-        void checkIfFavorite();
+        boolean checkIfFavorite();
         void showReleaseDate();
         void showRatings();
 
@@ -46,7 +44,8 @@ public interface MovieDetailsContract {
      interface MovieDetailsController extends UseCase {
          void requestMovieDetails();
          void sendMovieDetailsToPresenter(Movie movie);
-         boolean checkIfFavorite(Context context, String id);
+         boolean checkIfFavorite(String id);
          void saveMovieToDb(Movie movie);
+         void getFavoriteDetails();
     }
 }
