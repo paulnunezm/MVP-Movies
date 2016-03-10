@@ -43,7 +43,7 @@
             android:name="com.nunez.popularmovies.ShowMovies.MoviesFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="3"
             tools:layout="@android:layout/list_content"/>
 
         <FrameLayout
