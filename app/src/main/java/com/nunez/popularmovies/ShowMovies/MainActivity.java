@@ -1,5 +1,6 @@
 package com.nunez.popularmovies.ShowMovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -12,9 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.nunez.popularmovies.R;
+import com.nunez.popularmovies.showMovieDetails.MovieDetailActivity;
+import com.nunez.popularmovies.showMovieDetails.MovieDetailFragment;
 import com.nunez.popularmovies.utils.Constants;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
+    MoviesFragment.Callback{
 
     public static final String EXTRA_MOVIE_ID = "movie_id";
 
@@ -23,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private SharedPreferences.Editor prefEditor;
     private Spinner spinner;
     private boolean firstTimeOpen = true;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_POPULAR);
             prefEditor.apply();
         }
+
+        /** Check if two pane layout**/
+        if(findViewById(R.id.movie_detail_container) != null){
+            mTwoPane = true;
+
+//            if(savedInstanceState == null){
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.movie_detail_container,
+//                                new MovieDetailFragment(), MovieDetailFragment.FRAGMENT_TAG)
+//                        .commit();
+//            }
+
+        }else{
+            mTwoPane = false;
+        }
+
     }
 
     @Override
@@ -114,4 +135,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
+    @Override
+    public void onItemSelected(String movieId) {
+        if(mTwoPane){
+            Bundle args = new Bundle();
+            args.putString(MovieDetailFragment.MOVIE_ID, movieId);
+
+            MovieDetailFragment fragment = new MovieDetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment)
+                    .commit();
+
+        }else{
+            Intent intent = new Intent(this, MovieDetailActivity.class);
+            Bundle args = new Bundle();
+            args.putString(EXTRA_MOVIE_ID, String.valueOf(movieId));
+            intent.putExtra(EXTRA_MOVIE_ID, args);
+            startActivity(intent);
+        }
+    }
 }

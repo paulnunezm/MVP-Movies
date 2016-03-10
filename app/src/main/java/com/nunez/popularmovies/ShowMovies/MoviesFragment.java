@@ -2,7 +2,6 @@ package com.nunez.popularmovies.ShowMovies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -140,15 +139,10 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
 
     @Override
     public void onClick(View v, int position, float x, float y) {
-        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
 
         Movie movie = mAdapter.getMovies().get(position);
 
-        Bundle args = new Bundle();
-        args.putString(EXTRA_MOVIE_ID, String.valueOf(movie.id));
-        intent.putExtra(EXTRA_MOVIE_ID, args);
-
-        startActivity(intent);
+        ((Callback) getActivity()).onItemSelected(String.valueOf(movie.id));
     }
 
     /**
@@ -160,6 +154,6 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(Uri dateUri);
+        public void onItemSelected(String movieId);
     }
 }

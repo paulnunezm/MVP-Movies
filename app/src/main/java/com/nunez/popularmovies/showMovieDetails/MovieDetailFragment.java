@@ -57,6 +57,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     private static String LOG_TAG = MovieDetailFragment.class.getSimpleName();
     public static String MOVIE_ID = "movie_id";
+    public static String FRAGMENT_TAG = LOG_TAG;
 
     private String mMovieId;
     private String mTrailerUrl;
@@ -78,7 +79,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     @Bind(R.id.text_reviews)             TextView mReviewsTitle;
     @Bind(R.id.text_release)             TextView mReleaseDate;
     @Bind(R.id.text_rating)              TextView mRatings;
-    @Bind(R.id.toolbar)                  Toolbar toolbar;
+    @Nullable @Bind(R.id.toolbar)        Toolbar toolbar;
     @Bind(R.id.recyler_trailers)         RecyclerView mTrailersRecycleView;
     @Bind(R.id.recyler_reviews)          RecyclerView mReviewsRecyclerView;
     @Bind(R.id.button_fab)               ImageButton fab;
@@ -122,10 +123,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
         v.findViewById(R.id.actio_play_trailer).setOnClickListener(this);
         fab.setOnClickListener(this);
 
-        toolbar.setTitle("");
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if(activity.getSupportActionBar() != null){
+            toolbar.setTitle("");
+            activity.setSupportActionBar(toolbar);
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
 

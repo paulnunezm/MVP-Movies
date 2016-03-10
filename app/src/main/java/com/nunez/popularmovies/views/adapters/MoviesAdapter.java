@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -86,19 +85,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 })
                 .into(holder.poster);
 
-        if(!holder.containerAnimated){
-            holder.containerAnimated = true;
-//            holder.container.setTranslationY(holder.container.getHeight());
-
-            holder.container.animate()
-                    .translationY(0)
-                    .setDuration(500)
-                    .setInterpolator(new AccelerateDecelerateInterpolator())
-//                    .setStartDelay(20 * position)
-                    .start();
-//            Animation animation = AnimationUtils.loadAnimation(mContext, android.);
-//            holder.container.setAnimation(new TranslateAnimation(0,0, 50,0));
-        }
+//        if(!holder.containerAnimated){
+//            holder.containerAnimated = true;
+////            holder.container.setTranslationY(holder.container.getHeight());
+//
+//            holder.container.animate()
+//                    .translationY(0)
+//                    .setDuration(500)
+//                    .setInterpolator(new AccelerateDecelerateInterpolator())
+////                    .setStartDelay(20 * position)
+//                    .start();
+////            Animation animation = AnimationUtils.loadAnimation(mContext, android.);
+////            holder.container.setAnimation(new TranslateAnimation(0,0, 50,0));
+//        }
 
     }
 
