@@ -101,7 +101,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
 
     @Override
     public void showNoMovies() {
-        mAdapter.clearData();
+        if(mAdapter != null) mAdapter.clearData();
         mNoMovies.setVisibility(View.VISIBLE);
     }
 

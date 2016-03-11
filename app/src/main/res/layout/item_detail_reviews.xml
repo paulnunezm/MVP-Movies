@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="@drawable/item_selected">
 
     <com.nunez.popularmovies.views.custom_views.LatoTextView
         android:id="@+id/text_reviewer"
