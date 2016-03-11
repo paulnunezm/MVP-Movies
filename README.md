@@ -28,7 +28,7 @@ in features:
 
 ![Feature](/screenshots/feature.png?raw=true)
 
-Instead of using [Otto](https://github.com/square/otto) for the layers communications right now is still using
+Rather of using [Otto](https://github.com/square/otto) for the layers communications right now is still using
 callbacks interfaces and instead of using multiples classes for extending the base view, presenter and use cases
 are done by creating a contract interface for the feature in which each one is extending the base interface.
 I consider is easier to read this way.
