@@ -6,4 +6,9 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="AutofitRecyclerView">
+        <attr name="columnWidth" format="dimension">
+        </attr>
+    </declare-styleable>
+
 </resources>

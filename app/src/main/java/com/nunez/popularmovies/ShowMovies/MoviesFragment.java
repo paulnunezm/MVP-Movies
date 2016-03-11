@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.mvp.presenters.RecyclerViewClickListener;
 import com.nunez.popularmovies.mvp.views.MoviesView;
 import com.nunez.popularmovies.views.adapters.MoviesAdapter;
+import com.nunez.popularmovies.views.custom_views.AutofitRecyclerView;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     private MoviesPresenter mMoviesPresenter;
     private MoviesAdapter mAdapter;
     private ProgressBar mProgress;
-    private RecyclerView mRecycler;
+    private AutofitRecyclerView mRecycler;
     private FrameLayout mNoMovies;
 
     @Override
@@ -74,12 +74,12 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
         int columns = 2;
         Log.d(TAG, "initializeRecyclerView: "+getActivity().getRequestedOrientation());
 
-        mLayoutMangager = new GridLayoutManager(getContext(),2);
-        mRecycler.setLayoutManager(mLayoutMangager);
+//        mLayoutMangager = new GridLayoutManager(getContext(),2);
+//        mRecycler.setLayoutManager(mLayoutMangager);
     }
 
     public void initializeViews(View view){
-        mRecycler         = (RecyclerView) view.findViewById(R.id.recycler);
+        mRecycler         = (AutofitRecyclerView) view.findViewById(R.id.recycler);
         mProgress         = (ProgressBar) view.findViewById(R.id.progress);
         mNoMovies         = (FrameLayout) view.findViewById(R.id.no_movies);
     }
