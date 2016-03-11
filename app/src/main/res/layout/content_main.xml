@@ -15,16 +15,47 @@
         android:clipToPadding="false"
         app:layout_behavior=""/>
 
-    <com.nunez.popularmovies.views.custom_views.LatoTextView
+    <FrameLayout
         android:id="@+id/no_movies"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fontType="Light"
-        android:text="@string/no_movies"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone"
-        tools:visibility="visible"
-        style="@style/DetailsViewTextViewTitle"/>
+        android:paddingBottom="?actionBarSize"
+        android:background="@color/gray_light"
+        tools:visibility="visible" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="140dp"
+                android:src="@drawable/error_face"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.nunez.popularmovies.views.custom_views.LatoTextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/text_no_movies"
+                android:textSize="20sp"
+                app:fontType="Light"
+                android:textColor="@color/blue"
+                style="@style/DetailsViewTextViewTitle"/>
+
+            <com.nunez.popularmovies.views.custom_views.LatoTextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/text_come_back_later"
+                android:textSize="20sp"
+                app:fontType="Regular"
+                android:textColor="@color/blue"
+                style="@style/DetailsViewTextViewTitle"/>
+        </LinearLayout>
+    </FrameLayout>
 
     <ProgressBar
         android:id="@+id/progress"

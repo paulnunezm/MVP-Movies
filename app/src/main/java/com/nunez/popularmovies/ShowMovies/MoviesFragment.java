@@ -11,8 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.Movie;
@@ -36,7 +36,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     private MoviesAdapter mAdapter;
     private ProgressBar mProgress;
     private RecyclerView mRecycler;
-    private TextView mNoMovies;
+    private FrameLayout mNoMovies;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public void initializeViews(View view){
         mRecycler         = (RecyclerView) view.findViewById(R.id.recycler);
         mProgress         = (ProgressBar) view.findViewById(R.id.progress);
-        mNoMovies         = (TextView) view.findViewById(R.id.no_movies);
+        mNoMovies         = (FrameLayout) view.findViewById(R.id.no_movies);
     }
 
     public void refreshMovies(){
