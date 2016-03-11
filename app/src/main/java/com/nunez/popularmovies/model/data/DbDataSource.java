@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.model.entities.Movie;
+import com.nunez.popularmovies.model.entities.MovieDetails;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
 import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.ReviewsWrapper;
@@ -53,6 +54,8 @@ public class DbDataSource {
             movie.setPosertPath(mCursor.getString(2));
             movie.setTitle(mCursor.getString(3));
             movies.add(movie);
+
+//            ArrayList<Integer> genres;
         }
 
         moviesWrapper.setMovies(movies);
@@ -64,7 +67,7 @@ public class DbDataSource {
 
         ContentResolver resolver  = PopularMovies.context.getContentResolver();
 
-        Movie movie = new Movie();
+        MovieDetails movie = new MovieDetails();
         VideosWrapper videosWrapper = new VideosWrapper();
         ReviewsWrapper reviewsWrapper = new ReviewsWrapper();
         ArrayList<Review> reviews = new ArrayList<>();

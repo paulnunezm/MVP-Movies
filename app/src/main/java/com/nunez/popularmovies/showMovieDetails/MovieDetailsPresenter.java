@@ -1,7 +1,7 @@
 package com.nunez.popularmovies.showMovieDetails;
 
 import com.nunez.popularmovies.R;
-import com.nunez.popularmovies.model.entities.Movie;
+import com.nunez.popularmovies.model.entities.MovieDetails;
 import com.nunez.popularmovies.model.entities.ReviewsWrapper;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.utils.Callbacks;
@@ -19,7 +19,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
     private MovieDetailsContract.View mDetailView;
     private MovieDetailsController mDetailsController;
     private String movieId;
-    private Movie mMovie;
+    private MovieDetails mMovie;
     private boolean isFavorite;
 
     public MovieDetailsPresenter(String id){
@@ -130,7 +130,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
     // Callback implementation
     @Override
     public void onSuccess(Object o) {
-        mMovie =  (Movie) o;
+        mMovie =  (MovieDetails) o;
         showViews();
     }
 

@@ -1,7 +1,7 @@
 package com.nunez.popularmovies.showMovieDetails;
 
 import com.nunez.popularmovies.domain.UseCase;
-import com.nunez.popularmovies.model.entities.Movie;
+import com.nunez.popularmovies.model.entities.MovieDetails;
 import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.mvp.views.MVPView;
@@ -43,9 +43,9 @@ public interface MovieDetailsContract {
 
      interface MovieDetailsController extends UseCase {
          void requestMovieDetails();
-         void sendMovieDetailsToPresenter(Movie movie);
+         void sendMovieDetailsToPresenter(MovieDetails movie);
          boolean checkIfFavorite(String id);
-         void saveMovieToDb(Movie movie);
+         void saveMovieToDb(MovieDetails movie);
          void getFavoriteDetails();
     }
 }

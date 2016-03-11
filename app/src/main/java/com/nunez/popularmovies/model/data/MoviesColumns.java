@@ -20,6 +20,8 @@ public interface MoviesColumns {
     @DataType(TEXT) String DESCRIPTION = "description";
     @DataType(TEXT) String RELEASE = "release_date";
     @DataType(TEXT) String RATING = "rating";
+    @DataType(TEXT) String GENRE = "genre";
+
 
 
     // Declaring one to many relation

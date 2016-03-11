@@ -1,7 +1,6 @@
 package com.nunez.popularmovies.model.restApi;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -9,14 +8,9 @@ import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.nunez.popularmovies.BuildConfig;
-import com.nunez.popularmovies.PopularMovies;
-import com.nunez.popularmovies.R;
-import com.nunez.popularmovies.domain.MoviesCallback;
-import com.nunez.popularmovies.model.data.MoviesColumns;
-import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.entities.Movie;
+import com.nunez.popularmovies.model.entities.MovieDetails;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
-import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.ReviewsWrapper;
 import com.nunez.popularmovies.model.entities.VideosWrapper;
 import com.nunez.popularmovies.utils.Callbacks;
@@ -25,7 +19,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * This class is an implementation of the {@link RestDataSource}
@@ -65,7 +58,7 @@ public class RestMovieSource implements RestDataSource{
     @Override
     public void getMovieDetails(String id) {
         Log.d(LOG_TAG, "onGetMovieDetails");
-        Movie movie = new Movie();
+        MovieDetails movie = new MovieDetails();
         movie.setId(id);
 
         GetMovieDetailsCall mCall = new GetMovieDetailsCall(movie);
@@ -92,6 +85,9 @@ public class RestMovieSource implements RestDataSource{
         }else if( response instanceof MoviesWrapper){
 
             controllerCallback.onSuccess( response);
+
+        }else if( response instanceof  MovieDetails){
+            controllerCallback.onSuccess(response);
         }
     }
 
@@ -137,9 +133,9 @@ public class RestMovieSource implements RestDataSource{
 
     class GetMovieDetailsCall extends AsyncTask<Void, Void, String> {
 
-        private Movie mMovie;
+        private MovieDetails mMovie;
 
-        public GetMovieDetailsCall(Movie movie){
+        public GetMovieDetailsCall(MovieDetails movie){
             mMovie = movie;
         }
 
@@ -176,7 +172,7 @@ public class RestMovieSource implements RestDataSource{
 //            Movie response = null;
             mMovie  = null;
             try {
-                mMovie = gson.fromJson(result, Movie.class);
+                mMovie = gson.fromJson(result, MovieDetails.class);
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
             }
@@ -196,9 +192,9 @@ public class RestMovieSource implements RestDataSource{
 
     class GetVideoMovieVideosCall extends AsyncTask<Void, Void, String> {
 
-        public Movie mMovie;
+        public MovieDetails mMovie;
 
-        public GetVideoMovieVideosCall(Movie movie) {
+        public GetVideoMovieVideosCall(MovieDetails movie) {
             mMovie = movie;
         }
 
@@ -244,9 +240,9 @@ public class RestMovieSource implements RestDataSource{
 
     class GetMovieReviewsCall extends AsyncTask<Void, Void, String> {
 
-        public Movie mMovie;
+        public MovieDetails mMovie;
 
-        public GetMovieReviewsCall(Movie movie) {
+        public GetMovieReviewsCall(MovieDetails movie) {
             mMovie = movie;
         }
 
@@ -266,7 +262,6 @@ public class RestMovieSource implements RestDataSource{
                 e.printStackTrace();
                 onError(e.toString());
 //                Log.d("GetMovieReviewsCall", e.toString());
-
             }
             return "";
         }

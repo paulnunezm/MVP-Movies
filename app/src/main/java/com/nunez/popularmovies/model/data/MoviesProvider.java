@@ -17,6 +17,7 @@ public class MoviesProvider {
         String MOVIES = "movies";
         String TRAILERS = "trailers";
         String REVIEWS = "reviews";
+        String GENRES = "genres";
     }
 
 
@@ -49,5 +50,15 @@ public class MoviesProvider {
                 type = "vnd.android.cursor.dir/reviews",
                 defaultSort = ReviewsColumns.AUTHOR+ " ASC")
         public static final Uri Reviews = Uri.parse("content://" + AUTHORITY + "/"+Path.REVIEWS);
+    }
+
+    @TableEndpoint(table = MoviesDatabase.GENRES)
+    public static class Genres {
+
+        @ContentUri(
+                path = MoviesDatabase.GENRES,
+                type = "vnd.android.cursor.dir/genres",
+                defaultSort = ReviewsColumns.AUTHOR+ " ASC")
+        public static final Uri Genres = Uri.parse("content://" + AUTHORITY + "/"+Path.GENRES);
     }
 }

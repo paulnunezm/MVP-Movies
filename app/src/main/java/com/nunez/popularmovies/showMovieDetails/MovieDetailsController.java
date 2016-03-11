@@ -9,7 +9,7 @@ import com.nunez.popularmovies.model.data.MoviesColumns;
 import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.data.ReviewsColumns;
 import com.nunez.popularmovies.model.data.TrailersColumns;
-import com.nunez.popularmovies.model.entities.Movie;
+import com.nunez.popularmovies.model.entities.MovieDetails;
 import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.model.restApi.RestMovieSource;
@@ -50,7 +50,7 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
     }
 
     @Override
-    public void sendMovieDetailsToPresenter(Movie movieDetails) {
+    public void sendMovieDetailsToPresenter(MovieDetails movieDetails) {
         mPresenterCallback.onSuccess(movieDetails);
     }
 
@@ -60,7 +60,7 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
     }
 
     @Override
-    public void saveMovieToDb(Movie movie) {
+    public void saveMovieToDb(MovieDetails movie) {
         ContentValues values = new ContentValues();
         values.put(MoviesColumns.MOVIE_ID, mMovieId);
         values.put(MoviesColumns.TITLE, movie.title);
@@ -106,6 +106,19 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
                         reviewsValues);
             }
         }
+
+//        ArrayList<Integer> genres = movie.genres;
+//
+//        if(genres !=null && !genres.isEmpty()){
+//            for(Integer genre : genres){
+//                ContentValues genreValues  = new ContentValues();
+//                genreValues.put(GenreColumns.GENRE, genre);
+//
+//                PopularMovies.context.getContentResolver().insert(
+//                        MoviesProvider.Genres.Genres,
+//                        genreValues);
+//            }
+//        }
     }
 
     @Override
@@ -122,7 +135,7 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
 
     @Override
     public void onSuccess(Object movie) {
-        sendMovieDetailsToPresenter((Movie) movie);
+        sendMovieDetailsToPresenter((MovieDetails) movie);
     }
 
     @Override
