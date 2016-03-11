@@ -67,17 +67,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         Movie currentMovie = mMovies.get(position);
 
         holder.title.setText(currentMovie.title);
-        holder.rating.setText(currentMovie.rating);
+        holder.rating.setText(String.format(mContext.getResources()
+                .getString(R.string.format_rating), currentMovie.rating));
 
         String genres  = "";
         ArrayList<Integer> genreCodes = currentMovie.genres;
 
-        if(genreCodes != null ){
-            if(genreCodes.get(0)!=null){
-                genres= (Genres.list.get(genreCodes.get(0)));
-            }
-
-            if(genreCodes.get(1)!=null){
+        if(genreCodes != null && genreCodes.size() > 0 ){
+            genres= (Genres.list.get(genreCodes.get(0)));
+            if(genreCodes.size()>1){
                 genres = genres.concat(", " + Genres.list.get(genreCodes.get(1)));
             }
         }
