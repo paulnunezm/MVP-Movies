@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -38,6 +39,7 @@ import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.Video;
@@ -143,11 +145,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     @Override
     public void showPoster(String url) {
-        Glide.with(getContext()).
+        Glide.with(PopularMovies.context).
                 load(Constants.POSTER_BASE_URL + url)
                 .centerCrop()
-                .placeholder(getContext().getResources().getColor(R.color.movie_placeholder))
-                .error(getContext().getResources().getDrawable(R.drawable.ic_trailers))
+                .placeholder(PopularMovies.context.getResources().getColor(R.color.movie_placeholder))
+                .error(PopularMovies.context.getDrawable(R.drawable.ic_trailers))
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -341,6 +343,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
         scaleAnim.setRepeatCount(1);
         scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
         scaleAnim.start();
+    }
+
+    public Context getContext(){
+        return  getActivity();
     }
 
     public void animateFavorite(){

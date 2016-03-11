@@ -1,5 +1,6 @@
 package com.nunez.popularmovies.showMovieDetails;
 
+import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.MovieDetails;
 import com.nunez.popularmovies.model.entities.ReviewsWrapper;
@@ -83,8 +84,8 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
     public void showRatings() {
         String rating = mMovie.rating;
 
-        if (rating != null) mDetailView.showRatings(String.format(mDetailView.getContext().getResources()
-            .getString(R.string.format_rating),rating));
+        if (rating != null) mDetailView.showRatings(String.format(PopularMovies.context.getResources()
+                .getString(R.string.format_rating), rating));
     }
 
     @Override
