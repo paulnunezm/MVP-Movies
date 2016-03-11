@@ -5,6 +5,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_dimen">56dp</dimen>
     <dimen name="item_movie_width">180dp</dimen>
-    <dimen name="item_movie_height">240dp</dimen>
+    <dimen name="item_movie_height">220dp</dimen>
     <dimen name="card_elevation">12dp</dimen>
 </resources>

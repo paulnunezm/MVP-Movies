@@ -1,7 +1,6 @@
 package com.nunez.popularmovies.ShowMovies;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -18,7 +17,6 @@ import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.mvp.presenters.RecyclerViewClickListener;
 import com.nunez.popularmovies.mvp.views.MoviesView;
-import com.nunez.popularmovies.showMovieDetails.MovieDetailActivity;
 import com.nunez.popularmovies.views.adapters.MoviesAdapter;
 
 import java.util.ArrayList;
@@ -93,6 +91,8 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
         mAdapter = new MoviesAdapter(movieList,5);
         mAdapter.setRecyclerListListener(this);
         mRecycler.setAdapter(mAdapter);
+
+        ((Callback) getActivity()).onMoviesRecieved(movieList.get(0).getId());
     }
 
     @Override
@@ -155,5 +155,8 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
          * DetailFragmentCallback for when an item has been selected.
          */
         public void onItemSelected(String movieId);
+        public void onMoviesRecieved(String movieId);
     }
+
+
 }

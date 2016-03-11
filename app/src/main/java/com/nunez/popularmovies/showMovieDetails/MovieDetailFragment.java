@@ -220,7 +220,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     @Override
     public void showLoading() {
-
+        mProgress.setVisibility(View.VISIBLE);
     }
 
     @Override

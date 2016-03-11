@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.nunez.popularmovies.R;
+import com.nunez.popularmovies.model.entities.Genres;
 import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.mvp.presenters.RecyclerViewClickListener;
 import com.nunez.popularmovies.utils.Constants;
@@ -28,11 +31,13 @@ import java.util.ArrayList;
  * Created by paulnunez on 11/16/15.
  */
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
+    private static String TAG = MoviesAdapter.class.getSimpleName();
 
     private Context mContext;
     private ArrayList<Movie> mMovies;
     private int mLastVisibleItem;
     private RecyclerViewClickListener mRecyclerClickListener;
+    private MovieViewHolder clickedView;
 
 
     public MoviesAdapter(ArrayList<Movie> movies,  int lastVisibleItem) {
@@ -62,6 +67,21 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         Movie currentMovie = mMovies.get(position);
 
         holder.title.setText(currentMovie.title);
+        holder.rating.setText(currentMovie.rating);
+
+        String genres  = "";
+        ArrayList<Integer> genreCodes = currentMovie.genres;
+
+        if(genreCodes != null ){
+            if(genreCodes.get(0)!=null){
+                genres= (Genres.list.get(genreCodes.get(0)));
+            }
+
+            if(genreCodes.get(1)!=null){
+                genres = genres.concat(", " + Genres.list.get(genreCodes.get(1)));
+            }
+        }
+        holder.genres.setText(genres);
 
         Glide.with(mContext).
                 load(Constants.POSTER_BASE_URL+currentMovie.posertPath)
@@ -125,6 +145,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         return mMovies;
     }
 
+    private void clearPreviousClickedView(){
+
+        if(clickedView != null){
+            clickedView.clickState.
+                    setBackgroundColor(mContext.getResources().getColor(R.color.transparent));
+        }
+    }
+
 
     public void setTitleBackgroundColor(Bitmap bitmap, final MovieViewHolder holder, final int position){
 
@@ -152,37 +180,53 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
 
-    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         protected TextView title;
+        protected TextView rating;
+        protected TextView genres;
+
         protected ImageView poster;
-        protected FrameLayout container;
+        protected CardView container;
         protected boolean animated = false;
         protected boolean containerAnimated = false;
         private final RecyclerViewClickListener onClickListener;
+        private FrameLayout clickState;
 
 
-        public MovieViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
+        public MovieViewHolder(View itemView, final RecyclerViewClickListener onClickListener) {
             super(itemView);
 
-            container = (FrameLayout) itemView.findViewById(R.id.item_movie_container);
+            container = (CardView) itemView.findViewById(R.id.item_movie_container);
             title = (TextView) itemView.findViewById(R.id.item_movie_title);
             poster= (ImageView) itemView.findViewById(R.id.item_poster);
+            clickState = (FrameLayout) itemView.findViewById(R.id.click_state);
+            rating = (TextView) itemView.findViewById(R.id.item_movie_rating);
+            genres = (TextView) itemView.findViewById(R.id.item_movie_genres);
 
             /**
              * Important
              */
-            poster.setOnTouchListener(this);
+//            clickState.setonf(this);
+            clickState.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        onClickListener.onClick(v, getAdapterPosition(), 0f, 0f);
+                    }
+                }
+            });
             this.onClickListener = onClickListener;
-
-            // Maybe to get the rgb values later
-//            poster.setDrawingCacheEnabled(true);
            }
 
 
-        @Override
+//        @Override
         public boolean onTouch(View v, MotionEvent event) {
+            Log.d(TAG, "onTouch: ");
             if (event.getAction() == MotionEvent.ACTION_UP && event.getAction() != MotionEvent.ACTION_MOVE) {
+
+//                clickedItem = position;
+//                notifyDataSetChanged();
 
                 onClickListener.onClick(v, getAdapterPosition(), event.getX(), event.getY());
             }
@@ -190,5 +234,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         }
 
 
+        @Override
+        public void onClick(View v) {
+            onClickListener.onClick(v, getAdapterPosition(),0f, 0f);
+        }
     }
 }

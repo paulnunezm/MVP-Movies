@@ -156,4 +156,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             startActivity(intent);
         }
     }
+
+    @Override
+    public void onMoviesRecieved(String movieId) {
+        if(mTwoPane){
+            Bundle args = new Bundle();
+            args.putString(MovieDetailFragment.MOVIE_ID, movieId);
+
+            MovieDetailFragment fragment = new MovieDetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment)
+                    .commit();
+        }
+    }
 }

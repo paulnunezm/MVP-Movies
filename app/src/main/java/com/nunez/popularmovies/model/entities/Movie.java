@@ -4,6 +4,8 @@ package com.nunez.popularmovies.model.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class Movie {
 
     public int id;
@@ -21,6 +23,9 @@ public class Movie {
 
     @SerializedName("vote_average")
     public String rating;
+
+    @SerializedName("genre_ids")
+    public ArrayList<Integer> genres;
 
     // Not parsed
     public VideosWrapper videosWrapper;

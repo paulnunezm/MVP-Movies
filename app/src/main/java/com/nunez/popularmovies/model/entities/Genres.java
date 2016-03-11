@@ -7,7 +7,7 @@ import android.util.SparseArray;
  */
 public class Genres{
 
-     static SparseArray<String> list = new SparseArray<String>(){{
+     public static  SparseArray<String> list = new SparseArray<String>(){{
             put(28, "Action");
             put(12, "Adventure");
             put(16, "Animation");
