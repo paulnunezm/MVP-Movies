@@ -179,9 +179,6 @@ public class RestMovieSource implements RestDataSource{
 
             if(mMovie != null){
                 Log.d("GetMovieDetailsCall", mMovie.title);
-
-
-
 //                onSuccess(response);
 //                mMovie = response
                 new GetVideoMovieVideosCall(mMovie).execute();

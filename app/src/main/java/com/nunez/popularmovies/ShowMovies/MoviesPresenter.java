@@ -48,7 +48,7 @@ public class MoviesPresenter implements Presenter {
         SharedPreferences sharedPreferences = PopularMovies.context
                 .getSharedPreferences(Constants.PREFS, 0);
 
-
+        // if spannable is on favorites
         if(sharedPreferences.getString(Constants.PREFS_SORT, Constants.SORT_POPULAR)
                 .equals(Constants.SORT_FAVORITES)){
 
@@ -65,6 +65,10 @@ public class MoviesPresenter implements Presenter {
 
     public void onMoviesReceived(MoviesWrapper moviesWrapper){
         mMoviesView.hideLoading();
-        mMoviesView.showMovies(moviesWrapper.movies);
+        if (!moviesWrapper.movies.isEmpty()){
+            mMoviesView.showMovies(moviesWrapper.movies);
+        }else{
+            mMoviesView.showNoMovies();
+        }
     }
 }

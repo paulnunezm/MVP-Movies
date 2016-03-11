@@ -14,7 +14,11 @@ public class MovieDetails extends AbstractMovie {
     public ArrayList<DetailGenres> genres;
 
 
-    private class DetailGenres{
+    public class DetailGenres{
         Integer id;
+
+        public Integer getId() {
+            return id;
+        }
     }
 }

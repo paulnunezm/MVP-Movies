@@ -48,14 +48,32 @@ public class DbDataSource {
             null
         );
 
-        while (mCursor.moveToNext()){
+
+
+
+        while (mCursor != null && mCursor.moveToNext()){
             Movie movie = new Movie();
             movie.setId(mCursor.getString(1));
             movie.setPosertPath(mCursor.getString(2));
             movie.setTitle(mCursor.getString(3));
+            movie.setRating(mCursor.getString(6));
             movies.add(movie);
 
-//            ArrayList<Integer> genres;
+            ArrayList<Integer> genres = new ArrayList<Integer>();
+
+            Cursor genresCursor = PopularMovies.context.getContentResolver().query(
+                    MoviesProvider.Genres.Genres,
+                    null,
+                    MoviesColumns.MOVIE_ID + " = " + String.valueOf(movie.id),
+                    null,
+                    null
+            );
+
+            while (genresCursor != null && genresCursor.moveToNext()){
+                genres.add(genresCursor.getInt(1));
+            }
+
+            movie.setGenres(genres);
         }
 
         moviesWrapper.setMovies(movies);

@@ -11,6 +11,8 @@ public interface MoviesView extends MVPView {
 
     void showMovies(ArrayList<Movie> movieList);
 
+    void showNoMovies();
+
     boolean isTheListEmpty ();
 
     void appendMovies (ArrayList<Movie> movieList);

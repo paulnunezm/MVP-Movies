@@ -119,6 +119,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
             mDetailsController.getFavoriteDetails();
         }else{
             mDetailsController.requestMovieDetails();
+
         }
     }
 
@@ -126,6 +127,8 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
     public void stop() {
 
     }
+
+
 
     // Callback implementation
     @Override

@@ -58,7 +58,7 @@ public class MoviesProvider {
         @ContentUri(
                 path = MoviesDatabase.GENRES,
                 type = "vnd.android.cursor.dir/genres",
-                defaultSort = ReviewsColumns.AUTHOR+ " ASC")
+                defaultSort = GenreColumns.GENRE+ " ASC")
         public static final Uri Genres = Uri.parse("content://" + AUTHORITY + "/"+Path.GENRES);
     }
 }

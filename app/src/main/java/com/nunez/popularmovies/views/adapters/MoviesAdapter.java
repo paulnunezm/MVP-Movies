@@ -61,6 +61,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         this.mRecyclerClickListener = mRecyclerClickListener;
     }
 
+    public void clearData(){
+        mMovies.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(final MovieViewHolder holder, final int position) {
 

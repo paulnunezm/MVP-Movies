@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.model.data.DbDataSource;
+import com.nunez.popularmovies.model.data.GenreColumns;
 import com.nunez.popularmovies.model.data.MoviesColumns;
 import com.nunez.popularmovies.model.data.MoviesProvider;
 import com.nunez.popularmovies.model.data.ReviewsColumns;
@@ -107,18 +108,19 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
             }
         }
 
-//        ArrayList<Integer> genres = movie.genres;
+        ArrayList<MovieDetails.DetailGenres> genres = movie.genres;
 //
-//        if(genres !=null && !genres.isEmpty()){
-//            for(Integer genre : genres){
-//                ContentValues genreValues  = new ContentValues();
-//                genreValues.put(GenreColumns.GENRE, genre);
-//
-//                PopularMovies.context.getContentResolver().insert(
-//                        MoviesProvider.Genres.Genres,
-//                        genreValues);
-//            }
-//        }
+        if(genres !=null && !genres.isEmpty()){
+            for(MovieDetails.DetailGenres genre : genres){
+                ContentValues genreValues  = new ContentValues();
+                genreValues.put(GenreColumns.GENRE, genre.getId());
+                genreValues.put(GenreColumns.MOVIE_ID, movie.getId());
+
+                PopularMovies.context.getContentResolver().insert(
+                        MoviesProvider.Genres.Genres,
+                        genreValues);
+            }
+        }
     }
 
     @Override

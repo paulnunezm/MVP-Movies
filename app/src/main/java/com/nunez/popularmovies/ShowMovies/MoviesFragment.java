@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.Movie;
@@ -35,6 +36,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     private MoviesAdapter mAdapter;
     private ProgressBar mProgress;
     private RecyclerView mRecycler;
+    private TextView mNoMovies;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public void initializeViews(View view){
         mRecycler         = (RecyclerView) view.findViewById(R.id.recycler);
         mProgress         = (ProgressBar) view.findViewById(R.id.progress);
+        mNoMovies         = (TextView) view.findViewById(R.id.no_movies);
     }
 
     public void refreshMovies(){
@@ -87,6 +90,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
 
     @Override
     public void showMovies(ArrayList<Movie> movieList) {
+        mNoMovies.setVisibility(View.GONE);
         mAutoUpdated = true;
         mAdapter = new MoviesAdapter(movieList,5);
         mAdapter.setRecyclerListListener(this);
@@ -96,7 +100,14 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     }
 
     @Override
+    public void showNoMovies() {
+        mAdapter.clearData();
+        mNoMovies.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void showLoading() {
+        mNoMovies.setVisibility(View.GONE);
         mProgress.setVisibility(View.VISIBLE);
         Snackbar.make(((MainActivity) getActivity()).getCoordinatorLayout(),
                 "Requesting movies...", Snackbar.LENGTH_LONG).show();
