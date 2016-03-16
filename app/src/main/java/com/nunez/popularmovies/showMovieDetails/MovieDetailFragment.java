@@ -1,5 +1,6 @@
 package com.nunez.popularmovies.showMovieDetails;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
@@ -65,6 +66,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     private String mMovieId;
     private String mTrailerUrl;
     private boolean isFavorite;
+    private int    heartInitColor;
 
     private MovieDetailsPresenter mDetailPresenter;
     private TrailersAdapter mTrailersAdapter;
@@ -255,13 +257,14 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
         }else if(id == R.id.button_fab){
 
-            if(!isFavorite){
+            if(isFavorite){
+                isFavorite = false;
+            }else{
                 isFavorite = true;
                 mDetailPresenter.saveMovieToDb();
-                animateFavorite();
-            }else{
-                animateFavoritePulse();
             }
+
+            animateFavorite();
 
         }
     }
@@ -290,7 +293,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
                             if(isFavorite){
                                 fab.setColorFilter(0xFFF);
                             }else{
-                                fab.setColorFilter(color);
+                                heartInitColor = color;
+                                fab.setColorFilter(heartInitColor);
                             }
 //                            mDescriptionTitle.setTextColor(textColor);//vibrantSwatchTitleTextColor);
 //                            mDescription.setTextColor(textColor);
@@ -351,32 +355,79 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     }
 
     public void animateFavorite(){
-        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
-        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
-        ObjectAnimator scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
-        //scaleAnim.setInterpolator(new BounceInterpolator());
+        float   scaleValue = 1.3f;
+        int     backgroundColorReference;
+        int     rotation;
+        int     heartColorReference;
+
+        ObjectAnimator scaleAnim;
+
+        if(!isFavorite){
+            backgroundColorReference = R.drawable.circle_white;
+            rotation = 0;
+            heartColorReference = R.color.color_favorite;
+            scaleAnim = null;
+
+        }else{
+            backgroundColorReference = R.drawable.fab;
+            rotation = 720;
+            heartColorReference = R.color.white;
+        }
+
+        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, scaleValue);
+        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, scaleValue);
+        scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
+
         scaleAnim.setDuration(500);
         scaleAnim.setRepeatCount(1);
         scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
 
         //Let's change background's color to red.
         Drawable[] color = {fab.getBackground(),
-                getContext().getResources().getDrawable(R.drawable.fab)};
+                getContext().getResources().getDrawable(backgroundColorReference)};
         TransitionDrawable trans = new TransitionDrawable(color);
 
         //This will work also on old devices. The latest API says you have to use setBackground instead.
         fab.setBackgroundDrawable(trans);
         trans.startTransition(700);
 
-        ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, 720);
+        ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, rotation);
         rotateAnim.setInterpolator(new DecelerateInterpolator());
         rotateAnim.setDuration(1400);
 
-        ObjectAnimator heartColorAnim = ObjectAnimator.ofInt(fab, "colorFilter", getResources().getColor(R.color.white));
-        heartColorAnim.setDuration(700).setStartDelay(700);
-
         AnimatorSet setAnim = new AnimatorSet();
-        setAnim.play(scaleAnim).with(rotateAnim).with(heartColorAnim);
+        if(isFavorite){
+            ObjectAnimator heartColorAnim = ObjectAnimator.ofInt(fab, "colorFilter", getResources().getColor(heartColorReference));
+            heartColorAnim.setDuration(700).setStartDelay(700);
+
+            setAnim.play(scaleAnim).with(rotateAnim).with(heartColorAnim);
+        }else{
+            setAnim.play(rotateAnim).with(scaleAnim);
+            fab.setColorFilter(heartInitColor);
+        }
+
+        setAnim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                fab.setOnClickListener(null);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                fab.setOnClickListener(MovieDetailFragment.this);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
         setAnim.start();
     }
 
