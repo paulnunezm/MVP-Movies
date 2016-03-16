@@ -256,6 +256,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
         }else if(id == R.id.button_fab){
 
             if(!isFavorite){
+                isFavorite = true;
                 mDetailPresenter.saveMovieToDb();
                 animateFavorite();
             }else{
