@@ -11,6 +11,7 @@
     <string name="format_reviews">\" %s \"</string>
     <string name="format_rating">%s/10"</string>
     <string name="format_reviewer">- %s -"</string>
+    <string name="text_share_trailer">Share Trailer</string>
 
     <string-array name="movies_sort_array">
         <item>Popular movies</item>

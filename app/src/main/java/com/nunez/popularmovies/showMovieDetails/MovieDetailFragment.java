@@ -17,14 +17,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -73,6 +78,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     private LinearLayoutManager mReviewsLayoutManager;
     private LinearLayoutManager mTrailersLayoutManager;
     private ReviewsAdapter mReviewsAdapter;
+    private ShareActionProvider mShareActionProvider;
 
     @Bind(R.id.image_poster)             ImageView mPoster;
     @Bind(R.id.text_title_bgnd)          View mTitleBackground;
@@ -91,6 +97,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     @Bind(R.id.progress)                 ProgressBar mProgress;
     @Bind(R.id.container)                View mDetailsContainer;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -110,6 +121,16 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
         mDetailPresenter.attachView(this);
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate menu resource file.
+        getActivity().getMenuInflater().inflate(R.menu.fragment_detail, menu);
+
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        mShareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
     }
 
     @Override
@@ -142,11 +163,18 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     @Override
     public void setTrailerLink(String url) {
-        mTrailerUrl = url;
+        mTrailerUrl = "http://www.youtube.com/watch?v=" + url;
+
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, mTrailerUrl);
+
+        mShareActionProvider.setShareIntent(sharingIntent);
     }
 
     @Override
     public void showPoster(String url) {
+
         Glide.with(PopularMovies.context).
                 load(Constants.POSTER_BASE_URL + url)
                 .centerCrop()
@@ -433,8 +461,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     public void playTrailer(){
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v="
-                + mTrailerUrl));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
 
         // Verify that the intent will resolve to an activity
         if(intent.resolveActivity(getActivity().getPackageManager()) != null){
