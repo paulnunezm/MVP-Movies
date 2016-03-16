@@ -27,6 +27,7 @@ public interface MovieDetailsContract {
         void showRatings();
 
         void saveMovieToDb();
+        void removeMovieFromDb();
     }
 
     interface View extends MVPView {
@@ -46,6 +47,8 @@ public interface MovieDetailsContract {
          void sendMovieDetailsToPresenter(MovieDetails movie);
          boolean checkIfFavorite(String id);
          void saveMovieToDb(MovieDetails movie);
+         void removeMovieFromDb(String id);
          void getFavoriteDetails();
+
     }
 }

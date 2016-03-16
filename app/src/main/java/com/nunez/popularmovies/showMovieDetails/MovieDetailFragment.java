@@ -66,7 +66,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     private String mMovieId;
     private String mTrailerUrl;
     private boolean isFavorite;
-    private int    heartInitColor;
+    private int     heartInitColor;
 
     private MovieDetailsPresenter mDetailPresenter;
     private TrailersAdapter mTrailersAdapter;
@@ -259,6 +259,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
             if(isFavorite){
                 isFavorite = false;
+                mDetailPresenter.removeMovieFromDb();
             }else{
                 isFavorite = true;
                 mDetailPresenter.saveMovieToDb();
@@ -287,13 +288,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
                             // Set awesome colors to texts and backgrounds
 
-                            //mScrollView.setBackgroundColor(mutedLightSwatch.getRgb());
+                            heartInitColor = color;
                             mTitleBackground.setBackgroundColor(alphaColor);
                             toolbar.setBackgroundColor(alphaColor);
                             if(isFavorite){
                                 fab.setColorFilter(0xFFF);
                             }else{
-                                heartInitColor = color;
                                 fab.setColorFilter(heartInitColor);
                             }
 //                            mDescriptionTitle.setTextColor(textColor);//vibrantSwatchTitleTextColor);

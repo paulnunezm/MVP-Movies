@@ -93,6 +93,11 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
         mDetailsController.saveMovieToDb(mMovie);
     }
 
+    @Override
+    public void removeMovieFromDb() {
+        mDetailsController.removeMovieFromDb(movieId);
+    }
+
 
     @Override
     public void attachView(MovieDetailsContract.View detailsView) {
