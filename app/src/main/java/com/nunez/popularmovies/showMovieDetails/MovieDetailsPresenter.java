@@ -88,6 +88,8 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
                 .getString(R.string.format_rating), rating));
     }
 
+
+
     @Override
     public void saveMovieToDb() {
         mDetailsController.saveMovieToDb(mMovie);
@@ -126,6 +128,21 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
         }else{
             mDetailsController.requestMovieDetails();
 
+        }
+    }
+
+    @Override
+    public void startDetail(boolean connection) {
+        mDetailView.showLoading();
+
+        if(checkIfFavorite()){
+            mDetailsController.getFavoriteDetails();
+        }else{
+            if(connection){
+                mDetailsController.requestMovieDetails();
+            }else{
+                mDetailView.showError();
+            }
         }
     }
 

@@ -27,6 +27,8 @@
             style="?android:attr/progressBarStyleLarge"
             />
 
+        <include layout="@layout/error_screen"/>
+
         <LinearLayout
             android:id="@+id/container"
             xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,11 +1,17 @@
 package com.nunez.popularmovies.ShowMovies;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -25,7 +31,7 @@ import java.util.ArrayList;
  */
 public class MoviesFragment extends Fragment implements MoviesView, RecyclerViewClickListener {
 
-    private static final String TAG = MoviesFragment.class.getSimpleName();
+    public static final String TAG = MoviesFragment.class.getSimpleName();
     public static final String EXTRA_MOVIE_ID = "movie_id";
 
     private boolean mAutoUpdated;
@@ -35,13 +41,18 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     private ProgressBar mProgress;
     private AutofitRecyclerView mRecycler;
     private FrameLayout mNoMovies;
+    private ConnectivityManager connectivityManager;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMoviesPresenter = new MoviesPresenter();
         mMoviesPresenter.attachView(this);
+        setHasOptionsMenu(true);
     }
+
+
 
     @Nullable
     @Override
@@ -55,11 +66,23 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.movies_menu, menu);
+        Log.d(TAG, "onCreateOptionsMenu: ");
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         if(savedInstanceState == null){
-            mMoviesPresenter.requestMovies();
+            if(isNetworkConnected()){
+                mMoviesPresenter.requestMovies();
+            }else{
+                showNoMovies();
+                showConnectionError();
+            }
         }else{
             mMoviesPresenter.setMovieList((ArrayList<Movie>) savedInstanceState.getSerializable("movies"));
             mMoviesPresenter.showMovies();
@@ -76,6 +99,8 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public void onStart() {
         super.onStart();
 //        mMoviesPresenter.start();
+        setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -101,8 +126,12 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     }
 
     public void refreshMovies(){
-//        mMoviesPresenter.start();
-        mMoviesPresenter.requestMovies();
+       if(isNetworkConnected() || ((MainActivity) getActivity()).currentSpinnerPos == 2 ){
+           mMoviesPresenter.requestMovies();
+       }else{
+           showNoMovies();
+           showConnectionError();
+       }
     }
 
     @Override
@@ -121,6 +150,11 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public void showNoMovies() {
         if(mAdapter != null) mAdapter.clearData();
         mNoMovies.setVisibility(View.VISIBLE);
+    }
+
+    public void showConnectionError(){
+        Snackbar.make(mNoMovies, getResources()
+                .getString(R.string.error_connection), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -163,6 +197,16 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     @Override
     public Context getContext() {
         return getActivity().getApplicationContext();
+    }
+
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 
     @Override

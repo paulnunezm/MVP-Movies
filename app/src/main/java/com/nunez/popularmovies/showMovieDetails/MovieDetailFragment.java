@@ -12,10 +12,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -98,6 +101,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     @Bind(R.id.button_fab)               ImageButton fab;
     @Bind(R.id.progress)                 ProgressBar mProgress;
     @Bind(R.id.container)                View mDetailsContainer;
+    @Bind(R.id.no_movies)                View mErrorScreen;
 
     public MovieDetailFragment(){
         setHasOptionsMenu(true);
@@ -150,7 +154,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     @Override
     public void onStart() {
         super.onStart();
-        mDetailPresenter.start();
+        mDetailPresenter.startDetail(isNetworkConnected());
     }
 
     @Override
@@ -274,12 +278,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     @Override
     public void showLoading() {
+        mDetailsContainer.setVisibility(View.INVISIBLE);
+        mErrorScreen.setVisibility(View.GONE);
         mProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
         mProgress.setVisibility(View.GONE);
+        mErrorScreen.setVisibility(View.GONE);
         mDetailsContainer.setVisibility(View.VISIBLE);
     }
 
@@ -296,7 +303,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     @Override
     public void showError() {
-
+        mDetailsContainer.setVisibility(View.INVISIBLE);
+        mErrorScreen.setVisibility(View.VISIBLE);
+        Snackbar.make(mErrorScreen, getResources()
+                .getString(R.string.error_connection), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -479,6 +489,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
         });
 
         setAnim.start();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 
     public void playTrailer(){

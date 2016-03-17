@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/no_movies"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    android:paddingBottom="?actionBarSize"
+    android:background="@color/gray_light"
+    tools:visibility="visible"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="140dp"
+            android:src="@drawable/error_face"
+            android:layout_gravity="center_horizontal"/>
+
+        <com.nunez.popularmovies.views.custom_views.LatoTextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/text_no_movies"
+            android:textSize="20sp"
+            app:fontType="Light"
+            android:textColor="@color/blue"
+            style="@style/DetailsViewTextViewTitle"/>
+
+        <com.nunez.popularmovies.views.custom_views.LatoTextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/text_come_back_later"
+            android:textSize="20sp"
+            app:fontType="Regular"
+            android:textColor="@color/blue"
+            style="@style/DetailsViewTextViewTitle"/>
+    </LinearLayout>
+</FrameLayout>

@@ -25,6 +25,7 @@ public interface MovieDetailsContract {
         boolean checkIfFavorite();
         void showReleaseDate();
         void showRatings();
+        void startDetail(boolean connection);
 
         void saveMovieToDb();
         void removeMovieFromDb();

@@ -72,7 +72,7 @@ public class MoviesPresenter implements Presenter {
     public void showMovies(){
         mMoviesView.hideLoading();
 
-        if (!mMovies.isEmpty()){
+        if (mMovies != null && !mMovies.isEmpty()){
             mMoviesView.showMovies(mMovies);
         }else{
             mMoviesView.showNoMovies();
