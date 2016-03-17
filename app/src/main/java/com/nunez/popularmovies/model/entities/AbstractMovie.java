@@ -4,7 +4,9 @@ package com.nunez.popularmovies.model.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public abstract class AbstractMovie {
+import java.io.Serializable;
+
+public abstract class AbstractMovie implements Serializable{
 
     public int id;
 

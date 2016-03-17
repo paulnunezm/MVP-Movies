@@ -71,6 +71,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     private String mMovieId;
     private String mTrailerUrl;
     private boolean isFavorite;
+    private boolean shareInflated;
+
     private int     heartInitColor;
 
     private MovieDetailsPresenter mDetailPresenter;
@@ -97,9 +99,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     @Bind(R.id.progress)                 ProgressBar mProgress;
     @Bind(R.id.container)                View mDetailsContainer;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public MovieDetailFragment(){
         setHasOptionsMenu(true);
     }
 
@@ -114,11 +114,16 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
             mMovieId = args.getString(MOVIE_ID);
         }
 
+        shareInflated = (container.findViewById(R.id.action_share) != null) ;
+
         ButterKnife.bind(this, rootView);
         initalizeViews(rootView);
 
         mDetailPresenter = new MovieDetailsPresenter(mMovieId);
         mDetailPresenter.attachView(this);
+
+        heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
+
 
         return rootView;
     }
@@ -126,12 +131,21 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate menu resource file.
-        getActivity().getMenuInflater().inflate(R.menu.fragment_detail, menu);
+        menu.clear();
+        inflater.inflate(R.menu.fragment_detail, menu);
 
         MenuItem shareItem = menu.findItem(R.id.action_share);
         mShareActionProvider =
                 (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+
+        if(mTrailerUrl != null){
+            mShareActionProvider.setShareIntent(createShareIntent());
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
+
+
 
     @Override
     public void onStart() {
@@ -160,16 +174,22 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     }
 
 
+    public Intent createShareIntent(){
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, mTrailerUrl);
+        return sharingIntent;
+    }
+
 
     @Override
     public void setTrailerLink(String url) {
         mTrailerUrl = "http://www.youtube.com/watch?v=" + url;
 
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, mTrailerUrl);
+        if(mShareActionProvider != null){
+            mShareActionProvider.setShareIntent(createShareIntent());
+        }
 
-        mShareActionProvider.setShareIntent(sharingIntent);
     }
 
     @Override
@@ -179,7 +199,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
                 load(Constants.POSTER_BASE_URL + url)
                 .centerCrop()
                 .placeholder(PopularMovies.context.getResources().getColor(R.color.movie_placeholder))
-                .error(PopularMovies.context.getDrawable(R.drawable.ic_trailers))
+                .error(PopularMovies.context.getResources().getDrawable(R.drawable.ic_trailers))
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -238,6 +258,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     public void setFavorite() {
         isFavorite = true;
         fab.setBackgroundResource(R.drawable.fab);
+        fab.setRotation(720);
+        fab.setColorFilter(getActivity().getResources().getColor(R.color.white));
     }
 
     @Override

@@ -3,8 +3,10 @@ package com.nunez.popularmovies.ShowMovies;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,10 +19,13 @@ import com.nunez.popularmovies.showMovieDetails.MovieDetailActivity;
 import com.nunez.popularmovies.showMovieDetails.MovieDetailFragment;
 import com.nunez.popularmovies.utils.Constants;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
-    MoviesFragment.Callback{
+import static android.widget.AdapterView.OnItemSelectedListener;
 
+public class MainActivity extends AppCompatActivity implements OnItemSelectedListener,
+    MoviesFragment.Callback{
+    private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EXTRA_MOVIE_ID = "movie_id";
+    public static final String SPINNER_POSITION = "spinnerPosition";
 
     private CoordinatorLayout coordinatorLayout;
     private SharedPreferences sortPreferences;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Spinner spinner;
     private boolean firstTimeOpen = true;
     private boolean mTwoPane;
+    public int     currentSpinnerPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner           = (Spinner) findViewById(R.id.spinner_sort);
 
         spinner.setOnItemSelectedListener(this);
+
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.movies_sort_array, R.layout.item_spinner);
@@ -46,15 +53,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        // Initialize the sort preference, and set sort popular
         sortPreferences = getSharedPreferences(Constants.PREFS,0);
-        String sortType = sortPreferences.getString(Constants.SORT_POPULAR, null);
         prefEditor = sortPreferences.edit();
 
-        // If no sorting prefs has been set before, set popular sorting as default.
-        if (sortType == null) {
-            prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_POPULAR);
-            prefEditor.apply();
+        if(savedInstanceState == null){
+
+            // Initialize the sort preference, and set sort popular
+            String sortType = sortPreferences.getString(Constants.SORT_POPULAR, null);
+            currentSpinnerPos  = 0;
+
+            // If no sorting prefs has been set before, set popular sorting as default.
+            if (sortType == null) {
+                prefEditor.putString(Constants.PREFS_SORT, Constants.SORT_POPULAR);
+                prefEditor.apply();
+            }
         }
 
         /** Check if two pane layout**/
@@ -72,6 +84,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             mTwoPane = false;
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: s");
+        outState.putInt(SPINNER_POSITION, currentSpinnerPos);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState);
+        Log.d(TAG, "onRestoreInstanceState: 2");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentSpinnerPos = (int) savedInstanceState.get(SPINNER_POSITION);
     }
 
     @Override
@@ -121,8 +153,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     prefEditor.apply();
             }
 
-            ((MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies))
-                    .refreshMovies();
+            if(currentSpinnerPos != position){
+                currentSpinnerPos = position;
+                ((MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies))
+                        .refreshMovies();
+            }
 
         }
         firstTimeOpen = false;
@@ -169,6 +204,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_detail_container, fragment)
                     .commit();
+        }
+    }
+
+    @Override
+    public void onResumeFragment() {
+
+        // Always refresh favorites to check if there was a change while this fragment was yet alive.
+        // This could also be fixed adding a cursorLoader on the fragment if on favorite.
+        if( currentSpinnerPos == 2 ){
+            ((MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies))
+                    .refreshMovies();
         }
     }
 }

@@ -3,10 +3,8 @@ package com.nunez.popularmovies.ShowMovies;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +40,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMoviesPresenter = new MoviesPresenter();
+        mMoviesPresenter.attachView(this);
     }
 
     @Nullable
@@ -52,27 +51,44 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
         initializeViews(rootView);
         initializeRecyclerView();
 
-        mMoviesPresenter.attachView(this);
-
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if(savedInstanceState == null){
+            mMoviesPresenter.requestMovies();
+        }else{
+            mMoviesPresenter.setMovieList((ArrayList<Movie>) savedInstanceState.getSerializable("movies"));
+            mMoviesPresenter.showMovies();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("movies", mMoviesPresenter.getMovieList());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if(!mAutoUpdated) mMoviesPresenter.start(); // TODO: 3/9/16 set mAutoUpdaetd = true;
+//        mMoviesPresenter.start();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         initializeRecyclerView();
+        ((Callback) getActivity()).onResumeFragment();
     }
+
 
     public void initializeRecyclerView(){
 
         int columns = 2;
-        Log.d(TAG, "initializeRecyclerView: "+getActivity().getRequestedOrientation());
 
 //        mLayoutMangager = new GridLayoutManager(getContext(),2);
 //        mRecycler.setLayoutManager(mLayoutMangager);
@@ -85,11 +101,13 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     }
 
     public void refreshMovies(){
-        mMoviesPresenter.start();
+//        mMoviesPresenter.start();
+        mMoviesPresenter.requestMovies();
     }
 
     @Override
     public void showMovies(ArrayList<Movie> movieList) {
+        mRecycler.setVisibility(View.VISIBLE);
         mNoMovies.setVisibility(View.GONE);
         mAutoUpdated = true;
         mAdapter = new MoviesAdapter(movieList,5);
@@ -109,8 +127,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
     public void showLoading() {
         mNoMovies.setVisibility(View.GONE);
         mProgress.setVisibility(View.VISIBLE);
-        Snackbar.make(((MainActivity) getActivity()).getCoordinatorLayout(),
-                "Requesting movies...", Snackbar.LENGTH_LONG).show();
+        mRecycler.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -165,8 +182,9 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(String movieId);
-        public void onMoviesRecieved(String movieId);
+        void onItemSelected(String movieId);
+        void onMoviesRecieved(String movieId);
+        void onResumeFragment();
     }
 
 

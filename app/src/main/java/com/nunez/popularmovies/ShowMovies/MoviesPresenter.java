@@ -5,10 +5,13 @@ import android.util.Log;
 
 import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.domain.MoviesCallback;
+import com.nunez.popularmovies.model.entities.Movie;
 import com.nunez.popularmovies.model.entities.MoviesWrapper;
 import com.nunez.popularmovies.mvp.presenters.Presenter;
 import com.nunez.popularmovies.mvp.views.MoviesView;
 import com.nunez.popularmovies.utils.Constants;
+
+import java.util.ArrayList;
 
 /**
  * Created by paulnunez on 11/15/15.
@@ -19,6 +22,8 @@ public class MoviesPresenter implements Presenter {
     GetMoviesController getMoviesController;
     MoviesView          mMoviesView;
     MoviesCallback      mCallback;
+    ArrayList<Movie>    mMovies;
+
 
     public MoviesPresenter() {
         mCallback = new MoviesCallback() {
@@ -45,6 +50,11 @@ public class MoviesPresenter implements Presenter {
     public void start() {
         mMoviesView.showLoading();
 
+    }
+
+    public void requestMovies(){
+        mMoviesView.showLoading();
+
         SharedPreferences sharedPreferences = PopularMovies.context
                 .getSharedPreferences(Constants.PREFS, 0);
 
@@ -56,6 +66,17 @@ public class MoviesPresenter implements Presenter {
         }else{
             getMoviesController.requestPopularMovies();
         }
+
+    }
+
+    public void showMovies(){
+        mMoviesView.hideLoading();
+
+        if (!mMovies.isEmpty()){
+            mMoviesView.showMovies(mMovies);
+        }else{
+            mMoviesView.showNoMovies();
+        }
     }
 
     @Override
@@ -63,12 +84,16 @@ public class MoviesPresenter implements Presenter {
         mMoviesView = null;
     }
 
+    public ArrayList<Movie> getMovieList(){
+        return mMovies;
+    }
+
+    public void setMovieList(ArrayList<Movie> list){
+        mMovies = list;
+    }
+
     public void onMoviesReceived(MoviesWrapper moviesWrapper){
-        mMoviesView.hideLoading();
-        if (!moviesWrapper.movies.isEmpty()){
-            mMoviesView.showMovies(moviesWrapper.movies);
-        }else{
-            mMoviesView.showNoMovies();
-        }
+        mMovies = moviesWrapper.movies;
+        showMovies();
     }
 }
