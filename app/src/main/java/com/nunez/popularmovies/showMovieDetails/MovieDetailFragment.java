@@ -178,6 +178,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
 
   public void initalizeViews(View v) {
+    // FIXME: Error throwing for this beign null before setting the listener
     v.findViewById(R.id.actio_play_trailer).setOnClickListener(this);
     fab.setOnClickListener(this);
 
