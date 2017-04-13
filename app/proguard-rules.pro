@@ -18,6 +18,12 @@
 
 -dontwarn okio.**
 
+-ignorewarnings
+
+-keep class * {
+    public private *;
+}
+
 
 # ===============================
 # ==== BUTTERKNIFE RULES ========
