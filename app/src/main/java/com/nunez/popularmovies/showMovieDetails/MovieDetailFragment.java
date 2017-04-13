@@ -60,54 +60,73 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by paulnunez on 3/9/16.
  */
-public class MovieDetailFragment extends Fragment implements MovieDetailsContract.View,
-    View.OnClickListener {
+public class MovieDetailFragment extends Fragment implements MovieDetailsContract.View {
 
   public static  String MOVIE_ID     = "movie_id";
   private static String LOG_TAG      = MovieDetailFragment.class.getSimpleName();
   public static  String FRAGMENT_TAG = LOG_TAG;
+
   @BindView(R.id.image_poster)
-          ImageView             mPoster;
+  ImageView mPoster;
+
   @BindView(R.id.text_title_bgnd)
-          View                  mTitleBackground;
+  View mTitleBackground;
+
   @BindView(R.id.details_scrollView)
-          NestedScrollView      mScrollView;
+  NestedScrollView mScrollView;
+
   @BindView(R.id.text_title)
-          TextView              mTitle;
+  TextView mTitle;
+
   @BindView(R.id.text_description)
-          TextView              mDescription;
+  TextView mDescription;
+
   @BindView(R.id.text_description_title)
-          TextView              mDescriptionTitle;
+  TextView mDescriptionTitle;
+
   @BindView(R.id.text_trailers)
-          TextView              mTrailersTitle;
+  TextView mTrailersTitle;
+
   @BindView(R.id.text_reviews)
-          TextView              mReviewsTitle;
+  TextView mReviewsTitle;
+
   @BindView(R.id.text_release)
-          TextView              mReleaseDate;
+  TextView mReleaseDate;
+
   @BindView(R.id.text_rating)
-          TextView              mRatings;
+  TextView mRatings;
+
   @Nullable
   @BindView(R.id.toolbar)
-          Toolbar               toolbar;
+  Toolbar toolbar;
+
   @BindView(R.id.recyler_trailers)
-          RecyclerView          mTrailersRecycleView;
+  RecyclerView mTrailersRecycleView;
+
   @BindView(R.id.recyler_reviews)
-          RecyclerView          mReviewsRecyclerView;
+  RecyclerView mReviewsRecyclerView;
+
   @BindView(R.id.button_fab)
-          ImageButton           fab;
+  ImageButton fab;
+
   @BindView(R.id.progress)
-          ProgressBar           mProgress;
+  ProgressBar mProgress;
+
   @BindView(R.id.container)
-          View                  mDetailsContainer;
+  View mDetailsContainer;
+
   @BindView(R.id.no_movies)
-          View                  mErrorScreen;
+  View mErrorScreen;
+
   private String                mMovieId;
   private String                mTrailerUrl;
   private boolean               isFavorite;
+  private boolean               canClickFab;
   private boolean               shareInflated;
   private int                   heartInitColor;
   private MovieDetailsPresenter mDetailPresenter;
@@ -135,6 +154,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     shareInflated = (container.findViewById(R.id.action_share) != null);
 
+    canClickFab = true;
+
     ButterKnife.bind(this, rootView);
     initalizeViews(rootView);
 
@@ -142,7 +163,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     mDetailPresenter.attachView(this);
 
     heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
-
 
     return rootView;
   }
@@ -178,9 +198,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
 
   public void initalizeViews(View v) {
-    // FIXME: Error throwing for this beign null before setting the listener
-    v.findViewById(R.id.actio_play_trailer).setOnClickListener(this);
-    fab.setOnClickListener(this);
 
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     if (toolbar != null) {
@@ -190,6 +207,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
       actionBar.setDisplayHomeAsUpEnabled(true);
       actionBar.setDisplayShowHomeEnabled(true);
     }
+
+    mReviewsRecyclerView.setNestedScrollingEnabled(false);
+    mTrailersRecycleView.setNestedScrollingEnabled(false);
   }
 
 
@@ -213,6 +233,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
   @Override
   public void showPoster(String url) {
+    mScrollView.scrollTo(0, 0);
+
 
     Glide.with(PopularMovies.context).
         load(Constants.POSTER_BASE_URL + url)
@@ -229,11 +251,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
           public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
 
             setColors(((GlideBitmapDrawable) resource).getBitmap());
+            mScrollView.scrollTo(0, 0);
 
             return false;
           }
         })
         .into(mPoster);
+
   }
 
   @Override
@@ -324,14 +348,14 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
         .getString(R.string.error_connection), Snackbar.LENGTH_LONG).show();
   }
 
-  @Override
-  public void onClick(View v) {
-    int id = v.getId();
-    if (id == R.id.actio_play_trailer) {
-      playTrailer();
+  @OnClick(R.id.actio_play_trailer)
+  public void onBigTrailerClick() {
+    playTrailer();
+  }
 
-    } else if (id == R.id.button_fab) {
-
+  @OnClick(R.id.button_fab)
+  public void onFabClicked() {
+    if (canClickFab) {
       if (isFavorite) {
         isFavorite = false;
         mDetailPresenter.removeMovieFromDb();
@@ -339,9 +363,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
         isFavorite = true;
         mDetailPresenter.saveMovieToDb();
       }
-
       animateFavorite();
-
     }
   }
 
@@ -484,12 +506,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     setAnim.addListener(new Animator.AnimatorListener() {
       @Override
       public void onAnimationStart(Animator animation) {
-        fab.setOnClickListener(null);
+        canClickFab = false;
       }
 
       @Override
       public void onAnimationEnd(Animator animation) {
-        fab.setOnClickListener(MovieDetailFragment.this);
+        canClickFab = true;
       }
 
       @Override
