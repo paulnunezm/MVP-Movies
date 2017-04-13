@@ -58,310 +58,347 @@ import com.nunez.popularmovies.views.adapters.TrailersAdapter;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by paulnunez on 3/9/16.
  */
-public class MovieDetailFragment extends Fragment implements MovieDetailsContract.View,
-    View.OnClickListener{
+public class MovieDetailFragment extends Fragment implements MovieDetailsContract.View {
 
-    private static String LOG_TAG = MovieDetailFragment.class.getSimpleName();
-    public static String MOVIE_ID = "movie_id";
-    public static String FRAGMENT_TAG = LOG_TAG;
+  public static  String MOVIE_ID     = "movie_id";
+  private static String LOG_TAG      = MovieDetailFragment.class.getSimpleName();
+  public static  String FRAGMENT_TAG = LOG_TAG;
 
-    private String mMovieId;
-    private String mTrailerUrl;
-    private boolean isFavorite;
-    private boolean shareInflated;
+  @BindView(R.id.image_poster)
+  ImageView mPoster;
 
-    private int     heartInitColor;
+  @BindView(R.id.text_title_bgnd)
+  View mTitleBackground;
 
-    private MovieDetailsPresenter mDetailPresenter;
-    private TrailersAdapter mTrailersAdapter;
-    private LinearLayoutManager mReviewsLayoutManager;
-    private LinearLayoutManager mTrailersLayoutManager;
-    private ReviewsAdapter mReviewsAdapter;
-    private ShareActionProvider mShareActionProvider;
+  @BindView(R.id.details_scrollView)
+  NestedScrollView mScrollView;
 
-    @Bind(R.id.image_poster)             ImageView mPoster;
-    @Bind(R.id.text_title_bgnd)          View mTitleBackground;
-    @Bind(R.id.details_scrollView)       NestedScrollView mScrollView;
-    @Bind(R.id.text_title)               TextView mTitle;
-    @Bind(R.id.text_description)         TextView mDescription;
-    @Bind(R.id.text_description_title)   TextView mDescriptionTitle;
-    @Bind(R.id.text_trailers)            TextView mTrailersTitle;
-    @Bind(R.id.text_reviews)             TextView mReviewsTitle;
-    @Bind(R.id.text_release)             TextView mReleaseDate;
-    @Bind(R.id.text_rating)              TextView mRatings;
-    @Nullable @Bind(R.id.toolbar)        Toolbar toolbar;
-    @Bind(R.id.recyler_trailers)         RecyclerView mTrailersRecycleView;
-    @Bind(R.id.recyler_reviews)          RecyclerView mReviewsRecyclerView;
-    @Bind(R.id.button_fab)               ImageButton fab;
-    @Bind(R.id.progress)                 ProgressBar mProgress;
-    @Bind(R.id.container)                View mDetailsContainer;
-    @Bind(R.id.no_movies)                View mErrorScreen;
+  @BindView(R.id.text_title)
+  TextView mTitle;
 
-    public MovieDetailFragment(){
-        setHasOptionsMenu(true);
+  @BindView(R.id.text_description)
+  TextView mDescription;
+
+  @BindView(R.id.text_description_title)
+  TextView mDescriptionTitle;
+
+  @BindView(R.id.text_trailers)
+  TextView mTrailersTitle;
+
+  @BindView(R.id.text_reviews)
+  TextView mReviewsTitle;
+
+  @BindView(R.id.text_release)
+  TextView mReleaseDate;
+
+  @BindView(R.id.text_rating)
+  TextView mRatings;
+
+  @Nullable
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+
+  @BindView(R.id.recyler_trailers)
+  RecyclerView mTrailersRecycleView;
+
+  @BindView(R.id.recyler_reviews)
+  RecyclerView mReviewsRecyclerView;
+
+  @BindView(R.id.button_fab)
+  ImageButton fab;
+
+  @BindView(R.id.progress)
+  ProgressBar mProgress;
+
+  @BindView(R.id.container)
+  View mDetailsContainer;
+
+  @BindView(R.id.no_movies)
+  View mErrorScreen;
+
+  private String                mMovieId;
+  private String                mTrailerUrl;
+  private boolean               isFavorite;
+  private boolean               canClickFab;
+  private boolean               shareInflated;
+  private int                   heartInitColor;
+  private MovieDetailsPresenter mDetailPresenter;
+  private TrailersAdapter       mTrailersAdapter;
+  private LinearLayoutManager   mReviewsLayoutManager;
+  private LinearLayoutManager   mTrailersLayoutManager;
+  private ReviewsAdapter        mReviewsAdapter;
+  private ShareActionProvider   mShareActionProvider;
+
+
+  public MovieDetailFragment() {
+    setHasOptionsMenu(true);
+  }
+
+  @Nullable
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+
+    Bundle args = getArguments();
+
+    if (args != null) {
+      mMovieId = args.getString(MOVIE_ID);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+    shareInflated = (container.findViewById(R.id.action_share) != null);
 
-        Bundle args = getArguments();
+    canClickFab = true;
 
-        if(args != null){
-            mMovieId = args.getString(MOVIE_ID);
-        }
+    ButterKnife.bind(this, rootView);
+    initalizeViews(rootView);
 
-        shareInflated = (container.findViewById(R.id.action_share) != null) ;
+    mDetailPresenter = new MovieDetailsPresenter(mMovieId);
+    mDetailPresenter.attachView(this);
 
-        ButterKnife.bind(this, rootView);
-        initalizeViews(rootView);
+    heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
 
-        mDetailPresenter = new MovieDetailsPresenter(mMovieId);
-        mDetailPresenter.attachView(this);
+    return rootView;
+  }
 
-        heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    // Inflate menu resource file.
+    menu.clear();
+    inflater.inflate(R.menu.fragment_detail, menu);
 
+    MenuItem shareItem = menu.findItem(R.id.action_share);
+    mShareActionProvider =
+        (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 
-        return rootView;
+    if (mTrailerUrl != null) {
+      mShareActionProvider.setShareIntent(createShareIntent());
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate menu resource file.
-        menu.clear();
-        inflater.inflate(R.menu.fragment_detail, menu);
+    super.onCreateOptionsMenu(menu, inflater);
+  }
 
-        MenuItem shareItem = menu.findItem(R.id.action_share);
-        mShareActionProvider =
-                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 
-        if(mTrailerUrl != null){
-            mShareActionProvider.setShareIntent(createShareIntent());
-        }
+  @Override
+  public void onStart() {
+    super.onStart();
+    mDetailPresenter.startDetail(isNetworkConnected());
+  }
 
-        super.onCreateOptionsMenu(menu, inflater);
+  @Override
+  public void onResume() {
+    super.onResume();
+  }
+
+
+  public void initalizeViews(View v) {
+
+    AppCompatActivity activity = (AppCompatActivity) getActivity();
+    if (toolbar != null) {
+      toolbar.setTitle("");
+      activity.setSupportActionBar(toolbar);
+      ActionBar actionBar = activity.getSupportActionBar();
+      actionBar.setDisplayHomeAsUpEnabled(true);
+      actionBar.setDisplayShowHomeEnabled(true);
     }
 
+    mReviewsRecyclerView.setNestedScrollingEnabled(false);
+    mTrailersRecycleView.setNestedScrollingEnabled(false);
+  }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mDetailPresenter.startDetail(isNetworkConnected());
+  public Intent createShareIntent() {
+    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+    sharingIntent.setType("text/plain");
+    sharingIntent.putExtra(Intent.EXTRA_TEXT, mTrailerUrl);
+    return sharingIntent;
+  }
+
+
+  @Override
+  public void setTrailerLink(String url) {
+    mTrailerUrl = "http://www.youtube.com/watch?v=" + url;
+
+    if (mShareActionProvider != null) {
+      mShareActionProvider.setShareIntent(createShareIntent());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+  }
+
+  @Override
+  public void showPoster(String url) {
+    mScrollView.scrollTo(0, 0);
+
+
+    Glide.with(PopularMovies.context).
+        load(Constants.POSTER_BASE_URL + url)
+        .centerCrop()
+        .placeholder(PopularMovies.context.getResources().getColor(R.color.movie_placeholder))
+        .error(PopularMovies.context.getResources().getDrawable(R.drawable.ic_trailers))
+        .listener(new RequestListener<String, GlideDrawable>() {
+          @Override
+          public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            return false;
+          }
+
+          @Override
+          public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+
+            setColors(((GlideBitmapDrawable) resource).getBitmap());
+            mScrollView.scrollTo(0, 0);
+
+            return false;
+          }
+        })
+        .into(mPoster);
+
+  }
+
+  @Override
+  public void showTitle(String title) {
+    mTitle.setText(title);
+  }
+
+  @Override
+  public void showDescription(String description) {
+    mDescription.setText(description);
+  }
+
+  @Override
+  public void showTrailers(ArrayList<Video> trailers) {
+    if (trailers != null & trailers.size() > 0) {
+      mTrailersAdapter = new TrailersAdapter(trailers);
+      mTrailersLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+      mTrailersRecycleView.setLayoutManager(mTrailersLayoutManager);
+      mTrailersRecycleView.setHasFixedSize(true);
+      mTrailersRecycleView.setAdapter(mTrailersAdapter);
+      mTrailersRecycleView.setNestedScrollingEnabled(false);
+    } else {
+      mTrailersTitle.setVisibility(View.GONE);
     }
+  }
 
-
-    public void initalizeViews(View v){
-        v.findViewById(R.id.actio_play_trailer).setOnClickListener(this);
-        fab.setOnClickListener(this);
-
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        if(toolbar != null){
-            toolbar.setTitle("");
-            activity.setSupportActionBar(toolbar);
-            ActionBar actionBar = activity.getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-        }
+  @Override
+  public void showReviews(ArrayList<Review> reviews) {
+    if (reviews != null && reviews.size() > 0) {
+      mReviewsAdapter = new ReviewsAdapter(reviews);
+      mReviewsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+      mReviewsRecyclerView.setLayoutManager(mReviewsLayoutManager);
+      mReviewsRecyclerView.setAdapter(mReviewsAdapter);
+      mTrailersRecycleView.setNestedScrollingEnabled(false);
+    } else {
+      mReviewsTitle.setVisibility(View.GONE);
     }
+  }
 
+  @Override
+  public void setFavorite() {
+    isFavorite = true;
+    fab.setBackgroundResource(R.drawable.fab);
+    fab.setRotation(720);
+    fab.setColorFilter(getActivity().getResources().getColor(R.color.white));
+  }
 
-    public Intent createShareIntent(){
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, mTrailerUrl);
-        return sharingIntent;
-    }
+  @Override
+  public void showReleaseDate(String release) {
+    mReleaseDate.setText(release);
+  }
 
+  @Override
+  public void showRatings(String rating) {
+    mRatings.setText(rating);
+  }
 
-    @Override
-    public void setTrailerLink(String url) {
-        mTrailerUrl = "http://www.youtube.com/watch?v=" + url;
+  @Override
+  public void showLoading() {
+    mDetailsContainer.setVisibility(View.INVISIBLE);
+    mErrorScreen.setVisibility(View.GONE);
+    mProgress.setVisibility(View.VISIBLE);
+  }
 
-        if(mShareActionProvider != null){
-            mShareActionProvider.setShareIntent(createShareIntent());
-        }
+  @Override
+  public void hideLoading() {
+    mProgress.setVisibility(View.GONE);
+    mErrorScreen.setVisibility(View.GONE);
+    mDetailsContainer.setVisibility(View.VISIBLE);
+  }
 
-    }
+  @Override
+  public void showLoadingLabel() {
 
-    @Override
-    public void showPoster(String url) {
+  }
 
-        Glide.with(PopularMovies.context).
-                load(Constants.POSTER_BASE_URL + url)
-                .centerCrop()
-                .placeholder(PopularMovies.context.getResources().getColor(R.color.movie_placeholder))
-                .error(PopularMovies.context.getResources().getDrawable(R.drawable.ic_trailers))
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
+  @Override
+  public void hideActionLabel() {
+    mProgress.setVisibility(View.GONE);
+    mDetailsContainer.setVisibility(View.VISIBLE);
+  }
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+  @Override
+  public void showError() {
+    mDetailsContainer.setVisibility(View.INVISIBLE);
+    mErrorScreen.setVisibility(View.VISIBLE);
+    Snackbar.make(mErrorScreen, getResources()
+        .getString(R.string.error_connection), Snackbar.LENGTH_LONG).show();
+  }
 
-                        setColors(((GlideBitmapDrawable) resource).getBitmap());
+  @OnClick(R.id.actio_play_trailer)
+  public void onBigTrailerClick() {
+    playTrailer();
+  }
 
-                        return false;
-                    }
-                })
-                .into(mPoster);
-    }
-
-    @Override
-    public void showTitle(String title) {
-        mTitle.setText(title);
-    }
-
-    @Override
-    public void showDescription(String description) {
-        mDescription.setText(description);
-    }
-
-    @Override
-    public void showTrailers(ArrayList<Video> trailers) {
-        if(trailers != null & trailers.size()>0){
-            mTrailersAdapter = new TrailersAdapter(trailers);
-            mTrailersLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            mTrailersRecycleView.setLayoutManager(mTrailersLayoutManager);
-            mTrailersRecycleView.setHasFixedSize(true);
-            mTrailersRecycleView.setAdapter(mTrailersAdapter);
-            mTrailersRecycleView.setNestedScrollingEnabled(false);
-        }else{
-            mTrailersTitle.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void showReviews(ArrayList<Review> reviews) {
-        if(reviews!=null && reviews.size()>0 ){
-            mReviewsAdapter = new ReviewsAdapter(reviews);
-            mReviewsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            mReviewsRecyclerView.setLayoutManager(mReviewsLayoutManager);
-            mReviewsRecyclerView.setAdapter(mReviewsAdapter);
-            mTrailersRecycleView.setNestedScrollingEnabled(false);
-        }else{
-            mReviewsTitle.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void setFavorite() {
+  @OnClick(R.id.button_fab)
+  public void onFabClicked() {
+    if (canClickFab) {
+      if (isFavorite) {
+        isFavorite = false;
+        mDetailPresenter.removeMovieFromDb();
+      } else {
         isFavorite = true;
-        fab.setBackgroundResource(R.drawable.fab);
-        fab.setRotation(720);
-        fab.setColorFilter(getActivity().getResources().getColor(R.color.white));
+        mDetailPresenter.saveMovieToDb();
+      }
+      animateFavorite();
     }
+  }
 
-    @Override
-    public void showReleaseDate(String release) {
-        mReleaseDate.setText(release);
-    }
+  public void setColors(Bitmap bitmap) {
 
-    @Override
-    public void showRatings(String rating) {
-        mRatings.setText(rating);
-    }
+    if (bitmap != null) {
+      Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
 
-    @Override
-    public void showLoading() {
-        mDetailsContainer.setVisibility(View.INVISIBLE);
-        mErrorScreen.setVisibility(View.GONE);
-        mProgress.setVisibility(View.VISIBLE);
-    }
+        @Override
+        public void onGenerated(Palette palette) {
 
-    @Override
-    public void hideLoading() {
-        mProgress.setVisibility(View.GONE);
-        mErrorScreen.setVisibility(View.GONE);
-        mDetailsContainer.setVisibility(View.VISIBLE);
-    }
+          if (palette != null) {
+            Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
 
-    @Override
-    public void showLoadingLabel() {
+            try {
+              int color      = vibrantDarkSwatch.getRgb(); // for the status bar.
+              int alphaColor = Color.argb(170, Color.red(color), Color.green(color), Color.blue(color));
+              //int textColor = mutedLightSwatch.getBodyTextColor();
 
-    }
+              // Set awesome colors to texts and backgrounds
 
-    @Override
-    public void hideActionLabel() {
-        mProgress.setVisibility(View.GONE);
-        mDetailsContainer.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showError() {
-        mDetailsContainer.setVisibility(View.INVISIBLE);
-        mErrorScreen.setVisibility(View.VISIBLE);
-        Snackbar.make(mErrorScreen, getResources()
-                .getString(R.string.error_connection), Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if(id == R.id.actio_play_trailer){
-            playTrailer();
-
-        }else if(id == R.id.button_fab){
-
-            if(isFavorite){
-                isFavorite = false;
-                mDetailPresenter.removeMovieFromDb();
-            }else{
-                isFavorite = true;
-                mDetailPresenter.saveMovieToDb();
-            }
-
-            animateFavorite();
-
-        }
-    }
-
-    public void setColors(Bitmap bitmap){
-
-        if (bitmap != null) {
-            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-
-                @Override
-                public void onGenerated(Palette palette) {
-
-                    if (palette != null) {
-                        Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
-
-                        try {
-                            int color = vibrantDarkSwatch.getRgb(); // for the status bar.
-                            int alphaColor = Color.argb(170, Color.red(color), Color.green(color), Color.blue(color));
-                            //int textColor = mutedLightSwatch.getBodyTextColor();
-
-                            // Set awesome colors to texts and backgrounds
-
-                            heartInitColor = color;
-                            mTitleBackground.setBackgroundColor(alphaColor);
-                            toolbar.setBackgroundColor(alphaColor);
-                            if(isFavorite){
-                                fab.setColorFilter(0xFFF);
-                            }else{
-                                fab.setColorFilter(heartInitColor);
-                            }
+              heartInitColor = color;
+              mTitleBackground.setBackgroundColor(alphaColor);
+              toolbar.setBackgroundColor(alphaColor);
+              if (isFavorite) {
+                fab.setColorFilter(0xFFF);
+              } else {
+                fab.setColorFilter(heartInitColor);
+              }
 //                            mDescriptionTitle.setTextColor(textColor);//vibrantSwatchTitleTextColor);
 //                            mDescription.setTextColor(textColor);
 //                            mTrailersTitle.setTextColor(textColor);
 //                            mReviewsTitle.setTextColor(textColor);
 
-                            // Set awesome drawable colors
+              // Set awesome drawable colors
 //                            Drawable[] drawables = mDescriptionTitle.getCompoundDrawables();
 //                            drawables[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
 
@@ -370,145 +407,145 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 //                            Drawable[] drawableReviewsTitle = mReviewsTitle.getCompoundDrawables();
 //                            drawableReviewsTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
 
-                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                                changeStatusBarColor(color);
-                            }
+              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                changeStatusBarColor(color);
+              }
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        }
-
-
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void changeStatusBarColor(int color){
-        Window window = getActivity().getWindow();
-
-        // clear FLAG_TRANSLUCENT_STATUS flag:
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-        // finally change the color
-        window.setStatusBarColor(color);
-    }
-
-    public void animateFavoritePulse(){
-        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
-        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
-        ObjectAnimator scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
-
-        scaleAnim.setDuration(500);
-        scaleAnim.setRepeatCount(1);
-        scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
-        scaleAnim.start();
-    }
-
-    public Context getContext(){
-        return  getActivity();
-    }
-
-    public void animateFavorite(){
-        float   scaleValue = 1.3f;
-        int     backgroundColorReference;
-        int     rotation;
-        int     heartColorReference;
-
-        ObjectAnimator scaleAnim;
-
-        if(!isFavorite){
-            backgroundColorReference = R.drawable.circle_white;
-            rotation = 0;
-            heartColorReference = R.color.color_favorite;
-            scaleAnim = null;
-
-        }else{
-            backgroundColorReference = R.drawable.fab;
-            rotation = 720;
-            heartColorReference = R.color.white;
-        }
-
-        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, scaleValue);
-        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, scaleValue);
-        scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
-
-        scaleAnim.setDuration(500);
-        scaleAnim.setRepeatCount(1);
-        scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
-
-        //Let's change background's color to red.
-        Drawable[] color = {fab.getBackground(),
-                getContext().getResources().getDrawable(backgroundColorReference)};
-        TransitionDrawable trans = new TransitionDrawable(color);
-
-        //This will work also on old devices. The latest API says you have to use setBackground instead.
-        fab.setBackgroundDrawable(trans);
-        trans.startTransition(700);
-
-        ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, rotation);
-        rotateAnim.setInterpolator(new DecelerateInterpolator());
-        rotateAnim.setDuration(1400);
-
-        AnimatorSet setAnim = new AnimatorSet();
-        if(isFavorite){
-            ObjectAnimator heartColorAnim = ObjectAnimator.ofInt(fab, "colorFilter", getResources().getColor(heartColorReference));
-            heartColorAnim.setDuration(700).setStartDelay(700);
-
-            setAnim.play(scaleAnim).with(rotateAnim).with(heartColorAnim);
-        }else{
-            setAnim.play(rotateAnim).with(scaleAnim);
-            fab.setColorFilter(heartInitColor);
-        }
-
-        setAnim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                fab.setOnClickListener(null);
+            } catch (Exception e) {
+              e.printStackTrace();
             }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                fab.setOnClickListener(MovieDetailFragment.this);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        setAnim.start();
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-    }
-
-    public void playTrailer(){
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
-
-        // Verify that the intent will resolve to an activity
-        if(intent.resolveActivity(getActivity().getPackageManager()) != null){
-            startActivity(intent);
-        }else{
-            showError();
+          }
         }
+      });
     }
+
+
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  public void changeStatusBarColor(int color) {
+    Window window = getActivity().getWindow();
+
+    // clear FLAG_TRANSLUCENT_STATUS flag:
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+    // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+    // finally change the color
+    window.setStatusBarColor(color);
+  }
+
+  public void animateFavoritePulse() {
+    PropertyValuesHolder pvhX      = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
+    PropertyValuesHolder pvhY      = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
+    ObjectAnimator       scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
+
+    scaleAnim.setDuration(500);
+    scaleAnim.setRepeatCount(1);
+    scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
+    scaleAnim.start();
+  }
+
+  public Context getContext() {
+    return getActivity();
+  }
+
+  public void animateFavorite() {
+    float scaleValue = 1.3f;
+    int   backgroundColorReference;
+    int   rotation;
+    int   heartColorReference;
+
+    ObjectAnimator scaleAnim;
+
+    if (!isFavorite) {
+      backgroundColorReference = R.drawable.circle_white;
+      rotation = 0;
+      heartColorReference = R.color.color_favorite;
+      scaleAnim = null;
+
+    } else {
+      backgroundColorReference = R.drawable.fab;
+      rotation = 720;
+      heartColorReference = R.color.white;
+    }
+
+    PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, scaleValue);
+    PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, scaleValue);
+    scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
+
+    scaleAnim.setDuration(500);
+    scaleAnim.setRepeatCount(1);
+    scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
+
+    //Let's change background's color to red.
+    Drawable[] color = {fab.getBackground(),
+        getContext().getResources().getDrawable(backgroundColorReference)};
+    TransitionDrawable trans = new TransitionDrawable(color);
+
+    //This will work also on old devices. The latest API says you have to use setBackground instead.
+    fab.setBackgroundDrawable(trans);
+    trans.startTransition(700);
+
+    ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, rotation);
+    rotateAnim.setInterpolator(new DecelerateInterpolator());
+    rotateAnim.setDuration(1400);
+
+    AnimatorSet setAnim = new AnimatorSet();
+    if (isFavorite) {
+      ObjectAnimator heartColorAnim = ObjectAnimator.ofInt(fab, "colorFilter", getResources().getColor(heartColorReference));
+      heartColorAnim.setDuration(700).setStartDelay(700);
+
+      setAnim.play(scaleAnim).with(rotateAnim).with(heartColorAnim);
+    } else {
+      setAnim.play(rotateAnim).with(scaleAnim);
+      fab.setColorFilter(heartInitColor);
+    }
+
+    setAnim.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+        canClickFab = false;
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        canClickFab = true;
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+
+    setAnim.start();
+  }
+
+  private boolean isNetworkConnected() {
+    ConnectivityManager cm =
+        (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    return activeNetwork != null &&
+        activeNetwork.isConnectedOrConnecting();
+  }
+
+  public void playTrailer() {
+
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
+
+    // Verify that the intent will resolve to an activity
+    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+      startActivity(intent);
+    } else {
+      showError();
+    }
+  }
 }
