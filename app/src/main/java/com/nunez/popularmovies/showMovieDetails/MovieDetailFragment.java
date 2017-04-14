@@ -309,6 +309,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   @Override
+  public void showMessage(String message) {
+    Snackbar.make(mErrorScreen, message, Snackbar.LENGTH_LONG).show();
+  }
+
+  @Override
   public void setFavorite() {
     isFavorite = true;
     fab.setBackgroundResource(R.drawable.fab);
@@ -355,8 +360,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   public void showError() {
     mDetailsContainer.setVisibility(View.INVISIBLE);
     mErrorScreen.setVisibility(View.VISIBLE);
-    Snackbar.make(mErrorScreen, getResources()
-        .getString(R.string.error_connection), Snackbar.LENGTH_LONG).show();
+    showMessage(getResources().getString(R.string.error_connection));
   }
 
   @OnClick(R.id.actio_play_trailer)
@@ -566,14 +570,17 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   public void playTrailer() {
+    if (mTrailerUrl != null) {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
 
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
-
-    // Verify that the intent will resolve to an activity
-    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-      startActivity(intent);
+      // Verify that the intent will resolve to an activity
+      if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+        startActivity(intent);
+      } else {
+        showMessage(getResources().getString(R.string.error_no_trailer));
+      }
     } else {
-      showError();
+      showMessage(getResources().getString(R.string.error_no_trailer));
     }
   }
 }

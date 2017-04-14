@@ -14,6 +14,7 @@
     <string name="text_share_trailer">Share Trailer</string>
     <string name="text_refresh">Refresh</string>
     <string name="error_connection">"Aww, no network connection found! :/ "</string>
+    <string name="error_no_trailer">"Aww, it seems there's no trailer for this movie :/ "</string>
 
     <string-array name="movies_sort_array">
         <item>Popular movies</item>
