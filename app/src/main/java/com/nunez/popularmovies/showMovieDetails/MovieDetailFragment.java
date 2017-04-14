@@ -538,12 +538,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   public void playTrailer() {
+    if (mTrailerUrl != null) {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
 
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
-
-    // Verify that the intent will resolve to an activity
-    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-      startActivity(intent);
+      // Verify that the intent will resolve to an activity
+      if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+        startActivity(intent);
+      } else {
+        showError();
+      }
     } else {
       showError();
     }
