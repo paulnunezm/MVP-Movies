@@ -1,10 +1,11 @@
 package com.nunez.popularmovies.showMovieDetails;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Explode;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.MenuItem;
 
 import com.nunez.popularmovies.R;
@@ -20,7 +21,7 @@ public class MovieDetailActivity extends AppCompatActivity{
     private String mMovieId;
     private Context mContext;
 
-    @Override @TargetApi (Build.VERSION_CODES.LOLLIPOP)
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
@@ -42,6 +43,12 @@ public class MovieDetailActivity extends AppCompatActivity{
                     .commit();
         }
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Slide slide = new Slide(Gravity.BOTTOM);
+            slide.excludeTarget(android.R.id.statusBarBackground, true);
+            getWindow().setEnterTransition(slide);
+            getWindow().setExitTransition(new Explode());
+        }
     }
 
 

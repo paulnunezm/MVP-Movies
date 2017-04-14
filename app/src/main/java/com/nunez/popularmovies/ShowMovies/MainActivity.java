@@ -2,10 +2,13 @@ package com.nunez.popularmovies.ShowMovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,17 +24,16 @@ import static android.widget.AdapterView.OnItemSelectedListener;
 
 public class MainActivity extends AppCompatActivity implements OnItemSelectedListener,
     MoviesFragment.Callback{
-    private static final String TAG = MainActivity.class.getSimpleName();
-    public static final String EXTRA_MOVIE_ID = "movie_id";
-    public static final String SPINNER_POSITION = "spinnerPosition";
-
+    public static final  String EXTRA_MOVIE_ID   = "movie_id";
+    public static final  String SPINNER_POSITION = "spinnerPosition";
+    private static final String TAG              = MainActivity.class.getSimpleName();
+    public  int                      currentSpinnerPos;
     private CoordinatorLayout coordinatorLayout;
     private SharedPreferences sortPreferences;
     private SharedPreferences.Editor prefEditor;
     private Spinner spinner;
     private boolean firstTimeOpen = true;
     private boolean mTwoPane;
-    public int     currentSpinnerPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
             mTwoPane = false;
         }
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(new Explode());
+        }
     }
 
     @Override
@@ -144,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
 
 
     @Override
-    public void onItemSelected(String movieId) {
+    public void onItemSelected(View poster, String movieId) {
         if(mTwoPane){
             Bundle args = new Bundle();
             args.putString(MovieDetailFragment.MOVIE_ID, movieId);
@@ -161,7 +165,15 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
             Bundle args = new Bundle();
             args.putString(EXTRA_MOVIE_ID, String.valueOf(movieId));
             intent.putExtra(EXTRA_MOVIE_ID, args);
-            startActivity(intent);
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                MainActivity.this); //poster, "poster"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
         }
     }
 

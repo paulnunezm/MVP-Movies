@@ -185,15 +185,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        protected TextView title;
-        protected TextView rating;
-        protected TextView genres;
-
-        protected ImageView poster;
-        protected CardView container;
+      private final RecyclerViewClickListener onClickListener;
+      protected     TextView                  title;
+      protected     TextView                  rating;
+      protected     TextView                  genres;
+      protected     ImageView                 poster;
+      protected     CardView                  container;
         protected boolean animated = false;
         protected boolean containerAnimated = false;
-        private final RecyclerViewClickListener onClickListener;
         private FrameLayout clickState;
 
 
@@ -239,7 +238,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         @Override
         public void onClick(View v) {
-            onClickListener.onClick(v, getAdapterPosition(),0f, 0f);
+          onClickListener.onClick(poster, getAdapterPosition(), 0f, 0f);
         }
     }
 }
