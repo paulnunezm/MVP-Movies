@@ -17,17 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <ProgressBar
-            android:id="@+id/progress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center"
-            android:visibility="visible"
-            tools:visibility="gone"
-            />
-
         <include layout="@layout/error_screen"/>
 
 
@@ -37,9 +26,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:orientation="vertical">
 
             <FrameLayout
                 android:id="@+id/actio_play_trailer"
@@ -47,12 +34,12 @@
                 android:layout_height="wrap_content"
                 android:clickable="true" >
 
-
-
                 <ImageView
                     android:id="@+id/image_poster"
                     android:layout_width="fill_parent"
-                    android:layout_height="300dp"/>
+                    android:layout_height="300dp"
+                    android:transitionName="poster"/>
+
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -79,7 +66,6 @@
                     android:background="@color/transparent"
                     android:foregroundGravity="center"
                     android:padding="10dp"
-                    android:visibility="gone"
                     tools:visibility="visible">
 
                     <com.nunez.popularmovies.views.custom_views.LatoTextView
@@ -134,7 +120,7 @@
                     android:id="@+id/button_fab"
                     android:layout_width="@dimen/fab_dimen"
                     android:layout_height="@dimen/fab_dimen"
-                    android:layout_gravity="bottom|right|end"
+                    android:layout_gravity="bottom|end"
                     android:layout_marginBottom="40dp"
                     android:layout_marginRight="@dimen/fab_margin"
                     android:background="@drawable/circle_white"
@@ -143,6 +129,17 @@
                     android:tint="@android:color/darker_gray"/>
 
             </FrameLayout>
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="90dp"
+                android:visibility="visible"
+                tools:visibility="gone"
+                />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/container_description"
@@ -157,6 +154,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clipChildren="false"
                     android:orientation="vertical"
                     android:paddingBottom="10dp">
 

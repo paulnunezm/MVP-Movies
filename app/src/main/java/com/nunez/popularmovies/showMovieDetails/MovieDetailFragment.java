@@ -19,8 +19,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.transition.AutoTransition;
-import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -31,6 +29,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
+import android.transition.TransitionManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -134,6 +135,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   @BindView(R.id.container_trailers)
   View trailersContainer;
 
+
   private String                mMovieId;
   private String                mTrailerUrl;
   private boolean               isFavorite;
@@ -174,6 +176,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
 
+    postponeEnterTransition();
 
     return rootView;
   }
@@ -240,9 +243,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
   @Override
   public void showPoster(String url) {
-    mScrollView.scrollTo(0, 0);
-
-
     Glide.with(PopularMovies.context).
         load(Constants.POSTER_BASE_URL + url)
         .centerCrop()
@@ -258,14 +258,14 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
           public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
 
             setColors(((GlideBitmapDrawable) resource).getBitmap());
-            mScrollView.scrollTo(0, 0);
+            showEnterAnimation();
 
             return false;
           }
         })
         .into(mPoster);
-
   }
+
 
   @Override
   public void showTitle(String title) {
@@ -303,9 +303,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
       mReviewsRecyclerView.setAdapter(mReviewsAdapter);
       mTrailersRecycleView.setNestedScrollingEnabled(false);
     } else {
-      mReviewsTitle.setVisibility(View.VISIBLE);
+      mReviewsTitle.setVisibility(View.GONE);
     }
-//    reviewsContainer.setVisibility(View.VISIBLE);
+
+    mScrollView.scrollTo(0, 0);
   }
 
   @Override
@@ -333,7 +334,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
   @Override
   public void showLoading() {
-    mDetailsContainer.setVisibility(View.INVISIBLE);
     mErrorScreen.setVisibility(View.GONE);
     mProgress.setVisibility(View.VISIBLE);
   }
@@ -342,7 +342,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   public void hideLoading() {
     mProgress.setVisibility(View.GONE);
     mErrorScreen.setVisibility(View.GONE);
-    mDetailsContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -451,6 +450,22 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     window.setStatusBarColor(color);
   }
 
+  private void showEnterAnimation() {
+    startPostponedEnterTransition();
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      Slide slide = new Slide(Gravity.BOTTOM);
+      slide.setStartDelay(200);
+      slide.setInterpolator(new DecelerateInterpolator());
+
+
+      TransitionManager.beginDelayedTransition(mScrollView, slide);
+      desriptionContainer.setVisibility(View.VISIBLE);
+      trailersContainer.setVisibility(View.VISIBLE);
+      reviewsContainer.setVisibility(View.VISIBLE);
+    }
+  }
+
   public void animateFavoritePulse() {
     PropertyValuesHolder pvhX      = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
     PropertyValuesHolder pvhY      = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
@@ -467,22 +482,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   public void animateFavorite() {
-
-    AutoTransition transition = new AutoTransition();
-
-    mTitleBackground.setScaleX(0);
-    mTitleBackground.setScaleY(0);
-    Float y = desriptionContainer.getY();
-    desriptionContainer.setY(400);
-    mTitleBackground.setVisibility(View.VISIBLE);
-    desriptionContainer.setVisibility(View.VISIBLE);
-
-    TransitionManager.beginDelayedTransition(mScrollView);
-
-    mTitleBackground.setScaleX(1);
-    mTitleBackground.setScaleY(1);
-    desriptionContainer.setY(y);
-
 
     float scaleValue = 1.3f;
     int   backgroundColorReference;
