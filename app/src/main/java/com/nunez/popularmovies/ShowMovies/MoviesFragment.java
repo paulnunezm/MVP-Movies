@@ -214,7 +214,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
 
         Movie movie = mAdapter.getMovies().get(position);
 
-        ((Callback) getActivity()).onItemSelected(String.valueOf(movie.id));
+        ((Callback) getActivity()).onItemSelected(v, String.valueOf(movie.id));
     }
 
     /**
@@ -226,7 +226,7 @@ public class MoviesFragment extends Fragment implements MoviesView, RecyclerView
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        void onItemSelected(String movieId);
+        void onItemSelected(View poster, String movieId);
         void onMoviesRecieved(String movieId);
         void onResumeFragment();
     }

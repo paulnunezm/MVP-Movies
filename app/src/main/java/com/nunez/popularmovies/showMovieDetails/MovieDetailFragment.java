@@ -29,6 +29,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
+import android.transition.TransitionManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -123,6 +126,16 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   @BindView(R.id.no_movies)
   View mErrorScreen;
 
+  @BindView(R.id.container_description)
+  View desriptionContainer;
+
+  @BindView(R.id.container_reviews)
+  View reviewsContainer;
+
+  @BindView(R.id.container_trailers)
+  View trailersContainer;
+
+
   private String                mMovieId;
   private String                mTrailerUrl;
   private boolean               isFavorite;
@@ -135,7 +148,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   private LinearLayoutManager   mTrailersLayoutManager;
   private ReviewsAdapter        mReviewsAdapter;
   private ShareActionProvider   mShareActionProvider;
-
 
   public MovieDetailFragment() {
     setHasOptionsMenu(true);
@@ -164,6 +176,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
 
+    postponeEnterTransition();
+
     return rootView;
   }
 
@@ -184,7 +198,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     super.onCreateOptionsMenu(menu, inflater);
   }
 
-
   @Override
   public void onStart() {
     super.onStart();
@@ -195,7 +208,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   public void onResume() {
     super.onResume();
   }
-
 
   public void initalizeViews(View v) {
 
@@ -212,14 +224,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     mTrailersRecycleView.setNestedScrollingEnabled(false);
   }
 
-
   public Intent createShareIntent() {
     Intent sharingIntent = new Intent(Intent.ACTION_SEND);
     sharingIntent.setType("text/plain");
     sharingIntent.putExtra(Intent.EXTRA_TEXT, mTrailerUrl);
     return sharingIntent;
   }
-
 
   @Override
   public void setTrailerLink(String url) {
@@ -233,9 +243,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
   @Override
   public void showPoster(String url) {
-    mScrollView.scrollTo(0, 0);
-
-
     Glide.with(PopularMovies.context).
         load(Constants.POSTER_BASE_URL + url)
         .centerCrop()
@@ -251,23 +258,25 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
           public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
 
             setColors(((GlideBitmapDrawable) resource).getBitmap());
-            mScrollView.scrollTo(0, 0);
+            showEnterAnimation();
 
             return false;
           }
         })
         .into(mPoster);
-
   }
+
 
   @Override
   public void showTitle(String title) {
     mTitle.setText(title);
+//    mTitleBackground.setVisibility(View.VISIBLE);
   }
 
   @Override
   public void showDescription(String description) {
     mDescription.setText(description);
+//    desriptionContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -282,6 +291,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     } else {
       mTrailersTitle.setVisibility(View.GONE);
     }
+//    trailersContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -295,6 +305,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     } else {
       mReviewsTitle.setVisibility(View.GONE);
     }
+
+    mScrollView.scrollTo(0, 0);
+  }
+
+  @Override
+  public void showMessage(String message) {
+    Snackbar.make(mErrorScreen, message, Snackbar.LENGTH_LONG).show();
   }
 
   @Override
@@ -317,7 +334,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
   @Override
   public void showLoading() {
-    mDetailsContainer.setVisibility(View.INVISIBLE);
     mErrorScreen.setVisibility(View.GONE);
     mProgress.setVisibility(View.VISIBLE);
   }
@@ -326,7 +342,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   public void hideLoading() {
     mProgress.setVisibility(View.GONE);
     mErrorScreen.setVisibility(View.GONE);
-    mDetailsContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -344,8 +359,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   public void showError() {
     mDetailsContainer.setVisibility(View.INVISIBLE);
     mErrorScreen.setVisibility(View.VISIBLE);
-    Snackbar.make(mErrorScreen, getResources()
-        .getString(R.string.error_connection), Snackbar.LENGTH_LONG).show();
+    showMessage(getResources().getString(R.string.error_connection));
   }
 
   @OnClick(R.id.actio_play_trailer)
@@ -436,6 +450,22 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     window.setStatusBarColor(color);
   }
 
+  private void showEnterAnimation() {
+    startPostponedEnterTransition();
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      Slide slide = new Slide(Gravity.BOTTOM);
+      slide.setStartDelay(200);
+      slide.setInterpolator(new DecelerateInterpolator());
+
+
+      TransitionManager.beginDelayedTransition(mScrollView, slide);
+      desriptionContainer.setVisibility(View.VISIBLE);
+      trailersContainer.setVisibility(View.VISIBLE);
+      reviewsContainer.setVisibility(View.VISIBLE);
+    }
+  }
+
   public void animateFavoritePulse() {
     PropertyValuesHolder pvhX      = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
     PropertyValuesHolder pvhY      = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
@@ -452,6 +482,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   public void animateFavorite() {
+
     float scaleValue = 1.3f;
     int   backgroundColorReference;
     int   rotation;
@@ -538,14 +569,17 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   public void playTrailer() {
+    if (mTrailerUrl != null) {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
 
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerUrl));
-
-    // Verify that the intent will resolve to an activity
-    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-      startActivity(intent);
+      // Verify that the intent will resolve to an activity
+      if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+        startActivity(intent);
+      } else {
+        showMessage(getResources().getString(R.string.error_no_trailer));
+      }
     } else {
-      showError();
+      showMessage(getResources().getString(R.string.error_no_trailer));
     }
   }
 }
