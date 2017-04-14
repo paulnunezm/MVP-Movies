@@ -19,6 +19,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.transition.AutoTransition;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -123,6 +125,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   @BindView(R.id.no_movies)
   View mErrorScreen;
 
+  @BindView(R.id.container_description)
+  View desriptionContainer;
+
+  @BindView(R.id.container_reviews)
+  View reviewsContainer;
+
+  @BindView(R.id.container_trailers)
+  View trailersContainer;
+
   private String                mMovieId;
   private String                mTrailerUrl;
   private boolean               isFavorite;
@@ -135,7 +146,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   private LinearLayoutManager   mTrailersLayoutManager;
   private ReviewsAdapter        mReviewsAdapter;
   private ShareActionProvider   mShareActionProvider;
-
 
   public MovieDetailFragment() {
     setHasOptionsMenu(true);
@@ -164,6 +174,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
     heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
 
+
     return rootView;
   }
 
@@ -184,7 +195,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     super.onCreateOptionsMenu(menu, inflater);
   }
 
-
   @Override
   public void onStart() {
     super.onStart();
@@ -195,7 +205,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   public void onResume() {
     super.onResume();
   }
-
 
   public void initalizeViews(View v) {
 
@@ -212,14 +221,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     mTrailersRecycleView.setNestedScrollingEnabled(false);
   }
 
-
   public Intent createShareIntent() {
     Intent sharingIntent = new Intent(Intent.ACTION_SEND);
     sharingIntent.setType("text/plain");
     sharingIntent.putExtra(Intent.EXTRA_TEXT, mTrailerUrl);
     return sharingIntent;
   }
-
 
   @Override
   public void setTrailerLink(String url) {
@@ -263,11 +270,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   @Override
   public void showTitle(String title) {
     mTitle.setText(title);
+//    mTitleBackground.setVisibility(View.VISIBLE);
   }
 
   @Override
   public void showDescription(String description) {
     mDescription.setText(description);
+//    desriptionContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -282,6 +291,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     } else {
       mTrailersTitle.setVisibility(View.GONE);
     }
+//    trailersContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -293,8 +303,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
       mReviewsRecyclerView.setAdapter(mReviewsAdapter);
       mTrailersRecycleView.setNestedScrollingEnabled(false);
     } else {
-      mReviewsTitle.setVisibility(View.GONE);
+      mReviewsTitle.setVisibility(View.VISIBLE);
     }
+//    reviewsContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -452,6 +463,23 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   public void animateFavorite() {
+
+    AutoTransition transition = new AutoTransition();
+
+    mTitleBackground.setScaleX(0);
+    mTitleBackground.setScaleY(0);
+    Float y = desriptionContainer.getY();
+    desriptionContainer.setY(400);
+    mTitleBackground.setVisibility(View.VISIBLE);
+    desriptionContainer.setVisibility(View.VISIBLE);
+
+    TransitionManager.beginDelayedTransition(mScrollView);
+
+    mTitleBackground.setScaleX(1);
+    mTitleBackground.setScaleY(1);
+    desriptionContainer.setY(y);
+
+
     float scaleValue = 1.3f;
     int   backgroundColorReference;
     int   rotation;
