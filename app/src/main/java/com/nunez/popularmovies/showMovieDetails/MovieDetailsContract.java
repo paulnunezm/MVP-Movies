@@ -38,6 +38,8 @@ public interface MovieDetailsContract {
         void showDescription(String description);
         void showTrailers(ArrayList<Video> trailers);
         void showReviews(ArrayList<Review> reviews);
+
+        void showMessage(String message);
         void setFavorite();
         void showReleaseDate(String release);
         void showRatings(String rating);
