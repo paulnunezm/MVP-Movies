@@ -3,6 +3,7 @@ package com.nunez.popularmovies.showMovieDetails;
 import com.nunez.popularmovies.PopularMovies;
 import com.nunez.popularmovies.R;
 import com.nunez.popularmovies.model.entities.MovieDetails;
+import com.nunez.popularmovies.model.entities.Review;
 import com.nunez.popularmovies.model.entities.ReviewsWrapper;
 import com.nunez.popularmovies.model.entities.Video;
 import com.nunez.popularmovies.utils.Callbacks;
@@ -60,8 +61,10 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter,
 
     @Override
     public void showReviews() {
-        ReviewsWrapper reviewsWrapper = mMovie.getReviewsWrapper();
-        mDetailView.showReviews(reviewsWrapper.getReviews());
+        ReviewsWrapper    reviewsWrapper = mMovie.getReviewsWrapper();
+        ArrayList<Review> reviews        = reviewsWrapper.getReviews();
+
+        if (reviews != null && !reviews.isEmpty()) mDetailView.showReviews(reviews);
     }
 
     @Override
