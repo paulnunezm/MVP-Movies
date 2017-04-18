@@ -296,15 +296,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
 
   @Override
   public void showReviews(ArrayList<Review> reviews) {
-    if (reviews != null && reviews.size() > 0) {
-      mReviewsAdapter = new ReviewsAdapter(reviews);
-      mReviewsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-      mReviewsRecyclerView.setLayoutManager(mReviewsLayoutManager);
-      mReviewsRecyclerView.setAdapter(mReviewsAdapter);
-      mTrailersRecycleView.setNestedScrollingEnabled(false);
-    } else {
-      mReviewsTitle.setVisibility(View.GONE);
-    }
+
+    mReviewsAdapter = new ReviewsAdapter(reviews);
+    mReviewsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+    mReviewsRecyclerView.setLayoutManager(mReviewsLayoutManager);
+    mReviewsRecyclerView.setAdapter(mReviewsAdapter);
+    mTrailersRecycleView.setNestedScrollingEnabled(false);
+//    mReviewsTitle.setVisibility(View.GONE);
 
     mScrollView.scrollTo(0, 0);
   }
