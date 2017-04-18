@@ -83,7 +83,7 @@ dependencies {
     // Test
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.22'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    testCompile 'com.nhaarman:mockito-kotlin:1.4.0'
 
 }
 repositories {
