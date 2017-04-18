@@ -57,8 +57,8 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
     }
 
     @Override
-    public boolean checkIfFavorite(String id) {
-        return DbDataSource.checkIfFavorite(id);
+    public boolean checkIfFavorite() {
+        return DbDataSource.checkIfFavorite(mMovieId);
     }
 
     @Override

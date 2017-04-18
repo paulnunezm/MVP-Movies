@@ -136,18 +136,19 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   View trailersContainer;
 
 
-  private String                mMovieId;
-  private String                mTrailerUrl;
-  private boolean               isFavorite;
-  private boolean               canClickFab;
-  private boolean               shareInflated;
-  private int                   heartInitColor;
-  private MovieDetailsPresenter mDetailPresenter;
-  private TrailersAdapter       mTrailersAdapter;
-  private LinearLayoutManager   mReviewsLayoutManager;
-  private LinearLayoutManager   mTrailersLayoutManager;
-  private ReviewsAdapter        mReviewsAdapter;
-  private ShareActionProvider   mShareActionProvider;
+  private String                 mMovieId;
+  private String                 mTrailerUrl;
+  private boolean                isFavorite;
+  private boolean                canClickFab;
+  private boolean                shareInflated;
+  private int                    heartInitColor;
+  private MovieDetailsPresenter  mDetailPresenter;
+  private MovieDetailsController movieDetailsController;
+  private TrailersAdapter        mTrailersAdapter;
+  private LinearLayoutManager    mReviewsLayoutManager;
+  private LinearLayoutManager    mTrailersLayoutManager;
+  private ReviewsAdapter         mReviewsAdapter;
+  private ShareActionProvider    mShareActionProvider;
 
   public MovieDetailFragment() {
     setHasOptionsMenu(true);
@@ -171,8 +172,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     ButterKnife.bind(this, rootView);
     initalizeViews(rootView);
 
-    mDetailPresenter = new MovieDetailsPresenter(mMovieId);
+    mDetailPresenter = new MovieDetailsPresenter();
     mDetailPresenter.attachView(this);
+
+    movieDetailsController = new MovieDetailsController(mMovieId, mDetailPresenter);
+
+    mDetailPresenter.setController(movieDetailsController);
+//    movieDetailsController.setPresenterCallback()
 
     heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
 
