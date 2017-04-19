@@ -26,7 +26,7 @@ class DetailsViewsColorChanger(
         Palette.from(image).generate {
             if (it != null) {
                 try {
-                    val swatch = it.vibrantSwatch
+                    val swatch = it.darkVibrantSwatch
                     val color = swatch?.rgb // get the vibrant color
 
                     if (color != null) {
