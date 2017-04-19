@@ -59,11 +59,13 @@ class FabAnimator(val fab: ImageButton, val heartInitialColor: Int, val resource
             setAnim.play(rotateAnim).with(scaleAnim)
 
             if (!favorite) {
-                val heartColorAnim = ObjectAnimator.ofInt(fab, "colorFilter",
-                        resources.getColor(R.color.color_favorite))
-                heartColorAnim.duration = 700
-                heartColorAnim.startDelay = 700
-                setAnim.playTogether(heartColorAnim, rotateAnim, scaleAnim)
+//                val heartColorAnim = ObjectAnimator.ofInt(fab, "colorFilter",
+//                        resources.getColor(R.color.color_favorite))
+//                heartColorAnim.duration = 700
+//                heartColorAnim.startDelay = 700
+                setAnim.playTogether(rotateAnim, scaleAnim)
+                fab.setColorFilter(resources.getColor(R.color.gray_dark))
+
             } else {
                 setAnim.playTogether(rotateAnim, scaleAnim)
                 fab.setColorFilter(resources.getColor(R.color.white))
