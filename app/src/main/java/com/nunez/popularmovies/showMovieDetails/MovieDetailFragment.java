@@ -5,11 +5,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.ConnectivityManager;
@@ -24,7 +22,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
@@ -38,8 +35,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -263,7 +258,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
           @Override
           public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
 
-            setColors(((GlideBitmapDrawable) resource).getBitmap());
+            setViewColorsFromBitman(((GlideBitmapDrawable) resource).getBitmap());
             showEnterAnimation();
 
             return false;
@@ -385,73 +380,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     }
   }
 
-  public void setColors(Bitmap bitmap) {
+  public void setViewColorsFromBitman(Bitmap bitmap) {
 
     if (bitmap != null) {
-      Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-
-        @Override
-        public void onGenerated(Palette palette) {
-
-          if (palette != null) {
-            Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
-
-            try {
-              int color      = vibrantDarkSwatch.getRgb(); // for the status bar.
-              int alphaColor = Color.argb(170, Color.red(color), Color.green(color), Color.blue(color));
-              //int textColor = mutedLightSwatch.getBodyTextColor();
-
-              // Set awesome colors to texts and backgrounds
-
-              heartInitColor = color;
-              mTitleBackground.setBackgroundColor(alphaColor);
-              toolbar.setBackgroundColor(alphaColor);
-              if (isFavorite) {
-                fab.setColorFilter(0xFFF);
-              } else {
-                fab.setColorFilter(heartInitColor);
-              }
-//                            mDescriptionTitle.setTextColor(textColor);//vibrantSwatchTitleTextColor);
-//                            mDescription.setTextColor(textColor);
-//                            mTrailersTitle.setTextColor(textColor);
-//                            mReviewsTitle.setTextColor(textColor);
-
-              // Set awesome drawable colors
-//                            Drawable[] drawables = mDescriptionTitle.getCompoundDrawables();
-//                            drawables[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-
-//                            Drawable[] drawableTrailersTitle = mTrailersTitle.getCompoundDrawables();
-//                            drawableTrailersTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-//                            Drawable[] drawableReviewsTitle = mReviewsTitle.getCompoundDrawables();
-//                            drawableReviewsTitle[0].setColorFilter(textColor, PorterDuff.Mode.MULTIPLY);
-
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                changeStatusBarColor(color);
-              }
-
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
-          }
-        }
-      });
+      new DetailsViewsColorChanger(bitmap, mTitleBackground,
+          toolbar, fab, isFavorite, getActivity().getWindow()).changeColors();
     }
-
-
-  }
-
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public void changeStatusBarColor(int color) {
-    Window window = getActivity().getWindow();
-
-    // clear FLAG_TRANSLUCENT_STATUS flag:
-    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-    // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-    // finally change the color
-    window.setStatusBarColor(color);
   }
 
   private void showEnterAnimation() {
@@ -470,16 +404,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     }
   }
 
-  public void animateFavoritePulse() {
-    PropertyValuesHolder pvhX      = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.3f);
-    PropertyValuesHolder pvhY      = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.3f);
-    ObjectAnimator       scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
-
-    scaleAnim.setDuration(500);
-    scaleAnim.setRepeatCount(1);
-    scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
-    scaleAnim.start();
-  }
 
   public Context getContext() {
     return getActivity();
