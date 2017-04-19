@@ -1,15 +1,8 @@
 package com.nunez.popularmovies.showMovieDetails;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -144,6 +137,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   private LinearLayoutManager    mTrailersLayoutManager;
   private ReviewsAdapter         mReviewsAdapter;
   private ShareActionProvider    mShareActionProvider;
+  private FabAnimator            fabAnimator;
 
   public MovieDetailFragment() {
     setHasOptionsMenu(true);
@@ -155,25 +149,19 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
     Bundle args = getArguments();
-
-    if (args != null) {
-      mMovieId = args.getString(MOVIE_ID);
-    }
+    if (args != null) mMovieId = args.getString(MOVIE_ID);
 
     shareInflated = (container.findViewById(R.id.action_share) != null);
-
     canClickFab = true;
 
     ButterKnife.bind(this, rootView);
-    initalizeViews(rootView);
+    initalizeViews();
 
+    // Instantiate presenter and controller
     mDetailPresenter = new MovieDetailsPresenter();
     mDetailPresenter.attachView(this);
-
     movieDetailsController = new MovieDetailsController(mMovieId, mDetailPresenter);
-
     mDetailPresenter.setController(movieDetailsController);
-//    movieDetailsController.setPresenterCallback()
 
     heartInitColor = getActivity().getResources().getColor(R.color.gray_dark);
 
@@ -192,9 +180,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     mShareActionProvider =
         (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 
-    if (mTrailerUrl != null) {
-      mShareActionProvider.setShareIntent(createShareIntent());
-    }
+    if (mTrailerUrl != null) mShareActionProvider.setShareIntent(createShareIntent());
 
     super.onCreateOptionsMenu(menu, inflater);
   }
@@ -210,7 +196,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     super.onResume();
   }
 
-  public void initalizeViews(View v) {
+  public void initalizeViews() {
 
     AppCompatActivity activity = (AppCompatActivity) getActivity();
     if (toolbar != null) {
@@ -235,11 +221,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   @Override
   public void setTrailerLink(String url) {
     mTrailerUrl = "http://www.youtube.com/watch?v=" + url;
-
-    if (mShareActionProvider != null) {
-      mShareActionProvider.setShareIntent(createShareIntent());
-    }
-
+    if (mShareActionProvider != null) mShareActionProvider.setShareIntent(createShareIntent());
   }
 
   @Override
@@ -271,13 +253,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   @Override
   public void showTitle(String title) {
     mTitle.setText(title);
-//    mTitleBackground.setVisibility(View.VISIBLE);
   }
 
   @Override
   public void showDescription(String description) {
     mDescription.setText(description);
-//    desriptionContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -292,18 +272,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
     } else {
       mTrailersTitle.setVisibility(View.GONE);
     }
-//    trailersContainer.setVisibility(View.VISIBLE);
   }
 
   @Override
   public void showReviews(ArrayList<Review> reviews) {
-
     mReviewsAdapter = new ReviewsAdapter(reviews);
     mReviewsLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
     mReviewsRecyclerView.setLayoutManager(mReviewsLayoutManager);
     mReviewsRecyclerView.setAdapter(mReviewsAdapter);
     mTrailersRecycleView.setNestedScrollingEnabled(false);
-//    mReviewsTitle.setVisibility(View.GONE);
 
     mScrollView.scrollTo(0, 0);
   }
@@ -381,7 +358,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   public void setViewColorsFromBitman(Bitmap bitmap) {
-
     if (bitmap != null) {
       new DetailsViewsColorChanger(bitmap, mTitleBackground,
           toolbar, fab, isFavorite, getActivity().getWindow()).changeColors();
@@ -396,7 +372,6 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
       slide.setStartDelay(200);
       slide.setInterpolator(new DecelerateInterpolator());
 
-
       TransitionManager.beginDelayedTransition(mScrollView, slide);
       desriptionContainer.setVisibility(View.VISIBLE);
       trailersContainer.setVisibility(View.VISIBLE);
@@ -410,81 +385,13 @@ public class MovieDetailFragment extends Fragment implements MovieDetailsContrac
   }
 
   public void animateFavorite() {
-
-    float scaleValue = 1.3f;
-    int   backgroundColorReference;
-    int   rotation;
-    int   heartColorReference;
-
-    ObjectAnimator scaleAnim;
-
-    if (!isFavorite) {
-      backgroundColorReference = R.drawable.circle_white;
-      rotation = 0;
-      heartColorReference = R.color.color_favorite;
-      scaleAnim = null;
-
-    } else {
-      backgroundColorReference = R.drawable.fab;
-      rotation = 720;
-      heartColorReference = R.color.white;
+    if (fabAnimator == null) {
+      fabAnimator = new FabAnimator(
+          fab,
+          heartInitColor,
+          getContext().getResources());
     }
-
-    PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, scaleValue);
-    PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, scaleValue);
-    scaleAnim = ObjectAnimator.ofPropertyValuesHolder(fab, pvhX, pvhY);
-
-    scaleAnim.setDuration(500);
-    scaleAnim.setRepeatCount(1);
-    scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
-
-    //Let's change background's color to red.
-    Drawable[] color = {fab.getBackground(),
-        getContext().getResources().getDrawable(backgroundColorReference)};
-    TransitionDrawable trans = new TransitionDrawable(color);
-
-    //This will work also on old devices. The latest API says you have to use setBackground instead.
-    fab.setBackgroundDrawable(trans);
-    trans.startTransition(700);
-
-    ObjectAnimator rotateAnim = ObjectAnimator.ofFloat(fab, View.ROTATION, rotation);
-    rotateAnim.setInterpolator(new DecelerateInterpolator());
-    rotateAnim.setDuration(1400);
-
-    AnimatorSet setAnim = new AnimatorSet();
-    if (isFavorite) {
-      ObjectAnimator heartColorAnim = ObjectAnimator.ofInt(fab, "colorFilter", getResources().getColor(heartColorReference));
-      heartColorAnim.setDuration(700).setStartDelay(700);
-
-      setAnim.play(scaleAnim).with(rotateAnim).with(heartColorAnim);
-    } else {
-      setAnim.play(rotateAnim).with(scaleAnim);
-      fab.setColorFilter(heartInitColor);
-    }
-
-    setAnim.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-        canClickFab = false;
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        canClickFab = true;
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-
-    setAnim.start();
+    fabAnimator.animateFab(isFavorite);
   }
 
   private boolean isNetworkConnected() {
