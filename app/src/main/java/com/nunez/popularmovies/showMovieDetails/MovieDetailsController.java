@@ -104,64 +104,68 @@ public class MovieDetailsController implements MovieDetailsContract.MovieDetails
 
         @Override
         protected Void doInBackground(Void... params) {
-            ContentValues values = new ContentValues();
-            values.put(MoviesColumns.MOVIE_ID, mMovieId);
-            values.put(MoviesColumns.TITLE, movie.title);
-            values.put(MoviesColumns.DESCRIPTION, movie.description);
-            values.put(MoviesColumns.POSTER, movie.posertPath);
-            values.put(MoviesColumns.RELEASE, movie.releaseDate);
-            values.put(MoviesColumns.RATING, movie.rating);
+            try {
+                ContentValues values = new ContentValues();
+                values.put(MoviesColumns.MOVIE_ID, mMovieId);
+                values.put(MoviesColumns.TITLE, movie.title);
+                values.put(MoviesColumns.DESCRIPTION, movie.description);
+                values.put(MoviesColumns.POSTER, movie.posertPath);
+                values.put(MoviesColumns.RELEASE, movie.releaseDate);
+                values.put(MoviesColumns.RATING, movie.rating);
 
-            Uri inserMoviesUri;
+                Uri inserMoviesUri;
 
-            inserMoviesUri = PopularMovies.context.getContentResolver().insert(
+                inserMoviesUri = PopularMovies.context.getContentResolver().insert(
                     MoviesProvider.Movies.MOVIES,
                     values);
 
-            ArrayList<Video> trailers = movie.getVideosWrapper().videos;
+                ArrayList<Video> trailers = movie.getVideosWrapper().videos;
 
-            if(!trailers.isEmpty()){
-                for (Video trailer:trailers) {
-                    ContentValues trailerValues = new ContentValues();
-                    trailerValues.put(TrailersColumns.TRAILER_ID, trailer.id);
-                    trailerValues.put(TrailersColumns.SITE, trailer.site);
-                    trailerValues.put(TrailersColumns.TITLE, trailer.name);
-                    trailerValues.put(TrailersColumns.MOVIE_ID, movie.id);
+                if (!trailers.isEmpty()) {
+                    for (Video trailer : trailers) {
+                        ContentValues trailerValues = new ContentValues();
+                        trailerValues.put(TrailersColumns.TRAILER_ID, trailer.id);
+                        trailerValues.put(TrailersColumns.SITE, trailer.site);
+                        trailerValues.put(TrailersColumns.TITLE, trailer.name);
+                        trailerValues.put(TrailersColumns.MOVIE_ID, movie.id);
 
-                    PopularMovies.context.getContentResolver().insert(
+                        PopularMovies.context.getContentResolver().insert(
                             MoviesProvider.Trailers.Trailers,
                             trailerValues);
+                    }
                 }
-            }
 
-            ArrayList<Review> reviews = movie.getReviewsWrapper().getReviews();
+                ArrayList<Review> reviews = movie.getReviewsWrapper().getReviews();
 
-            if(!reviews.isEmpty()){
-                for (Review review:reviews) {
-                    ContentValues reviewsValues = new ContentValues();
-                    reviewsValues.put(ReviewsColumns.AUTHOR, review.getAuthor());
-                    reviewsValues.put(ReviewsColumns.CONTENT, review.getContent());
-                    reviewsValues.put(ReviewsColumns.URL, review.getUrl());
-                    reviewsValues.put(TrailersColumns.MOVIE_ID, movie.id);
+                if (!reviews.isEmpty()) {
+                    for (Review review : reviews) {
+                        ContentValues reviewsValues = new ContentValues();
+                        reviewsValues.put(ReviewsColumns.AUTHOR, review.getAuthor());
+                        reviewsValues.put(ReviewsColumns.CONTENT, review.getContent());
+                        reviewsValues.put(ReviewsColumns.URL, review.getUrl());
+                        reviewsValues.put(TrailersColumns.MOVIE_ID, movie.id);
 
-                    PopularMovies.context.getContentResolver().insert(
+                        PopularMovies.context.getContentResolver().insert(
                             MoviesProvider.Reviews.Reviews,
                             reviewsValues);
+                    }
                 }
-            }
 
-            ArrayList<MovieDetails.DetailGenres> genres = movie.genres;
+                ArrayList<MovieDetails.DetailGenres> genres = movie.genres;
 //
-            if(genres !=null && !genres.isEmpty()){
-                for(MovieDetails.DetailGenres genre : genres){
-                    ContentValues genreValues  = new ContentValues();
-                    genreValues.put(GenreColumns.GENRE, genre.getId());
-                    genreValues.put(GenreColumns.MOVIE_ID, movie.getId());
+                if (genres != null && !genres.isEmpty()) {
+                    for (MovieDetails.DetailGenres genre : genres) {
+                        ContentValues genreValues = new ContentValues();
+                        genreValues.put(GenreColumns.GENRE, genre.getId());
+                        genreValues.put(GenreColumns.MOVIE_ID, movie.getId());
 
-                    PopularMovies.context.getContentResolver().insert(
+                        PopularMovies.context.getContentResolver().insert(
                             MoviesProvider.Genres.Genres,
                             genreValues);
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return null;
         }
